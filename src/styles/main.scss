@@ -1,0 +1,15 @@
+@use "./calendar.scss";
+
+div._tw-satellite {
+  display: contents;
+
+  & + * {
+    display: none;
+  }
+}
+
+textarea.tw-auto-resize {
+  box-sizing: border-box;
+  overflow: hidden;
+  resize: none;
+}
