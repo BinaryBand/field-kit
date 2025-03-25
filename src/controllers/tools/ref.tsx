@@ -1,4 +1,4 @@
-import React, { ForwardedRef, MutableRefObject } from "react";
+import React, { ForwardedRef, MutableRefObject } from 'react';
 
 export function useMergedRef<T extends HTMLElement>(
   forwardedRef: ForwardedRef<T>,
@@ -8,7 +8,7 @@ export function useMergedRef<T extends HTMLElement>(
     (elem: T | null): void => {
       internalRef.current = elem;
 
-      if (typeof forwardedRef === "function") {
+      if (typeof forwardedRef === 'function') {
         forwardedRef(elem);
       } else if (forwardedRef !== null) {
         forwardedRef.current = elem;

@@ -1,16 +1,64 @@
-import React, { ChangeEvent, ComponentProps, ForwardedRef, Fragment, KeyboardEvent, MutableRefObject, ReactElement } from "react";
-import styled, { StyledComponent } from "@emotion/styled";
-import { createChangeEvent, tryParse, useMergedRef } from "@utils";
+import React, {
+  ChangeEvent,
+  ComponentProps,
+  ForwardedRef,
+  KeyboardEvent,
+  MutableRefObject,
+  ReactElement,
+} from 'react';
+import styled, { StyledComponent } from '@emotion/styled';
+import { createChangeEvent, tryParse, useMergedRef } from '@utils';
 
-export const StyledToken: StyledComponent<ComponentProps<"div">> = styled.div`
+import AppContext from '@providers/AppContext';
+import ClearIconUrl from '@/assets/icons/x.svg';
+
+const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
+  background: none;
+  border: transparent;
+  padding: 1px 2px;
+
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: start;
+  gap: 0.25em;
+`;
+
+const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
+  pointer-events: none;
+  visibility: hidden;
+`;
+
+const StyledReference: StyledComponent<ComponentProps<'input'>> = styled.input`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  padding-left: ${(props) => props.style?.paddingLeft ?? 0}px !important;
+  padding-top: ${(props) => props.style?.paddingTop ?? 0}px !important;
+  margin: 0 !important;
+`;
+
+export const StyledToken: StyledComponent<ComponentProps<'div'>> = styled.div`
   align-items: center;
   border: 1px solid;
-  border-radius: 2em;
-  display: inline-flex;
+  border-radius: 12px;
+  display: flex;
   gap: 0.3em;
   padding: 0.1em 0.5em;
+  position: relative;
+  z-index: 5;
+
+  &._tw-placeholder-token {
+    pointer-events: none;
+    visibility: hidden;
+  }
 
   div.icon-button {
+    height: 100%;
     display: flex;
     font-size: 1.25em;
     font-weight: bold;
@@ -19,42 +67,57 @@ export const StyledToken: StyledComponent<ComponentProps<"div">> = styled.div`
 `;
 
 function ListInput(
-  { defaultValue, onChange, onKeyDown, value, ...props }: ComponentProps<"input">,
+  { className, defaultValue, onChange, onKeyDown, style, value, ...props }: ComponentProps<'input'>,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactElement {
-  const internalRef: MutableRefObject<HTMLInputElement | null> = React.useRef<HTMLInputElement | null>(null);
+  const { scrollHeight, scrollWidth, pageWidth, pageHeight } = React.useContext(AppContext);
 
-  const [internalValue, setInternalValue] = React.useState<string>("");
+  const containerRef: MutableRefObject<HTMLDivElement | null> =
+    React.createRef<HTMLDivElement | null>();
+  const internalRef: MutableRefObject<HTMLInputElement | null> =
+    React.createRef<HTMLInputElement | null>();
+
+  const [internalValue, setInternalValue] = React.useState<string>('');
   const [list, setList] = React.useState<string[]>(() => {
     return tryParse<string[]>(defaultValue) ?? [`${value}`];
   });
+
+  const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
+  const [paddingTop, setPaddingTop] = React.useState<number>(0);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>): void {
     const newValue: string = event.target.value;
     setInternalValue(newValue);
   }
 
+  function handleSpecialKey(event: KeyboardEvent<HTMLInputElement>): void {
+    let newValue: string[];
+    switch (event.key) {
+      case 'Enter':
+        newValue = [...list, internalValue];
+        setInternalValue('');
+        setList(newValue);
+        break;
+      case 'Backspace':
+        newValue = list.slice(0, list.length - 1);
+        setInternalValue(list[list.length - 1] ?? '');
+        setList(newValue);
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    if (internalRef.current !== null) {
+      onChange?.(createChangeEvent(internalRef.current, JSON.stringify(newValue)));
+    }
+  }
+
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-    if (event.key === "Enter" && internalValue !== "") {
-      event.preventDefault();
-
-      const newValue: string[] = [...list, internalValue];
-      setInternalValue("");
-      setList(newValue);
-
-      if (event.currentTarget !== null) {
-        onChange?.(createChangeEvent(event.currentTarget, JSON.stringify(newValue)));
-      }
-    } else if (event.key === "Backspace" && internalValue === "") {
-      event.preventDefault();
-
-      const newValue: string[] = list.slice(0, list.length - 1);
-      setInternalValue(list[list.length - 1] ?? "");
-      setList(newValue);
-
-      if (event.currentTarget !== null) {
-        onChange?.(createChangeEvent(event.currentTarget, JSON.stringify(newValue)));
-      }
+    if (event.key === 'Enter' && internalValue !== '') {
+      handleSpecialKey(event);
+    } else if (event.key === 'Backspace' && internalValue === '' && list.length > 0) {
+      handleSpecialKey(event);
     }
 
     onKeyDown?.(event);
@@ -70,7 +133,17 @@ function ListInput(
   }
 
   React.useEffect((): void => {
-    if (typeof value === "string") {
+    if (containerRef.current && internalRef.current) {
+      const { left: containerLeft, top: containerTop } =
+        containerRef.current.getBoundingClientRect();
+      const { left: inputLeft, top: inputTop } = internalRef.current.getBoundingClientRect();
+      setPaddingLeft(inputLeft - containerLeft);
+      setPaddingTop(inputTop - containerTop);
+    }
+  }, [list, scrollHeight, scrollWidth, pageWidth, pageHeight]);
+
+  React.useEffect((): void => {
+    if (typeof value === 'string') {
       const fullList: string[] = tryParse<string[]>(value) ?? [`${value}`].filter(Boolean);
       setList(fullList);
     } else if (Array.isArray(value)) {
@@ -79,24 +152,27 @@ function ListInput(
   }, [value]);
 
   return (
-    <Fragment>
-      <Fragment
-        children={list.map((item: string, i: number) => (
-          <StyledToken className="token" key={i}>
-            <small>{item}</small>
-            <div className="icon-button" onClick={() => handleRemove(i)} role="button">⮾</div>
-          </StyledToken>
-        ))}
-      />
+    <ListInputContainer className={className} ref={containerRef} style={style}>
+      {list.map((item: string, i: number) => (
+        <StyledToken className="token" key={i}>
+          <small>{item}</small>
+          <div className="icon-button" onClick={() => handleRemove(i)} role="button">
+            <img src={ClearIconUrl} />
+          </div>
+        </StyledToken>
+      ))}
 
-      <input
+      <StyledInput readOnly ref={useMergedRef(ref, internalRef)} value={internalValue} />
+
+      <StyledReference
         {...props}
+        className={className}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        ref={useMergedRef(ref, internalRef)}
+        style={{ ...style, paddingLeft, paddingTop }}
         value={internalValue}
       />
-    </Fragment>
+    </ListInputContainer>
   );
 }
 

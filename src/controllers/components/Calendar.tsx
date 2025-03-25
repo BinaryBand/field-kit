@@ -1,5 +1,5 @@
-import React, { Fragment, ReactNode } from "react";
-import Portal from "@inline/Portal";
+import React, { Fragment, ReactNode } from 'react';
+import Portal from '@inline/Portal';
 
 function isInteger(value: string | null): boolean {
   if (value === null) {
@@ -10,15 +10,22 @@ function isInteger(value: string | null): boolean {
 }
 
 function Calendar({ children, element }: IControllerProps): ReactNode {
-  const observer: MutationObserver = React.useMemo(() => new MutationObserver(observerCallback), []);
+  const observer: MutationObserver = React.useMemo(
+    () => new MutationObserver(observerCallback),
+    []
+  );
 
   const [yearAttribute, setYearAttribute] = React.useState(element.getAttribute('data-tw-year'));
   const [monthAttribute, setMonthAttribute] = React.useState(element.getAttribute('data-tw-month'));
 
   const { blankDays, totalDays } = React.useMemo(() => {
     const currentDate: Date = new Date(Date.now());
-    const year: number = isInteger(yearAttribute) ? parseInt(yearAttribute!) : currentDate.getFullYear();
-    const month: number = isInteger(monthAttribute) ? parseInt(monthAttribute!) - 1 : currentDate.getMonth();
+    const year: number = isInteger(yearAttribute)
+      ? parseInt(yearAttribute!)
+      : currentDate.getFullYear();
+    const month: number = isInteger(monthAttribute)
+      ? parseInt(monthAttribute!) - 1
+      : currentDate.getMonth();
 
     const targetDate: Date = new Date(year, month, 1);
     const blankDays: number = targetDate.getDay();
@@ -40,14 +47,14 @@ function Calendar({ children, element }: IControllerProps): ReactNode {
     setMonthAttribute(element.getAttribute('data-tw-month'));
   }
 
-  React.useEffect((): () => void => {
+  React.useEffect((): (() => void) => {
     element.addEventListener('attributes', updateAttributes);
     observer.observe(element, { attributes: true });
 
     return () => {
       element.removeEventListener('attributes', updateAttributes);
       observer.disconnect();
-    }
+    };
   }, [element]);
 
   React.useEffect(() => {
@@ -64,8 +71,8 @@ function Calendar({ children, element }: IControllerProps): ReactNode {
 
         <Fragment children={children} />
       </Portal>
-    )
-  };
+    );
+  }
 }
 
 export default Calendar;

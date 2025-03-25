@@ -11,5 +11,5 @@ interface IPortalProps<T extends React.ElementType<{}>, E extends HTMLElement> {
 type PortalProps<
   T extends React.ElementType<{}>,
   P extends React.ComponentProps<T>,
-  E extends HTMLElement = HTMLElement
+  E extends HTMLElement = HTMLElement,
 > = IPortalProps<T, E> & P;

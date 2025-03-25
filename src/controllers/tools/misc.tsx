@@ -8,10 +8,7 @@ export function createRandomKey(): string {
   return Math.random().toString(36);
 }
 
-
-export function tryParse<T extends object = object>(
-  value: unknown
-): T | undefined {
+export function tryParse<T extends object = object>(value: unknown): T | undefined {
   try {
     return JSON.parse(`${value}`) as T;
   } catch {

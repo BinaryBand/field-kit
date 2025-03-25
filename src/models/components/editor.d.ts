@@ -4,7 +4,7 @@ interface IToolbarProps {
   remove: () => void;
 }
 
-type ToolbarProps = IToolbarProps & React.ComponentProps<"div">;
+type ToolbarProps = IToolbarProps & React.ComponentProps<'div'>;
 
 /********************************************************************* */
 
@@ -14,11 +14,11 @@ interface CommonComponent {
 
 type EditorComponents = {
   text: {
-    tag: "text";
+    tag: 'text';
     value: string;
   };
   image: {
-    tag: "image";
+    tag: 'image';
     source?: string;
   };
 };

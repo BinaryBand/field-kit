@@ -10,14 +10,14 @@ export function toDataUrl(url: string): Promise<string | undefined> {
       .then((response) => response.blob())
       .then((blob) => {
         reader.onloadend = () =>
-          resolve(typeof reader.result === "string" ? reader.result : undefined);
+          resolve(typeof reader.result === 'string' ? reader.result : undefined);
         reader.readAsDataURL(blob);
       });
   });
 }
 
 export async function uploadImage(): Promise<string | undefined> {
-  const target: HTMLInputElement = window.document.createElement("input");
+  const target: HTMLInputElement = window.document.createElement('input');
 
   return new Promise((resolve) => {
     target.onchange = (event: Event): void => {
@@ -26,9 +26,8 @@ export async function uploadImage(): Promise<string | undefined> {
       resolve(file && URL.createObjectURL(file));
     };
 
-    target.accept = "image/png, image/jpeg, image/gif";
-    target.type = "file";
+    target.accept = 'image/png, image/jpeg, image/gif';
+    target.type = 'file';
     target.click();
   });
 }
-

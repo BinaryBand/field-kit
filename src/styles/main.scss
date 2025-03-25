@@ -1,6 +1,6 @@
-@use "./calendar.scss";
+@use './calendar.scss';
 
-div._tw-satellite {
+div._tw-wrapper {
   display: contents;
 
   & + * {

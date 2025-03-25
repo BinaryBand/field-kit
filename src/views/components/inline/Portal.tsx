@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import ReactDOM from "react-dom";
+import { ReactNode } from 'react';
+import ReactDOM from 'react-dom';
 
 function Portal<E extends HTMLElement>({ children, container }: BasePortalProps<E>): ReactNode {
   if (!container) return children;

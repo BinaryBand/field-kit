@@ -1,0 +1,43 @@
+import React, { ComponentProps, ForwardedRef, ReactElement } from 'react';
+import styled, { StyledComponent } from '@emotion/styled';
+
+import AppContext from '@providers/AppContext';
+
+const StyledOverlay: StyledComponent<ComponentProps<'div'>> = styled.div`
+  background: none;
+  position: absolute;
+  pointer-events: none;
+
+  & > * {
+    pointer-events: all;
+  }
+`;
+
+function Overlay(
+  { style, target, ...props }: OverlayProps,
+  ref: ForwardedRef<HTMLDivElement>
+): ReactElement {
+  const { scrollHeight, scrollWidth, pageWidth, pageHeight } = React.useContext(AppContext);
+
+  const [left, setLeft] = React.useState<number>(0);
+  const [top, setTop] = React.useState<number>(0);
+  const [width, setWidth] = React.useState<number>(0);
+  const [height, setHeight] = React.useState<number>(0);
+
+  function handleResize(): void {
+    if (target.current !== null) {
+      const { left, top } = target.current.getBoundingClientRect();
+      const { offsetWidth, offsetHeight } = target.current;
+      setLeft(left + scrollWidth);
+      setTop(top + scrollHeight);
+      setWidth(offsetWidth);
+      setHeight(offsetHeight);
+    }
+  }
+
+  React.useEffect(handleResize, [pageWidth, pageHeight]);
+
+  return <StyledOverlay {...props} ref={ref} style={{ ...style, left, top, height, width }} />;
+}
+
+export default React.forwardRef(Overlay);

@@ -1,16 +1,25 @@
-import React, { ChangeEvent, ComponentProps, ForwardedRef, Fragment, MouseEvent, MutableRefObject, ReactElement } from 'react';
-import styled, { StyledComponent } from "@emotion/styled";
-import { createChangeEvent, useMergedRef } from "@utils";
+import React, {
+  ChangeEvent,
+  ComponentProps,
+  ForwardedRef,
+  Fragment,
+  MouseEvent,
+  MutableRefObject,
+  ReactElement,
+} from 'react';
+import styled, { StyledComponent } from '@emotion/styled';
+import { createChangeEvent, useMergedRef } from '@utils';
 
 import Stack from '@inline/Stack';
-import UploadIconUrl from '@/assets/icons/image.svg';
+
 import ClearIconUrl from '@/assets/icons/x.svg';
+import UploadIconUrl from '@/assets/icons/image.svg';
 
 const CenterContainer: StyledComponent<StackProps> = styled(Stack)`
   align-items: center;
   display: flex;
   gap: 0.5rem;
-  justify-content: center;  
+  justify-content: center;
 
   position: absolute;
   left: 0;
@@ -78,29 +87,42 @@ async function normalizeImage(image: File | string): Promise<string> {
     const reader: FileReader = new FileReader();
 
     return new Promise(async (resolve, reject) => {
-      reader.onloadend = () => resolve(reader.result as string || '');
+      reader.onloadend = () => resolve((reader.result as string) || '');
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     });
-  }
-  catch (error: unknown) {
-    console.error("Error normalizing image:", error);
+  } catch (error: unknown) {
+    console.error('Error normalizing image:', error);
     return '';
   }
 }
 
 function ImageInput(
-  { className, defaultValue, disabled, placeholder, onChange, readOnly, style, value, ...props }: ComponentProps<'input'>,
+  {
+    className,
+    defaultValue,
+    disabled,
+    placeholder,
+    onChange,
+    readOnly,
+    style,
+    value,
+    ...props
+  }: ComponentProps<'input'>,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactElement {
-  const internalRef: MutableRefObject<HTMLInputElement | null> = React.useRef<HTMLInputElement | null>(null);
+  const internalRef: MutableRefObject<HTMLInputElement | null> =
+    React.useRef<HTMLInputElement | null>(null);
 
   const [internalValue, setInternalValue] = React.useState<string>((): string => {
-    const internalValue: string = `${value ?? defaultValue ?? ""}`;
-    return isValidBase64(internalValue) ? internalValue : "";
+    const internalValue: string = `${value ?? defaultValue ?? ''}`;
+    return isValidBase64(internalValue) ? internalValue : '';
   });
 
-  const hasImage: boolean = React.useMemo((): boolean => isValidBase64(internalValue), [internalValue]);
+  const hasImage: boolean = React.useMemo(
+    (): boolean => isValidBase64(internalValue),
+    [internalValue]
+  );
 
   async function handleChange(event: ChangeEvent<HTMLInputElement>): Promise<void> {
     const imageFile: File | null = event.target.files?.item(0) ?? null;
@@ -111,9 +133,8 @@ function ImageInput(
         setInternalValue(imageUrl);
         onChange?.(createChangeEvent(event.target, imageUrl));
       }
-    }
-    catch (error: unknown) {
-      console.error("Error handling image change:", error);
+    } catch (error: unknown) {
+      console.error('Error handling image change:', error);
     }
   }
 
@@ -125,37 +146,61 @@ function ImageInput(
       }
 
       event.stopPropagation();
-      onChange?.(createChangeEvent(internalRef.current, ""));
+      onChange?.(createChangeEvent(internalRef.current, ''));
     }
   }
 
   React.useEffect((): void => {
     if (!hasImage && internalRef.current !== null) {
-      internalRef.current.value = "";
+      internalRef.current.value = '';
     }
   }, [hasImage]);
 
   React.useEffect((): void => {
-    if (value !== undefined && typeof value === "string") {
+    if (value !== undefined && typeof value === 'string') {
       setInternalValue(value);
     }
   }, [value]);
 
   return (
     <Fragment>
-      <ImageContainer className={className} data-disabled={disabled || undefined} data-has-image={hasImage || undefined} data-readonly={readOnly || undefined} onClick={handleClick} style={style}>
-        <CenterContainer align='center' gap={1} id='_image-input'>
+      <ImageContainer
+        className={className}
+        data-disabled={disabled || undefined}
+        data-has-image={hasImage || undefined}
+        data-readonly={readOnly || undefined}
+        onClick={handleClick}
+        style={style}
+      >
+        <CenterContainer align="center" gap={1} id="_image-input">
           <img alt="Upload button" id="_upload-icon" src={UploadIconUrl} height={32} />
-          <img alt="Clear button" hidden={readOnly} id="_clear-icon" src={ClearIconUrl} height={32} />
-          <label hidden={readOnly} htmlFor={props.id} style={{ pointerEvents: 'none', textWrap: 'nowrap' }}>
-            <span>{hasImage ? 'Clear Image' : placeholder ?? 'Upload Image'}</span>
+          <img
+            alt="Clear button"
+            hidden={readOnly}
+            id="_clear-icon"
+            src={ClearIconUrl}
+            height={32}
+          />
+          <label
+            hidden={readOnly}
+            htmlFor={props.id}
+            style={{ pointerEvents: 'none', textWrap: 'nowrap' }}
+          >
+            <span>{hasImage ? 'Clear Image' : (placeholder ?? 'Upload Image')}</span>
           </label>
         </CenterContainer>
 
-        <img src={internalValue} width='100%' />
+        <img src={internalValue} width="100%" />
       </ImageContainer>
 
-      <input {...props} accept='image/*' hidden onChange={handleChange} ref={useMergedRef(ref, internalRef)} type='file' />
+      <input
+        {...props}
+        accept="image/*"
+        hidden
+        onChange={handleChange}
+        ref={useMergedRef(ref, internalRef)}
+        type="file"
+      />
     </Fragment>
   );
 }

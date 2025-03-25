@@ -4,10 +4,16 @@ import Wrapper from '@inline/Wrapper';
 function InputWrapper<T extends 'input'>(props: OverloadedInputWrapperProps<T>): ReactNode;
 function InputWrapper<T extends 'select'>(props: OverloadedInputWrapperProps<T>): ReactNode;
 function InputWrapper<T extends 'textarea'>(props: OverloadedInputWrapperProps<T>): ReactNode;
-function InputWrapper<T extends 'input' | 'select' | 'textarea'>(props: WrapperProps<T>): ReactNode {
-  const [internalValue, setInternalValue] = React.useState<string>(`${props.defaultValue ?? ""}`);
+function InputWrapper<T extends 'input' | 'select' | 'textarea'>(
+  props: WrapperProps<T>
+): ReactNode {
+  const [internalValue, setInternalValue] = React.useState<string>(
+    `${props.container.value ?? ''}`
+  );
 
-  function handleChangeEvent(event: ChangeEvent<HTMLElement & { value: string }>): void {
+  function handleChangeEvent(
+    event: ChangeEvent<HTMLElement & { checked?: boolean; value: string }>
+  ): void {
     props.container.value = event.currentTarget.value;
     handleEvent(event);
   }
@@ -17,11 +23,12 @@ function InputWrapper<T extends 'input' | 'select' | 'textarea'>(props: WrapperP
     props.container.dispatchEvent(nativeEvent);
   }
 
-  const nativeChangeMemo = React.useMemo(() => (): void => {
-    setInternalValue(props.container.value);
-  }, []);
+  const nativeChangeMemo = React.useMemo(
+    () => (): void => setInternalValue(props.container.value),
+    []
+  );
 
-  React.useEffect((): () => void => {
+  React.useEffect((): (() => void) => {
     props.container.addEventListener('change', nativeChangeMemo);
     return () => props.container.removeEventListener('change', nativeChangeMemo);
   }, [props.container, nativeChangeMemo]);
@@ -37,11 +44,24 @@ function InputWrapper<T extends 'input' | 'select' | 'textarea'>(props: WrapperP
   } as ComponentProps<T>;
 
   if (props.container instanceof HTMLSelectElement) {
-    return <Wrapper {...baseProps} {...props} />;
+    const selectProps: ComponentProps<'select'> = {
+      multiple: props.container.multiple,
+    };
+    return <Wrapper {...baseProps} {...selectProps} {...props} />;
   }
 
   const { placeholder, readOnly } = props.container;
-  const textProps: ComponentProps<'input' | 'textarea'> = { placeholder, readOnly };
+  const textProps: ComponentProps<'input' | 'textarea'> = {
+    placeholder,
+    readOnly,
+  };
+
+  if (props.container instanceof HTMLInputElement) {
+    const { type } = props.container;
+    const inputProps: ComponentProps<'input'> = { type };
+    return <Wrapper {...baseProps} {...textProps} {...inputProps} {...props} />;
+  }
+
   return <Wrapper {...baseProps} {...textProps} {...props} />;
 }
 

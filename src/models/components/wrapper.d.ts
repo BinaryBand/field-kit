@@ -13,7 +13,9 @@ interface IWrapperProps<T extends keyof HTMLElementTagNameMap> {
   container: HTMLElementTagNameMap[T];
 }
 
-type WrapperProps<T extends keyof HTMLElementTagNameMap> = IWrapperProps<T> & React.ComponentProps<T>;
-type OverloadedWrapperProps<T extends keyof HTMLElementTagNameMap> = IWrapperProps<T> & React.ComponentProps<T>;
-type OverloadedInputWrapperProps<T extends "input" | "select" | "textarea"> = IOverloadedInputWrapperProps<T> &
-  ComponentProps<T>;
+type WrapperProps<T extends keyof HTMLElementTagNameMap> = IWrapperProps<T> &
+  React.ComponentProps<T>;
+type OverloadedWrapperProps<T extends keyof HTMLElementTagNameMap> = IWrapperProps<T> &
+  React.ComponentProps<T>;
+type OverloadedInputWrapperProps<T extends 'input' | 'select' | 'textarea'> =
+  IOverloadedInputWrapperProps<T> & ComponentProps<T>;

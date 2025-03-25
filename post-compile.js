@@ -1,5 +1,5 @@
-import * as fs from "fs/promises";
-import * as path from "path";
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 async function clearDirectory(dirPath) {
   try {
@@ -16,15 +16,16 @@ async function clearDirectory(dirPath) {
       }
     }
   } catch (error) {
-    if (error.code !== "ENOENT") {
+    if (error.code !== 'ENOENT') {
       throw error;
     }
   }
 }
 
 async function main() {
-  const sourceDir = "C:/Users/Shane/OneDrive/Documents/Development/tw-client/dist";
-  const targetDir = "C:/Users/Shane/Source/Repos/TWMainSolutionCore/ReportsWeb/wwwroot/lib/tw-client";
+  const sourceDir = 'C:/Users/Shane/OneDrive/Documents/Development/tw-client/dist';
+  const targetDir =
+    'C:/Users/Shane/Source/Repos/TWMainSolutionCore/ReportsWeb/wwwroot/lib/tw-client';
 
   try {
     await fs.mkdir(targetDir, { recursive: true });
@@ -41,7 +42,7 @@ async function main() {
 
     console.log(`Files moved from ${sourceDir} to ${targetDir}.`);
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
   }
 }
 

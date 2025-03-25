@@ -20,9 +20,9 @@ table.tw-calendar > tbody > tr {
 
     // Add blank days to the beginning of the month
     @for $i from 1 through 6 {
-      &[data-tw-blank-days="#{$i}"] {
+      &[data-tw-blank-days='#{$i}'] {
         &::before {
-          content: "";
+          content: '';
           width: calc(100% / 7 * $i);
         }
       }
@@ -30,9 +30,9 @@ table.tw-calendar > tbody > tr {
 
     // Hide days after the last day of the month
     @for $i from 28 through 30 {
-      &[data-tw-total-days="#{$i}"] {
+      &[data-tw-total-days='#{$i}'] {
         @for $j from $i through 31 {
-          td[data-tw-day="#{$j + 1}"] {
+          td[data-tw-day='#{$j + 1}'] {
             display: none;
           }
         }
@@ -41,15 +41,15 @@ table.tw-calendar > tbody > tr {
 
     @for $i from 1 through 31 {
       // Hide placeholder days that have a corresponding day
-      & > td[data-tw-day="#{$i}"] ~ td[data-tw-day="#{$i}"] {
+      & > td[data-tw-day='#{$i}'] ~ td[data-tw-day='#{$i}'] {
         display: none;
       }
 
       // Manually order and label the days of the month
-      & > td[data-tw-day="#{$i}"] {
+      & > td[data-tw-day='#{$i}'] {
         order: #{$i};
         &::before {
-          content: "#{$i}";
+          content: '#{$i}';
         }
       }
     }
