@@ -11,11 +11,18 @@ function InputWrapper<T extends 'input' | 'select' | 'textarea'>(
     `${props.container.value ?? ''}`
   );
 
-  function handleChangeEvent(
-    event: ChangeEvent<HTMLElement & { checked?: boolean; value: string }>
-  ): void {
-    props.container.value = event.currentTarget.value;
-    handleEvent(event);
+  function handleChangeEvent(event: ChangeEvent<HTMLElement>): void {
+    if (event.currentTarget instanceof HTMLInputElement) {
+      props.container.value = event.currentTarget.value;
+      handleEvent(event);
+    } else if (event.currentTarget instanceof HTMLTextAreaElement) {
+      props.container.value = event.currentTarget.value;
+      handleEvent(event);
+    } else if (event.currentTarget instanceof HTMLSelectElement) {
+      console.log(event.currentTarget.selectedOptions);
+
+      // handleEvent(event);
+    }
   }
 
   function handleEvent({ currentTarget, type, ...event }: SyntheticEvent<HTMLElement>): void {
@@ -44,9 +51,13 @@ function InputWrapper<T extends 'input' | 'select' | 'textarea'>(
   } as ComponentProps<T>;
 
   if (props.container instanceof HTMLSelectElement) {
+    const values: string[] = Array.from(props.container.selectedOptions).map(({ value }) => value);
+
     const selectProps: ComponentProps<'select'> = {
       multiple: props.container.multiple,
+      value: values,
     };
+
     return <Wrapper {...baseProps} {...selectProps} {...props} />;
   }
 

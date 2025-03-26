@@ -12,7 +12,7 @@ import { createChangeEvent, tryParse, useMergedRef } from '@utils';
 import AppContext from '@providers/AppContext';
 import ClearIconUrl from '@/assets/icons/x.svg';
 
-const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
+export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
   background: none;
   border: transparent;
   padding: 1px 2px;
@@ -25,7 +25,7 @@ const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
   gap: 0.25em;
 `;
 
-const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
+export const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
   pointer-events: none;
   visibility: hidden;
 `;
@@ -79,7 +79,14 @@ function ListInput(
 
   const [internalValue, setInternalValue] = React.useState<string>('');
   const [list, setList] = React.useState<string[]>(() => {
-    return tryParse<string[]>(defaultValue) ?? [`${value}`];
+    switch (typeof defaultValue) {
+      case 'string':
+        return tryParse<string[]>(defaultValue) ?? [`${defaultValue}`].filter(Boolean);
+      case 'object':
+        return Array.isArray(defaultValue) ? defaultValue : [];
+      default:
+        return [];
+    }
   });
 
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
@@ -143,12 +150,19 @@ function ListInput(
   }, [list, scrollHeight, scrollWidth, pageWidth, pageHeight]);
 
   React.useEffect((): void => {
-    if (typeof value === 'string') {
-      const fullList: string[] = tryParse<string[]>(value) ?? [`${value}`].filter(Boolean);
-      setList(fullList);
-    } else if (Array.isArray(value)) {
-      setList(value);
+    let newValue: string[];
+    switch (typeof value) {
+      case 'string':
+        newValue = tryParse<string[]>(value) ?? [`${value}`].filter(Boolean);
+        break;
+      case 'object':
+        newValue = Array.isArray(value) ? value : [];
+        break;
+      default:
+        newValue = [];
     }
+
+    setList(newValue);
   }, [value]);
 
   return (
