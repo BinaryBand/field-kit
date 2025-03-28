@@ -1,212 +1,3 @@
-// import React, {
-//   ChangeEvent,
-//   ComponentProps,
-//   ForwardedRef,
-//   Fragment,
-//   KeyboardEvent,
-//   MouseEvent,
-//   MutableRefObject,
-//   ReactElement,
-// } from 'react';
-// import styled, { StyledComponent } from '@emotion/styled';
-// import { createChangeEvent, useMergedRef } from '@utils';
-// import { useDebounce } from 'use-debounce';
-
-// import Overlay from '@inline/Overlay';
-
-// const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
-//   &:not(:focus) + div {
-//     display: none;
-//   }
-// `;
-
-// const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
-//   background-color: white;
-//   border: 1px solid var(--bs-gray-300, #d0d0d7);
-//   overflow-x: hidden;
-//   overflow-y: scroll;
-//   z-index: 5;
-
-//   position: absolute;
-//   left: 0;
-//   top: 100%;
-//   width: 100%;
-
-//   option {
-//     padding: 4px 6px;
-//     &:hover:not(:disabled) {
-//       background-color: var(--bs-gray-300, #d0d0d7);
-//     }
-
-//     &[value=''] {
-//       display: none;
-//     }
-//   }
-
-//   &:not([data-prevent-filter]) {
-//     & > option[data-blurred='true']:not(._tw-no-options) {
-//       display: none;
-//     }
-//   }
-// `;
-
-// function SelectInput(
-//   {
-//     children,
-//     className,
-//     defaultValue,
-//     multiple,
-//     onChange,
-//     style,
-//     value,
-//     ...props
-//   }: ComponentProps<'select'>,
-//   ref: ForwardedRef<HTMLSelectElement>
-// ): ReactElement {
-//   const dropdownRef: MutableRefObject<HTMLDivElement | null> =
-//     React.createRef<HTMLDivElement | null>();
-// const inputRef: MutableRefObject<HTMLInputElement | null> =
-//   React.createRef<HTMLInputElement | null>();
-//   const internalRef: MutableRefObject<HTMLSelectElement | null> =
-//     React.createRef<HTMLSelectElement | null>();
-
-//   const [inputValue, setInputValue] = React.useState<string>('');
-//   const [internalValue, setInternalValue] = React.useState<string>(`${defaultValue ?? ''}`);
-//   const [preventFilter, setPreventFilter] = React.useState<boolean>(true);
-
-//   const [debouncedInputValue] = useDebounce(inputValue, 150);
-
-//   function changeOption(option: HTMLOptionElement): void {
-//     setInternalValue(option.value);
-//     setInputValue(option.textContent ?? '');
-//     setPreventFilter(true);
-
-//     if (internalRef.current) {
-//       onChange?.(createChangeEvent(internalRef.current, option.value));
-//     }
-//   }
-
-//   function handleInputChange({ currentTarget }: ChangeEvent<HTMLInputElement>): void {
-//     setInputValue(currentTarget.value);
-//     setPreventFilter(false);
-//   }
-
-//   function handleKeyEvent(event: KeyboardEvent<HTMLInputElement>): void {
-//     if (dropdownRef.current !== null) {
-//       switch (event.key) {
-//         case 'ArrowUp':
-//         case 'ArrowDown':
-//           event.preventDefault();
-
-//           const options: NodeListOf<HTMLOptionElement> =
-//             dropdownRef.current.querySelectorAll<HTMLOptionElement>('option.tw-option');
-//           const activeIndex: number = Array.from(options).findIndex(
-//             (elem: HTMLOptionElement) => elem.selected
-//           );
-
-//           const direction: number = event.key === 'ArrowUp' ? -1 : 1;
-//           const selected: HTMLOptionElement = options.item(
-//             (activeIndex + direction + options.length) % options.length
-//           );
-//           changeOption(selected);
-//           break;
-//         case 'Enter':
-//           event.preventDefault();
-
-//           const selected2: HTMLOptionElement | null =
-//             dropdownRef.current.querySelector<HTMLOptionElement>('option.tw-option[selected]');
-//           selected2 && changeOption(selected2);
-//           inputRef.current?.blur();
-//           break;
-//       }
-//     }
-//   }
-
-//   function handleMouseDown({ target }: MouseEvent<HTMLDivElement>): void {
-//     if (target instanceof HTMLOptionElement) {
-//       changeOption(target);
-//     }
-//   }
-
-//   React.useEffect((): void => {
-//     if (dropdownRef.current !== null) {
-//       const normalizedInputValue: string = debouncedInputValue.toLowerCase();
-//       const options: NodeListOf<HTMLOptionElement> =
-//         dropdownRef.current.querySelectorAll<HTMLOptionElement>('option.tw-option');
-
-//       for (let i: number = 0; i < options.length; i++) {
-//         const option: HTMLOptionElement | null = options.item(i);
-
-//         const hidden: boolean =
-//           !option.textContent?.toLowerCase().includes(normalizedInputValue) &&
-//           !option.value?.toLowerCase().includes(normalizedInputValue);
-
-//         option.setAttribute('data-blurred', hidden ? 'true' : 'false');
-//       }
-//     }
-//   }, [debouncedInputValue]);
-
-//   React.useEffect((): void => {
-//     if (internalRef.current !== null) {
-//       internalRef.current.value = internalValue;
-
-//       const inputValue: string =
-//         internalRef.current.querySelector(`option[value="${internalValue}"]`)?.textContent ??
-//         internalRef.current.options[0]?.textContent ??
-//         '';
-
-//       setInputValue(inputValue);
-//     }
-
-//     if (dropdownRef.current !== null) {
-//       const options: HTMLCollectionOf<HTMLOptionElement> =
-//         dropdownRef.current.getElementsByTagName('option');
-
-//       for (let i: number = 0; i < options.length; i++) {
-//         const option: HTMLOptionElement | null = options.item(i);
-//         option?.toggleAttribute('selected', option.value === internalValue);
-//       }
-//     }
-//   }, [internalValue]);
-
-//   React.useEffect((): void => {
-//     setInternalValue(`${value ?? ''}`);
-//   }, [value]);
-
-//   return (
-//     <Fragment>
-//       <StyledInput
-//         className={className}
-//         onChange={handleInputChange}
-//         onKeyDown={handleKeyEvent}
-//         ref={inputRef}
-//         style={style}
-//         type="text"
-//         value={inputValue}
-//       />
-
-//       <Overlay target={inputRef}>
-//         <Dropdown
-//           className={className}
-//           data-prevent-filter={preventFilter || undefined}
-//           onMouseDown={handleMouseDown}
-//           ref={dropdownRef}
-//           style={style}
-//         >
-//           <Fragment children={children} />
-//           <option className="_tw-no-options" disabled>
-//             No Options
-//           </option>
-//         </Dropdown>
-//       </Overlay>
-
-//       <select {...props} children={children} hidden ref={useMergedRef(ref, internalRef)} />
-//     </Fragment>
-//   );
-// }
-
-// export default React.forwardRef(SelectInput);
-
 import React, {
   ChangeEvent,
   ComponentProps,
@@ -215,60 +6,57 @@ import React, {
   MouseEvent,
   MutableRefObject,
   ReactElement,
+  ReactNode,
 } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
-import { createChangeEvent, tryParse, useMergedRef } from '@utils';
+import { useDebounce } from 'use-debounce';
+
+import ClearIconUrl from '@/assets/icons/x.svg';
+import CaretDownUrl from '@/assets/icons/caret-down.svg';
 
 import AppContext from '@providers/AppContext';
-import ClearIconUrl from '@/assets/icons/x.svg';
 import Overlay from '@inline/Overlay';
+import SelectInputContext from '@providers/SelectInputContext';
+import { StyledToken } from '@components/ListInput';
+
+import { createChangeEvent, tryParse, useMergedRef } from '@utils';
+
+export function SelectOption({
+  children,
+  value,
+  ...props
+}: ComponentProps<'option'>): ReactElement {
+  const { addOption } = React.useContext(SelectInputContext);
+
+  React.useEffect((): void => {
+    if (value !== undefined && typeof value === 'string') {
+      addOption(value, children ?? value);
+    }
+  }, [value, children]);
+
+  return <option {...props} children={children} value={value} />;
+}
 
 export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
   background: none;
   border: transparent;
   padding: 1px 2px;
 
-  position: relative;
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: start;
   gap: 0.25em;
+  position: relative;
+
+  &:not([data-multiple]) > div.token {
+    display: none;
+  }
 `;
 
 export const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
   pointer-events: none;
   visibility: hidden;
-`;
-
-const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
-  background-color: white;
-  border: 1px solid var(--bs-gray-300, #d0d0d7);
-  overflow-x: hidden;
-  overflow-y: scroll;
-  z-index: 5;
-
-  position: absolute;
-  left: 0;
-  top: 100%;
-  width: 100%;
-
-  option {
-    padding: 4px 6px;
-    &:hover:not(:disabled) {
-      background-color: var(--bs-gray-300, #d0d0d7);
-    }
-
-    &[value=''] {
-      display: none;
-    }
-  }
-
-  &:not([data-prevent-filter]) {
-    & > option[data-blurred='true']:not(._tw-no-options) {
-      display: none;
-    }
-  }
 `;
 
 const StyledReference: StyledComponent<ComponentProps<'input'>> = styled.input`
@@ -283,28 +71,51 @@ const StyledReference: StyledComponent<ComponentProps<'input'>> = styled.input`
   margin: 0 !important;
 `;
 
-export const StyledToken: StyledComponent<ComponentProps<'div'>> = styled.div`
+const StyledOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
   align-items: center;
-  border: 1px solid;
-  border-radius: 12px;
   display: flex;
-  gap: 0.3em;
-  padding: 0.1em 0.5em;
-  position: relative;
-  z-index: 5;
+  justify-content: end;
 
-  &._tw-placeholder-token {
-    pointer-events: none;
-    visibility: hidden;
+  gap: 0.5em;
+  padding-right: 0.5em;
+`;
+
+const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
+  background-color: white;
+  border: 1px solid var(--bs-gray-300, #d0d0d7);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  z-index: 4;
+
+  left: 0;
+  top: 100%;
+  position: absolute;
+  width: 100%;
+
+  option {
+    padding: 4px 6px;
+
+    &:hover:not(:disabled) {
+      background-color: var(--bs-gray-300, #d0d0d7);
+    }
+
+    &._tw-no-options,
+    &[data-blurred='true'],
+    &[value=''] {
+      display: none;
+    }
   }
 
-  div.icon-button {
-    height: 100%;
-    display: flex;
-    font-size: 1.25em;
-    font-weight: bold;
-    line-height: 0;
+  &:not(:has(option[data-blurred='false'])) {
+    & > option._tw-no-options {
+      display: block;
+    }
   }
+`;
+
+const StyledCaretDown: StyledComponent<ComponentProps<'img'>> = styled.img`
+  transform: ${(props) => props['aria-expanded'] && 'rotate(180deg)'};
+  transform-origin: center;
 `;
 
 function normalizedInputValue(value?: string | number | readonly string[]): string[] {
@@ -319,11 +130,27 @@ function normalizedInputValue(value?: string | number | readonly string[]): stri
   }
 }
 
-function ListInput(
+// function SelectInput(
+//   {
+//     children,
+//     className,
+//     'data-placeholder': placeholder,
+//     defaultValue,
+//     multiple,
+//     onChange,
+//     onKeyDown,
+//     style,
+//     value,
+//     ...props
+//   }: SelectInputProps,
+//   ref: ForwardedRef<HTMLSelectElement>
+// ): ReactElement {
+function SelectInput(
   {
     children,
     className,
     defaultValue,
+    multiple,
     onChange,
     onKeyDown,
     style,
@@ -332,103 +159,183 @@ function ListInput(
   }: ComponentProps<'select'>,
   ref: ForwardedRef<HTMLSelectElement>
 ): ReactElement {
-  const { scrollHeight, scrollWidth, pageWidth, pageHeight } = React.useContext(AppContext);
+  const { pageWidth, pageHeight } = React.useContext(AppContext);
 
   const containerRef: MutableRefObject<HTMLDivElement | null> =
+    React.createRef<HTMLDivElement | null>();
+  const dropdownRef: MutableRefObject<HTMLDivElement | null> =
     React.createRef<HTMLDivElement | null>();
   const inputRef: MutableRefObject<HTMLInputElement | null> =
     React.createRef<HTMLInputElement | null>();
   const internalRef: MutableRefObject<HTMLSelectElement | null> =
     React.createRef<HTMLSelectElement | null>();
+  const placeholderRef: MutableRefObject<HTMLInputElement | null> =
+    React.createRef<HTMLInputElement | null>();
 
   const [internalValue, setInternalValue] = React.useState<string>('');
   const [list, setList] = React.useState<string[]>((): string[] =>
     normalizedInputValue(defaultValue)
   );
 
+  const [debouncedInputValue] = useDebounce(internalValue, 125);
+  const [debouncedList] = useDebounce(list, 50);
+
+  const [focused, setFocused] = React.useState<boolean>(false);
+  const [options, setOptions] = React.useState<Record<string, ReactNode>>({});
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
   const [paddingTop, setPaddingTop] = React.useState<number>(0);
 
-  function handleChange({ target }: ChangeEvent<HTMLInputElement>): void {
-    const newValue: string = target.value;
-    setInternalValue(newValue);
+  const activeLabel: string | undefined = React.useMemo((): string | undefined => {
+    const activeLabel: unknown = options[debouncedList[0]] ?? debouncedList[0];
+    return typeof activeLabel === 'string' ? activeLabel : undefined;
+  }, [debouncedList, options]);
+
+  const triggerUpdate = React.useCallback(
+    (value: string[]): void => {
+      if (onChange && internalRef.current !== null) {
+        onChange(createChangeEvent(internalRef.current, value));
+      } else {
+        setList(value);
+      }
+    },
+    [onChange, internalRef]
+  );
+
+  function addOption(key: string, value: ReactNode): void {
+    setOptions((prev: Record<string, ReactNode>) => ({ ...prev, [key]: value }));
   }
 
-  function handleMouseDown(event: MouseEvent): void {
-    if (event.target instanceof HTMLOptionElement && internalRef.current !== null) {
-      const value: string = event.target.value ?? '';
+  function clearAll(): void {
+    triggerUpdate([]);
+  }
 
-      let updatedList: string[] = [...list];
-      if (!updatedList.includes(value)) {
-        updatedList = [...list, value];
+  function handleFocus(): void {
+    setFocused(true);
+  }
+
+  function handleBlur(): void {
+    setFocused(false);
+  }
+
+  function handleChange({ target }: ChangeEvent<HTMLInputElement>): void {
+    setInternalValue(target.value);
+  }
+
+  function handleMouseDown({ target }: MouseEvent): void {
+    if (target instanceof HTMLOptionElement) {
+      const { value } = target;
+
+      let updatedList: string[];
+      if (!multiple) {
+        updatedList = [value];
+      } else if (!debouncedList.includes(value)) {
+        updatedList = [...debouncedList, value];
       } else {
-        updatedList = updatedList.filter((item: string) => item !== value);
+        updatedList = debouncedList.filter((item: string) => item !== value);
       }
 
-      // value
+      triggerUpdate(updatedList);
+    }
+  }
 
-      internalRef.current.querySelector(`option[value="${value}"]`)?.toggleAttribute('selected');
+  function handleRemove(index: number): void {
+    const updatedList: string[] = debouncedList.filter((_, i: number) => i !== index);
+    triggerUpdate(updatedList);
+  }
 
-      // internalRef.current.querySelectorAll('option').forEach((option: HTMLOptionElement) => {
-      //   option.selected = updatedList.includes(
-      //     option.value ? option.value : (option.textContent ?? '')
-      //   );
-      // });
-
-      const changeEvent: ChangeEvent<HTMLSelectElement> = createChangeEvent(
-        internalRef.current,
-        updatedList
-      );
-
-      onChange?.(changeEvent);
+  function resize(): void {
+    if (containerRef.current !== null && placeholderRef.current !== null) {
+      const { left: containerLeft, top: containerTop } =
+        containerRef.current.getBoundingClientRect();
+      const { left: inputLeft, top: inputTop } = placeholderRef.current.getBoundingClientRect();
+      setPaddingLeft(inputLeft - containerLeft);
+      setPaddingTop(inputTop - containerTop);
     }
   }
 
   React.useEffect((): void => {
-    if (containerRef.current && internalRef.current) {
-      const { left: containerLeft, top: containerTop } =
-        containerRef.current.getBoundingClientRect();
-      const { left: inputLeft, top: inputTop } = internalRef.current.getBoundingClientRect();
-      setPaddingLeft(inputLeft - containerLeft);
-      setPaddingTop(inputTop - containerTop);
-    }
-  }, [list, scrollHeight, scrollWidth, pageWidth, pageHeight]);
+    dropdownRef.current?.querySelectorAll('option').forEach((option: HTMLOptionElement) => {
+      option.selected = debouncedList.includes(option.value);
+    });
+  }, [debouncedList]);
+
+  React.useEffect(resize, [debouncedList, pageWidth, pageHeight, debouncedInputValue]);
 
   React.useEffect((): void => {
     const newValue: string[] = normalizedInputValue(value);
     setList(newValue);
   }, [value]);
 
+  React.useEffect((): void => {
+    if (dropdownRef.current !== null) {
+      const normalizedInputValue: string = debouncedInputValue.toLowerCase();
+      const options: NodeListOf<HTMLOptionElement> =
+        dropdownRef.current.querySelectorAll<HTMLOptionElement>('option');
+
+      for (let i: number = 0; i < options.length; i++) {
+        const option: HTMLOptionElement | null = options.item(i);
+
+        const hidden: boolean =
+          !option.textContent?.toLowerCase().includes(normalizedInputValue) &&
+          !option.value?.toLowerCase().includes(normalizedInputValue);
+
+        option.setAttribute('data-blurred', hidden ? 'true' : 'false');
+      }
+    }
+  }, [debouncedInputValue]);
+
+  React.useEffect((): void => {
+    for (const opt of dropdownRef.current?.getElementsByTagName('option') ?? []) {
+      opt.setAttribute('data-blurred', 'false');
+    }
+
+    if (!multiple) {
+      setInternalValue(activeLabel ?? '');
+    } else if (multiple) {
+      setInternalValue('');
+    }
+  }, [focused, debouncedList, multiple, options]);
+
   return (
-    <>
-      <ListInputContainer className={className} ref={containerRef} style={style}>
+    <SelectInputContext.Provider value={{ options, addOption }}>
+      <ListInputContainer
+        className={className}
+        data-multiple={multiple || undefined}
+        ref={containerRef}
+        style={style}
+      >
         {list?.map?.((item: string, i: number) => (
           <StyledToken className="token" key={i}>
-            <small>{item}</small>
-            {/* <div className="icon-button" onClick={() => handleRemove(i)} role="button">
+            <small>{options[item] ?? item}</small>
+            <div className="icon-button" onClick={() => handleRemove(i)} role="button">
               <img src={ClearIconUrl} />
-            </div> */}
+            </div>
           </StyledToken>
         ))}
 
-        <StyledInput readOnly value={internalValue} />
+        <StyledInput readOnly ref={placeholderRef} value={internalValue} />
 
         <StyledReference
-          // {...props}
           className={className}
           onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          // placeholder={placeholder}
           ref={inputRef}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}
         />
       </ListInputContainer>
 
-      <Overlay target={inputRef}>
+      <StyledOverlay target={containerRef}>
+        <StyledCaretDown aria-expanded={focused || undefined} src={CaretDownUrl} />
+        <img hidden={!multiple} onClick={clearAll} role="button" src={ClearIconUrl} />
+
         <Dropdown
           className={className}
-          // data-prevent-filter={preventFilter || undefined}
+          hidden={!focused}
           onMouseDown={handleMouseDown}
-          // ref={dropdownRef}
+          ref={dropdownRef}
           style={style}
         >
           <Fragment children={children} />
@@ -436,13 +343,18 @@ function ListInput(
             No Options
           </option>
         </Dropdown>
-      </Overlay>
+      </StyledOverlay>
 
-      <div style={{ height: '300px' }} />
-
-      <select {...props} children={children} ref={useMergedRef(ref, internalRef)} value={list} />
-    </>
+      <select
+        {...props}
+        children={children}
+        hidden
+        multiple
+        ref={useMergedRef(ref, internalRef)}
+        value={list}
+      />
+    </SelectInputContext.Provider>
   );
 }
 
-export default React.forwardRef(ListInput);
+export default React.forwardRef(SelectInput);

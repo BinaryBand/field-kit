@@ -35,7 +35,7 @@ function Overlay(
     }
   }
 
-  React.useEffect(handleResize, [pageWidth, pageHeight]);
+  React.useEffect(handleResize, [target, scrollHeight, scrollWidth, pageWidth, pageHeight]);
 
   return <StyledOverlay {...props} ref={ref} style={{ ...style, left, top, height, width }} />;
 }

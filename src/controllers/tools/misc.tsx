@@ -5,7 +5,7 @@ export function assert(condition: boolean, message?: string): void {
 }
 
 export function createRandomKey(): string {
-  return Math.random().toString(36);
+  return Math.random().toString(36).slice(2);
 }
 
 export function tryParse<T extends object = object>(value: unknown): T | undefined {

@@ -1,5 +1,5 @@
 import React, { Context } from 'react';
 
-const appContext: Context<IAppContext> = React.createContext<IAppContext>(undefined!);
+const AppContext: Context<IAppContext> = React.createContext<IAppContext>(null!);
 
-export default appContext;
+export default AppContext;

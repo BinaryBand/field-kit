@@ -1,12 +1,13 @@
 import '../src/index';
 
-const template = document.getElementById('code-demo-template');
+const codeTemplate = document.getElementById('code-demo-template');
+const optionsTemplate = document.getElementById('select-option-template');
 
-if (template instanceof HTMLTemplateElement) {
+if (codeTemplate instanceof HTMLTemplateElement) {
   document.querySelectorAll('.code-demo').forEach((item) => {
     const targetQuery = item.getAttribute('data-target') ?? '';
     const target = document.querySelector(targetQuery);
-    const clone = template.content.cloneNode(true);
+    const clone = codeTemplate.content.cloneNode(true);
 
     if (target !== null && clone instanceof DocumentFragment) {
       const codeString = target.outerHTML;
@@ -22,6 +23,13 @@ if (template instanceof HTMLTemplateElement) {
       });
     }
 
+    item.appendChild(clone);
+  });
+}
+
+if (optionsTemplate instanceof HTMLTemplateElement) {
+  document.querySelectorAll('.tw-select-group').forEach((item) => {
+    const clone = optionsTemplate.content.cloneNode(true);
     item.appendChild(clone);
   });
 }

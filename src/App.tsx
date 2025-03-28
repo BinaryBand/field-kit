@@ -1,11 +1,15 @@
 import React, { ReactElement } from 'react';
+import { useDebounce } from 'use-debounce';
 import AppContext from '@providers/AppContext';
 
 function App({ children, root }: IAppProps): ReactElement {
   const [scrollHeight, setScrollHeight] = React.useState<number>(0);
   const [scrollWidth, setScrollWidth] = React.useState<number>(0);
-  const [pageWidth, setPageWidth] = React.useState<number>(0);
-  const [pageHeight, setPageHeight] = React.useState<number>(0);
+  const [currentPageWidth, setPageWidth] = React.useState<number>(0);
+  const [currentPageHeight, setPageHeight] = React.useState<number>(0);
+
+  const [pageWidth] = useDebounce(currentPageWidth, 125);
+  const [pageHeight] = useDebounce(currentPageHeight, 125);
 
   function handleResize(): void {
     setPageWidth(window.innerWidth);

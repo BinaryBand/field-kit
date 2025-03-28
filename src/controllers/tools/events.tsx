@@ -1,5 +1,5 @@
 import { ChangeEvent, SyntheticEvent } from 'react';
-import { tryParse } from './misc';
+import { applySelectedOptions, tryParse } from '@utils';
 
 export function createNativeEvent<T extends HTMLElement = HTMLElement>(
   type: string,
@@ -47,57 +47,23 @@ export function createSyntheticEvent<T extends Element, E extends Event = Event>
   };
 }
 
-function createSelectChangeEvent(
-  target: HTMLSelectElement,
-  values?: string[]
-): ChangeEvent<HTMLSelectElement> {
-  // target.value = JSON.stringify(values);
-
-  // Array.from(target.getElementsByTagName('option')).forEach((option: HTMLOptionElement) => {
-  //   option.selected = values?.includes(option.value) ?? false;
-  // });
-
-  // if (target instanceof HTMLSelectElement) {
-  //   console.log('select', target);
-  // }
-
-  // const virtualTarget: HTMLSelectElement = Object.assign({}, target, {
-  //   selectedOptions: Array.from(target.selectedOptions),
-  //   tagName: 'select',
-  //   value: JSON.stringify(values) ?? Array.from(target.selectedOptions).map(({ value }) => value),
-  // });
+function createChangeEvent<T extends GenericInputElement, V extends boolean | string | string[]>(
+  target: T,
+  value?: V
+): ChangeEvent<T> {
+  if (target instanceof HTMLInputElement) {
+    target.checked = Boolean(value) ?? target.checked ?? false;
+    target.value = `${value ?? target.value ?? ''}`;
+  } else if (target instanceof HTMLTextAreaElement) {
+    target.value = `${value ?? target.value ?? ''}`;
+  } else if (target instanceof HTMLSelectElement) {
+    const values: string[] = Array.isArray(value) ? value : (tryParse(value) ?? []);
+    applySelectedOptions(target, values);
+  }
 
   const nativeEvent: Event = createNativeEvent('change', target);
-  const syntheticEvent: SyntheticEvent<HTMLSelectElement> = createSyntheticEvent(nativeEvent);
-  return syntheticEvent as ChangeEvent<HTMLSelectElement>;
-}
-
-function createChangeEvent<T extends HTMLInputElement, V>(
-  target: HTMLInputElement,
-  value: V
-): ChangeEvent<T>;
-function createChangeEvent<T extends HTMLTextAreaElement>(
-  target: T,
-  value?: string
-): ChangeEvent<T>;
-function createChangeEvent<T extends HTMLSelectElement>(
-  target: T,
-  value?: string[]
-): ChangeEvent<T>;
-function createChangeEvent<T extends HTMLElement, V>(target: T, value?: V): ChangeEvent<T> {
-  if (target instanceof HTMLSelectElement) {
-    return createSelectChangeEvent(target, value);
-  }
-
-  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
-    const virtualTarget: T = Object.assign({}, target, {
-      value: value ?? target.value,
-    });
-
-    const nativeEvent: Event = createNativeEvent('change', virtualTarget);
-    const syntheticEvent: SyntheticEvent<T> = createSyntheticEvent(nativeEvent);
-    return syntheticEvent as ChangeEvent<T>;
-  }
+  const syntheticEvent: SyntheticEvent<T> = createSyntheticEvent(nativeEvent);
+  return syntheticEvent as ChangeEvent<T>;
 }
 
 export { createChangeEvent };

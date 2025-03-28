@@ -9,8 +9,10 @@ import InputWrapper from '@inline/InputWrapper';
 
 import ImageInput from '@components/ImageInput';
 import ListInput from '@components/ListInput';
-import SelectInput from '@components/SelectInput';
+import SelectInput, { SelectOption } from '@components/SelectInput';
 import Signature from '@components/Signature';
+
+import { FilterGroup, TextFilter } from '@/controllers/components/Filter';
 
 import Calendar from '@/controllers/components/Calendar';
 import Multiline from '@/controllers/components/Multiline';
@@ -23,7 +25,7 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
   switch (className.toLowerCase()) {
     case 'tw-select-group':
       return (
-        <InputWrapper<'select'>
+        <InputWrapper
           children={children}
           component={SelectInput}
           container={element as HTMLSelectElement}
@@ -31,17 +33,26 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
         />
       );
     case 'tw-option':
-      const { className, textContent, style } = element as HTMLOptionElement;
-      const value: string = element.getAttribute('value') ?? '';
+      const { className, textContent, style, value } = element as HTMLOptionElement;
       return (
-        <option className={className} css={style.cssText} key={key} value={value}>
-          {textContent}
-        </option>
+        <SelectOption
+          children={textContent}
+          className={className}
+          css={style.cssText}
+          key={key}
+          value={value}
+        />
       );
     case 'tw-calendar-month':
       return <Calendar children={children} element={element} key={key} />;
     case 'tw-auto-resize':
       return <Multiline children={children} element={element} key={key} />;
+
+    case 'tw-filter-group':
+      return <FilterGroup children={children} container={element} key={key} />;
+    case 'tw-text-filter':
+      return <TextFilter target={element as HTMLInputElement} key={key} />;
+
     default:
       return null;
   }
@@ -52,8 +63,6 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
   const key: string = `${type || 'input'}_${createRandomKey()}`;
 
   switch (type?.toLowerCase()) {
-    case 'test':
-      return <InputWrapper component="input" container={element} key={key} />;
     case 'img':
       return <InputWrapper component={ImageInput} container={element} key={key} />;
     case 'list':
@@ -66,10 +75,6 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
 }
 
 function renderComponents(parent: HTMLElement): ReactNode {
-  if (parent instanceof HTMLInputElement) {
-    return inputToComponent(parent);
-  }
-
   let reactElement: ReactNode = null;
   if (parent.querySelector('input, [class*="tw-"]') !== null) {
     reactElement = Array.from(parent.children)
@@ -82,6 +87,11 @@ function renderComponents(parent: HTMLElement): ReactNode {
   for (const className of Array.from(parent.classList).filter((c) => c.startsWith('tw-'))) {
     const element: ReactNode = classToComponent(reactElement, className, parent);
     element && (reactElement = element);
+  }
+
+  if (parent instanceof HTMLInputElement) {
+    const inputComponent: ReactNode = inputToComponent(parent);
+    inputComponent && (reactElement = [reactElement, inputComponent]);
   }
 
   return reactElement;

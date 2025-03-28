@@ -1,6 +1,6 @@
 interface BasePortalProps<E extends HTMLElement> {
   children: React.ReactNode;
-  container?: E;
+  container?: E | null;
 }
 
 interface IPortalProps<T extends React.ElementType<{}>, E extends HTMLElement> {

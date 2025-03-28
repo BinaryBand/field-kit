@@ -2,15 +2,18 @@ import React, {
   ChangeEvent,
   ComponentProps,
   ForwardedRef,
+  Fragment,
   KeyboardEvent,
   MutableRefObject,
   ReactElement,
 } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
-import { createChangeEvent, tryParse, useMergedRef } from '@utils';
+import { useDebounce } from 'use-debounce';
 
+import Overlay from '@inline/Overlay';
 import AppContext from '@providers/AppContext';
 import ClearIconUrl from '@/assets/icons/x.svg';
+import { createChangeEvent, tryParse, useMergedRef } from '@utils';
 
 export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
   background: none;
@@ -50,20 +53,21 @@ export const StyledToken: StyledComponent<ComponentProps<'div'>> = styled.div`
   gap: 0.3em;
   padding: 0.1em 0.5em;
   position: relative;
-  z-index: 5;
+  z-index: 3;
 
   &._tw-placeholder-token {
     pointer-events: none;
     visibility: hidden;
   }
+`;
 
-  div.icon-button {
-    height: 100%;
-    display: flex;
-    font-size: 1.25em;
-    font-weight: bold;
-    line-height: 0;
-  }
+const StyledOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
+  align-items: center;
+  display: flex;
+  justify-content: end;
+
+  gap: 0.5em;
+  padding-right: 0.5em;
 `;
 
 function ListInput(
@@ -89,41 +93,51 @@ function ListInput(
     }
   });
 
+  const [debouncedList] = useDebounce(list, 50);
+
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
   const [paddingTop, setPaddingTop] = React.useState<number>(0);
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
-    const newValue: string = event.target.value;
-    setInternalValue(newValue);
+  function clearAll(): void {
+    if (onChange !== undefined && internalRef.current !== null) {
+      onChange?.(createChangeEvent(internalRef.current, JSON.stringify([])));
+    } else {
+      setList([]);
+      setInternalValue('');
+    }
+  }
+
+  function handleChange({ target }: ChangeEvent<HTMLInputElement>): void {
+    setInternalValue(target.value);
   }
 
   function handleSpecialKey(event: KeyboardEvent<HTMLInputElement>): void {
-    let newValue: string[];
+    let newList: string[] = [...list];
+
     switch (event.key) {
       case 'Enter':
-        newValue = [...list, internalValue];
         setInternalValue('');
-        setList(newValue);
+        newList.push(internalValue);
         break;
       case 'Backspace':
-        newValue = list.slice(0, list.length - 1);
-        setInternalValue(list[list.length - 1] ?? '');
-        setList(newValue);
+        setInternalValue(newList.pop() ?? '');
         break;
       default:
         return;
     }
 
-    event.preventDefault();
-    if (internalRef.current !== null) {
-      onChange?.(createChangeEvent(internalRef.current, JSON.stringify(newValue)));
+    if (onChange !== undefined && internalRef.current !== null) {
+      event.preventDefault();
+      onChange(createChangeEvent(internalRef.current, JSON.stringify(newList)));
+    } else {
+      setList(newList);
     }
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Enter' && internalValue !== '') {
       handleSpecialKey(event);
-    } else if (event.key === 'Backspace' && internalValue === '' && list.length > 0) {
+    } else if (event.key === 'Backspace' && internalValue === '' && debouncedList.length > 0) {
       handleSpecialKey(event);
     }
 
@@ -131,11 +145,11 @@ function ListInput(
   }
 
   function handleRemove(i: number): void {
-    const updatedList: string[] = list.filter((_, j: number) => j !== i);
-    setList(updatedList);
-
-    if (internalRef.current !== null) {
-      onChange?.(createChangeEvent(internalRef.current, JSON.stringify(updatedList)));
+    const updatedList: string[] = debouncedList.filter((_, j: number) => j !== i);
+    if (onChange !== undefined && internalRef.current !== null) {
+      onChange(createChangeEvent(internalRef.current, JSON.stringify(updatedList)));
+    } else {
+      setList(updatedList);
     }
   }
 
@@ -147,13 +161,13 @@ function ListInput(
       setPaddingLeft(inputLeft - containerLeft);
       setPaddingTop(inputTop - containerTop);
     }
-  }, [list, scrollHeight, scrollWidth, pageWidth, pageHeight]);
+  }, [debouncedList, scrollHeight, scrollWidth, pageWidth, pageHeight]);
 
   React.useEffect((): void => {
     let newValue: string[];
     switch (typeof value) {
       case 'string':
-        newValue = tryParse<string[]>(value) ?? [`${value}`].filter(Boolean);
+        newValue = tryParse<string[]>(value) ?? [value].filter(Boolean);
         break;
       case 'object':
         newValue = Array.isArray(value) ? value : [];
@@ -166,27 +180,33 @@ function ListInput(
   }, [value]);
 
   return (
-    <ListInputContainer className={className} ref={containerRef} style={style}>
-      {list.map((item: string, i: number) => (
-        <StyledToken className="token" key={i}>
-          <small>{item}</small>
-          <div className="icon-button" onClick={() => handleRemove(i)} role="button">
-            <img src={ClearIconUrl} />
-          </div>
-        </StyledToken>
-      ))}
+    <Fragment>
+      <ListInputContainer className={className} ref={containerRef} style={style}>
+        {list.map((item: string, i: number) => (
+          <StyledToken className="token" key={i}>
+            <small>{item}</small>
+            <div className="icon-button" onClick={() => handleRemove(i)} role="button">
+              <img src={ClearIconUrl} />
+            </div>
+          </StyledToken>
+        ))}
 
-      <StyledInput readOnly ref={useMergedRef(ref, internalRef)} value={internalValue} />
+        <StyledInput readOnly ref={useMergedRef(ref, internalRef)} value={internalValue} />
 
-      <StyledReference
-        {...props}
-        className={className}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        style={{ ...style, paddingLeft, paddingTop }}
-        value={internalValue}
-      />
-    </ListInputContainer>
+        <StyledReference
+          {...props}
+          className={className}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          style={{ ...style, paddingLeft, paddingTop }}
+          value={internalValue}
+        />
+      </ListInputContainer>
+
+      <StyledOverlay target={containerRef}>
+        <img onClick={clearAll} role="button" src={ClearIconUrl} />
+      </StyledOverlay>
+    </Fragment>
   );
 }
 

@@ -1,20 +1,31 @@
-import React, { ComponentProps, ReactNode } from 'react';
+import React, { ComponentProps, ComponentType, JSX, ReactNode } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
-import Portal from '@inline/Portal';
+import Portal from '@/views/components/inline/Portal';
 
-function Wrapper<T extends keyof HTMLElementTagNameMap>(
-  props: OverloadedWrapperProps<T>
-): ReactNode;
-function Wrapper<T extends keyof HTMLElementTagNameMap>({
-  component,
-  container,
-  ...props
-}: WrapperProps<T>): ReactNode {
-  const Component: StyledComponent<ComponentProps<T>> = React.useMemo(
-    () => styled(component)(container.style.cssText),
-    []
-  );
+interface IWrapperProps<
+  P extends JSX.IntrinsicAttributes,
+  C extends keyof JSX.IntrinsicElements | ComponentType<P>,
+> {
+  component: C;
+  container?: HTMLElement | null;
+}
+
+type WrapperProps<
+  P extends JSX.IntrinsicAttributes,
+  C extends keyof JSX.IntrinsicElements | ComponentType<P>,
+> = IWrapperProps<P, C> & ComponentProps<C>;
+
+function Wrapper<
+  P extends JSX.IntrinsicAttributes,
+  C extends keyof JSX.IntrinsicElements | ComponentType<P>,
+>({ component, container, ...props }: WrapperProps<P, C>): ReactNode {
   const [shuttle, setShuttle] = React.useState<HTMLDivElement>();
+
+  const StyledComponent = React.useMemo<StyledComponent<ComponentProps<C>, any, any>>(
+    () => styled(component as keyof JSX.IntrinsicElements)(container?.style.cssText),
+    // () => styled(component as React.ComponentType<P>)(container?.style.cssText),
+    [component, container]
+  );
 
   React.useEffect((): (() => void) => {
     if (!container || !container?.parentElement) return () => undefined;
@@ -32,11 +43,7 @@ function Wrapper<T extends keyof HTMLElementTagNameMap>({
 
   return (
     <Portal container={shuttle}>
-      <Component
-        {...(props as ComponentProps<T>)}
-        className={container.className}
-        theme={undefined}
-      />
+      <StyledComponent {...props} />
     </Portal>
   );
 }

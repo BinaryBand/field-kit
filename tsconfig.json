@@ -32,5 +32,5 @@
     }
   },
   "exclude": ["node_modules", "dist", "build"],
-  "include": ["src", "index.d.ts"]
+  "include": ["src", "public", "index.d.ts"]
 }
