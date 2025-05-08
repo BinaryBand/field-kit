@@ -1,21 +1,25 @@
-interface IOverloadedWrapperProps<T extends keyof HTMLElementTagNameMap> {
-  component: T | React.ComponentType<React.ComponentProps<T>>;
+type InputTags = 'input' | 'select' | 'textarea';
+
+interface IInputWrapperProps<T extends InputTags, P extends JSX.IntrinsicAttributes> {
+  component: T | React.ComponentType<P>;
   container: HTMLElementTagNameMap[T];
 }
 
-interface IOverloadedInputWrapperProps<T extends keyof HTMLElementTagNameMap> {
-  component: T | React.ComponentType<React.ComponentProps<T>>;
-  container: HTMLElementTagNameMap[T];
-}
-
-interface IWrapperProps<T extends keyof HTMLElementTagNameMap> {
-  component: React.ComponentType<React.ComponentProps<T>>;
-  container: HTMLElementTagNameMap[T];
-}
-
-type WrapperProps<T extends keyof HTMLElementTagNameMap> = IWrapperProps<T> &
+type InputWrapperProps<T extends InputTags, P extends JSX.IntrinsicAttributes> = IInputWrapperProps<
+  T,
+  P
+> &
   React.ComponentProps<T>;
-type OverloadedWrapperProps<T extends keyof HTMLElementTagNameMap> = IWrapperProps<T> &
-  React.ComponentProps<T>;
-type OverloadedInputWrapperProps<T extends 'input' | 'select' | 'textarea'> =
-  IOverloadedInputWrapperProps<T> & ComponentProps<T>;
+
+interface IWrapperProps<
+  P extends JSX.IntrinsicAttributes,
+  C extends keyof JSX.IntrinsicElements | React.ComponentType<P>,
+> {
+  component: C;
+  container?: HTMLElement | null;
+}
+
+type WrapperProps<
+  P extends JSX.IntrinsicAttributes,
+  C extends keyof JSX.IntrinsicElements | React.ComponentType<P>,
+> = IWrapperProps<P, C> & React.ComponentType<C>;

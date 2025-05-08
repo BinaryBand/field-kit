@@ -8,13 +8,8 @@ interface IGenericInputElement {
 
 type GenericInputElement = IGenericInputElement & HTMLElement;
 
-interface ISelectInputProps extends WrapperProps<'select'> {
+interface ISelectInputProps extends React.ComponentProps<'select'> {
   'data-placeholder'?: string;
 }
 
-type SelectInputProps = WrapperProps<'select'> & ISelectInputProps;
-
-interface ISelectInputContext {
-  options: Record<string, ReactNode>;
-  addOption: (key: string, value: ReactNode) => void;
-}
+type SelectInputProps = ISelectInputProps;

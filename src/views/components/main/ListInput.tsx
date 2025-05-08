@@ -145,8 +145,8 @@ function ListInput(
   }
 
   function handleRemove(i: number): void {
-    const updatedList: string[] = debouncedList.filter((_, j: number) => j !== i);
-    if (onChange !== undefined && internalRef.current !== null) {
+    const updatedList = list.filter((_, j: number) => j !== i);
+    if (onChange && internalRef.current) {
       onChange(createChangeEvent(internalRef.current, JSON.stringify(updatedList)));
     } else {
       setList(updatedList);

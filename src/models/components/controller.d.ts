@@ -1,4 +1,4 @@
-interface IControllerProps {
-  children: React.ReactNode;
-  element: HTMLElement;
+interface IControllerProps<T extends HTMLElement = HTMLElement> {
+  children?: React.ReactNode;
+  target: T;
 }

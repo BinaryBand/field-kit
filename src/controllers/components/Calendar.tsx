@@ -9,14 +9,14 @@ function isInteger(value: string | null): boolean {
   return /^\-?\d+$/.test(value);
 }
 
-function Calendar({ children, element }: IControllerProps): ReactNode {
+function Calendar({ children, target }: IControllerProps): ReactNode {
   const observer: MutationObserver = React.useMemo(
     () => new MutationObserver(observerCallback),
     []
   );
 
-  const [yearAttribute, setYearAttribute] = React.useState(element.getAttribute('data-tw-year'));
-  const [monthAttribute, setMonthAttribute] = React.useState(element.getAttribute('data-tw-month'));
+  const [yearAttribute, setYearAttribute] = React.useState(target.getAttribute('data-tw-year'));
+  const [monthAttribute, setMonthAttribute] = React.useState(target.getAttribute('data-tw-month'));
 
   const { blankDays, totalDays } = React.useMemo(() => {
     const currentDate: Date = new Date(Date.now());
@@ -37,34 +37,34 @@ function Calendar({ children, element }: IControllerProps): ReactNode {
   function observerCallback(mutations: MutationRecord[]): void {
     mutations.forEach((mut: MutationRecord): void => {
       if (mut.type === 'attributes') {
-        element.dispatchEvent(new Event('attributes'));
+        target.dispatchEvent(new Event('attributes'));
       }
     });
   }
 
   function updateAttributes(): void {
-    setYearAttribute(element.getAttribute('data-tw-year'));
-    setMonthAttribute(element.getAttribute('data-tw-month'));
+    setYearAttribute(target.getAttribute('data-tw-year'));
+    setMonthAttribute(target.getAttribute('data-tw-month'));
   }
 
   React.useEffect((): (() => void) => {
-    element.addEventListener('attributes', updateAttributes);
-    observer.observe(element, { attributes: true });
+    target.addEventListener('attributes', updateAttributes);
+    observer.observe(target, { attributes: true });
 
     return () => {
-      element.removeEventListener('attributes', updateAttributes);
+      target.removeEventListener('attributes', updateAttributes);
       observer.disconnect();
     };
-  }, [element]);
+  }, [target]);
 
   React.useEffect(() => {
-    element.setAttribute('data-tw-blank-days', blankDays.toString());
-    element.setAttribute('data-tw-total-days', totalDays.toString());
+    target.setAttribute('data-tw-blank-days', blankDays.toString());
+    target.setAttribute('data-tw-total-days', totalDays.toString());
   }, [blankDays, totalDays]);
 
-  if (element instanceof HTMLTableRowElement) {
+  if (target instanceof HTMLTableRowElement) {
     return (
-      <Portal container={element}>
+      <Portal container={target}>
         {[...new Array(31)].map((_, i: number) => (
           <td className="_tw-calendar-day-placeholder" data-tw-day={i + 1} key={i} />
         ))}

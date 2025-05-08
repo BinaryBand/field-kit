@@ -18,6 +18,13 @@ table.tw-calendar > tbody > tr {
       width: calc(100% / 7);
     }
 
+    @media only screen and (max-width: 600px) {
+      & > td.tw-calendar-day,
+      & > td._tw-calendar-day-placeholder {
+        width: 100%;
+      }
+    }
+
     // Add blank days to the beginning of the month
     @for $i from 1 through 6 {
       &[data-tw-blank-days='#{$i}'] {

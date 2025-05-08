@@ -15,8 +15,8 @@ import ClearIconUrl from '@/assets/icons/x.svg';
 import CaretDownUrl from '@/assets/icons/caret-down.svg';
 
 import AppContext from '@providers/AppContext';
-import Overlay from '@inline/Overlay';
 import SelectInputContext from '@providers/SelectInputContext';
+import Overlay from '@inline/Overlay';
 import { StyledToken } from '@components/ListInput';
 
 import { createChangeEvent, tryParse, useMergedRef } from '@utils';
@@ -130,25 +130,11 @@ function normalizedInputValue(value?: string | number | readonly string[]): stri
   }
 }
 
-// function SelectInput(
-//   {
-//     children,
-//     className,
-//     'data-placeholder': placeholder,
-//     defaultValue,
-//     multiple,
-//     onChange,
-//     onKeyDown,
-//     style,
-//     value,
-//     ...props
-//   }: SelectInputProps,
-//   ref: ForwardedRef<HTMLSelectElement>
-// ): ReactElement {
 function SelectInput(
   {
     children,
     className,
+    'data-placeholder': placeholder,
     defaultValue,
     multiple,
     onChange,
@@ -156,7 +142,7 @@ function SelectInput(
     style,
     value,
     ...props
-  }: ComponentProps<'select'>,
+  }: SelectInputProps,
   ref: ForwardedRef<HTMLSelectElement>
 ): ReactElement {
   const { pageWidth, pageHeight } = React.useContext(AppContext);
@@ -320,7 +306,7 @@ function SelectInput(
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          // placeholder={placeholder}
+          placeholder={placeholder}
           ref={inputRef}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}

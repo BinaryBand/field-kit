@@ -1,6 +1,6 @@
 import React, { Fragment, ReactElement } from 'react';
 
-function Multiline({ children, element }: IControllerProps): ReactElement {
+function Multiline({ children, target }: IControllerProps): ReactElement {
   function addTab(textArea: HTMLTextAreaElement): void {
     const { selectionStart, selectionEnd } = textArea;
     textArea.setSelectionRange(selectionStart, selectionEnd);
@@ -34,16 +34,16 @@ function Multiline({ children, element }: IControllerProps): ReactElement {
   }
 
   React.useEffect((): (() => void) => {
-    handleInput(element);
+    handleInput(target);
 
-    element.addEventListener('input', handleInput, false);
-    element.addEventListener('keydown', handleKeyDown);
+    target.addEventListener('input', handleInput, false);
+    target.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      element.removeEventListener('input', handleInput);
-      element.removeEventListener('keydown', handleKeyDown);
+      target.removeEventListener('input', handleInput);
+      target.removeEventListener('keydown', handleKeyDown);
     };
-  }, [element]);
+  }, [target]);
 
   return <Fragment children={children} />;
 }

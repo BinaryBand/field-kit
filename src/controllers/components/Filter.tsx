@@ -1,17 +1,10 @@
-import React, { ComponentProps, Context, ReactElement, ReactNode } from 'react';
+import React, { ComponentProps, Context, Fragment, ReactElement, ReactNode } from 'react';
 import { useDebounce } from 'use-debounce';
 import { createRandomKey } from '@utils';
 
-interface IFilterContext {
-  textFilters: Record<string, string>;
-  registerFilter: (key: string, value: string) => void;
-  unregisterFilter: (key: string) => void;
-  updateTextFilter: (key: string, value: string) => void;
-}
-
 const FilterContext: Context<IFilterContext> = React.createContext<IFilterContext>(null!);
 
-export function TextFilter({ target }: { target?: HTMLInputElement | null }): ReactNode {
+export function TextFilter({ children, target }: IControllerProps<HTMLInputElement>): ReactNode {
   const { registerFilter, unregisterFilter, updateTextFilter } = React.useContext(FilterContext);
 
   const key: string = React.useMemo((): string => createRandomKey(), []);
@@ -36,7 +29,7 @@ export function TextFilter({ target }: { target?: HTMLInputElement | null }): Re
     return () => target?.removeEventListener('input', handleChange);
   }, [target]);
 
-  return null;
+  return <Fragment children={children} />;
 }
 
 export function FilterGroup({

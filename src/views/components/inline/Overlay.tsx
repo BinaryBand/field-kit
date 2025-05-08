@@ -17,7 +17,8 @@ function Overlay(
   { style, target, ...props }: OverlayProps,
   ref: ForwardedRef<HTMLDivElement>
 ): ReactElement {
-  const { scrollHeight, scrollWidth, pageWidth, pageHeight } = React.useContext(AppContext);
+  const { updateTrigger, scrollHeight, scrollWidth, pageWidth, pageHeight } =
+    React.useContext(AppContext);
 
   const [left, setLeft] = React.useState<number>(0);
   const [top, setTop] = React.useState<number>(0);
@@ -35,7 +36,14 @@ function Overlay(
     }
   }
 
-  React.useEffect(handleResize, [target, scrollHeight, scrollWidth, pageWidth, pageHeight]);
+  React.useEffect(handleResize, [
+    target,
+    updateTrigger,
+    scrollHeight,
+    scrollWidth,
+    pageWidth,
+    pageHeight,
+  ]);
 
   return <StyledOverlay {...props} ref={ref} style={{ ...style, left, top, height, width }} />;
 }

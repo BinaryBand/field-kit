@@ -1,26 +1,6 @@
-import React, {
-  ChangeEvent,
-  ComponentProps,
-  ComponentType,
-  JSX,
-  ReactNode,
-  SyntheticEvent,
-} from 'react';
-import Wrapper from '@inline/Wrapper';
+import React, { ChangeEvent, ComponentProps, JSX, ReactNode, SyntheticEvent } from 'react';
+import StyledPortalWrapperProps from '@inline/StyledPortalWrapper';
 import { applySelectedOptions, getSelectedOptionValues } from '@tools/inputs';
-
-type InputTags = 'input' | 'select' | 'textarea';
-
-interface IInputWrapperProps<T extends InputTags, P extends JSX.IntrinsicAttributes> {
-  component: T | ComponentType<P>;
-  container: HTMLElementTagNameMap[T];
-}
-
-type InputWrapperProps<T extends InputTags, P extends JSX.IntrinsicAttributes> = IInputWrapperProps<
-  T,
-  P
-> &
-  ComponentProps<T>;
 
 function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
   props: InputWrapperProps<T, P>
@@ -50,7 +30,13 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
   }
 
   function handleEvent(event: SyntheticEvent<HTMLElement>): void {
-    const nativeEvent: CustomEvent = new CustomEvent(event.type, event);
+    const eventInit: CustomEventInit = {
+      bubbles: event.bubbles,
+      cancelable: event.cancelable,
+      detail: { syntheticEvent: event },
+    };
+
+    const nativeEvent: CustomEvent = new CustomEvent(event.type, eventInit);
     container.dispatchEvent(nativeEvent);
   }
 
@@ -73,6 +59,7 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
     return () => container.removeEventListener('change', nativeChangeMemo);
   }, [container, nativeChangeMemo]);
 
+  // Props that can be passed to any and all input elements
   const baseProps = {
     disabled: container.disabled,
     onChange: handleChangeEvent,
@@ -99,10 +86,10 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
       value: selectedOptions,
     };
     const placeholder: string = container.getAttribute('data-placeholder') ?? '';
-
-    return <Wrapper data-placeholder={placeholder} {...(props as any)} {...selectProps} />;
+    return <StyledPortalWrapperProps data-placeholder={placeholder} {...props} {...selectProps} />;
   }
 
+  // Props that can be passed to both input and textarea elements
   const { placeholder, readOnly } = container;
 
   if (isInput) {
@@ -115,17 +102,11 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
       value,
     };
 
-    return <Wrapper {...(props as any)} {...inputProps} />;
+    return <StyledPortalWrapperProps {...props} {...inputProps} />;
   }
 
-  const textProps: ComponentProps<'textarea'> = {
-    ...baseProps,
-    placeholder,
-    readOnly,
-    value,
-  };
-
-  return <Wrapper {...(props as any)} {...textProps} />;
+  const textProps: ComponentProps<'textarea'> = { ...baseProps, placeholder, readOnly, value };
+  return <StyledPortalWrapperProps {...props} {...textProps} />;
 }
 
 export default InputWrapper;
