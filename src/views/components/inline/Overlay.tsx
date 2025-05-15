@@ -1,6 +1,8 @@
 import React, { ComponentProps, ForwardedRef, ReactElement } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
 
+import Portal from './Portal';
+
 import AppContext from '@providers/AppContext';
 
 const StyledOverlay: StyledComponent<ComponentProps<'div'>> = styled.div`
@@ -27,12 +29,11 @@ function Overlay(
 
   function handleResize(): void {
     if (target.current !== null) {
-      const { left, top } = target.current.getBoundingClientRect();
-      const { offsetWidth, offsetHeight } = target.current;
+      const { left, top, width, height } = target.current.getBoundingClientRect();
       setLeft(left + scrollWidth);
       setTop(top + scrollHeight);
-      setWidth(offsetWidth);
-      setHeight(offsetHeight);
+      setWidth(width);
+      setHeight(height);
     }
   }
 
@@ -45,7 +46,11 @@ function Overlay(
     pageHeight,
   ]);
 
-  return <StyledOverlay {...props} ref={ref} style={{ ...style, left, top, height, width }} />;
+  return (
+    <Portal container={document.body}>
+      <StyledOverlay {...props} ref={ref} style={{ ...style, left, top, height, width }} />
+    </Portal>
+  );
 }
 
 export default React.forwardRef(Overlay);

@@ -9,6 +9,8 @@ import InputWrapper from '@inline/InputWrapper';
 
 import ImageInput from '@components/ImageInput';
 import ListInput from '@components/ListInput';
+import PasskeyInput from '@components/PasskeyInput';
+import PinInput from '@components/PinInput';
 import SelectInput, { SelectOption } from '@components/SelectInput';
 import Signature from '@components/Signature';
 
@@ -17,13 +19,7 @@ import Form from '@/controllers/components/Form';
 import Multiline from '@/controllers/components/Multiline';
 import { FilterGroup, TextFilter } from '@/controllers/components/Filter';
 
-import { createRandomKey } from '@utils';
-
-function assert(condition: unknown, message?: string): asserts condition {
-  if (!condition) {
-    throw new Error(message ?? 'Assertion failed');
-  }
-}
+import { assert, createRandomKey } from '@utils';
 
 function getStableKey(htmlElement: HTMLElement): string {
   return htmlElement.id || htmlElement.dataset.stableId || createRandomKey();
@@ -41,8 +37,8 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
     case 'tw-option':
       assert(element instanceof HTMLOptionElement, 'Element is not an option element');
       const { className, textContent, style, value } = element;
-      const selectOptionProps: ComponentProps<'option'> = { className, value, key };
-      return <SelectOption children={textContent} css={style.cssText} {...selectOptionProps} />;
+      const props: ComponentProps<'option'> = { className, value };
+      return <SelectOption children={textContent} css={style.cssText} {...props} key={key} />;
     case 'tw-calendar-month':
       return <Calendar children={children} target={element} key={key} />;
     case 'tw-auto-resize':
@@ -65,6 +61,14 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
       return <InputWrapper component={ImageInput} container={element} key={key} />;
     case 'list':
       return <InputWrapper component={ListInput} container={element} key={key} />;
+    case 'passkey':
+      const identifier: string = element.getAttribute('data-identifier') ?? '';
+      const userName: string | undefined = element.getAttribute('data-user') ?? undefined;
+      const props: ISecurityProps = { identifier, userName };
+      return <InputWrapper component={PasskeyInput} container={element} {...props} key={key} />;
+    case 'pin':
+      const size: number | undefined = Number(element.getAttribute('data-size')) ?? undefined;
+      return <InputWrapper component={PinInput} container={element} size={size} key={key} />;
     case 'signature':
       return <InputWrapper component={Signature} container={element} key={key} />;
   }

@@ -10,22 +10,22 @@ import React, {
 import styled, { StyledComponent } from '@emotion/styled';
 import { useDebounce } from 'use-debounce';
 
+import XIcon from '@/assets/icons/XIcon';
+
 import Overlay from '@inline/Overlay';
 import AppContext from '@providers/AppContext';
-import ClearIconUrl from '@/assets/icons/x.svg';
 import { createChangeEvent, tryParse, useMergedRef } from '@utils';
 
 export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
   background: none;
   border: transparent;
-  padding: 1px 2px;
 
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: start;
-  gap: 0.25em;
+  gap: 0.5em;
 `;
 
 export const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
@@ -59,6 +59,12 @@ export const StyledToken: StyledComponent<ComponentProps<'div'>> = styled.div`
     pointer-events: none;
     visibility: hidden;
   }
+
+  .icon-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const StyledOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
@@ -76,10 +82,9 @@ function ListInput(
 ): ReactElement {
   const { scrollHeight, scrollWidth, pageWidth, pageHeight } = React.useContext(AppContext);
 
-  const containerRef: MutableRefObject<HTMLDivElement | null> =
-    React.createRef<HTMLDivElement | null>();
+  const containerRef: MutableRefObject<HTMLDivElement | null> = React.createRef<HTMLDivElement>();
   const internalRef: MutableRefObject<HTMLInputElement | null> =
-    React.createRef<HTMLInputElement | null>();
+    React.createRef<HTMLInputElement>();
 
   const [internalValue, setInternalValue] = React.useState<string>('');
   const [list, setList] = React.useState<string[]>(() => {
@@ -135,8 +140,12 @@ function ListInput(
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-    if (event.key === 'Enter' && internalValue !== '') {
-      handleSpecialKey(event);
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      if (internalValue !== '') {
+        handleSpecialKey(event);
+      }
     } else if (event.key === 'Backspace' && internalValue === '' && debouncedList.length > 0) {
       handleSpecialKey(event);
     }
@@ -186,7 +195,7 @@ function ListInput(
           <StyledToken className="token" key={i}>
             <small>{item}</small>
             <div className="icon-button" onClick={() => handleRemove(i)} role="button">
-              <img src={ClearIconUrl} />
+              <XIcon />
             </div>
           </StyledToken>
         ))}
@@ -204,7 +213,7 @@ function ListInput(
       </ListInputContainer>
 
       <StyledOverlay target={containerRef}>
-        <img onClick={clearAll} role="button" src={ClearIconUrl} />
+        <XIcon onClick={clearAll} role="button" />
       </StyledOverlay>
     </Fragment>
   );

@@ -2,11 +2,7 @@ import React, { Fragment, ReactNode } from 'react';
 import Portal from '@inline/Portal';
 
 function isInteger(value: string | null): boolean {
-  if (value === null) {
-    return false;
-  }
-
-  return /^\-?\d+$/.test(value);
+  return Number.isInteger(Number(value));
 }
 
 function Calendar({ children, target }: IControllerProps): ReactNode {

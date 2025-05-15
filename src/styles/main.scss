@@ -1,6 +1,8 @@
 @use './calendar.scss';
 
 div._tw-wrapper {
+  background-color: inherit;
+  color: inherit;
   display: contents;
 
   & + * {

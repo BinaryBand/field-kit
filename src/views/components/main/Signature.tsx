@@ -25,13 +25,14 @@ const StyledCanvas: StyledComponent<ComponentProps<'canvas'>> = styled.canvas`
 `;
 
 const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
+  background-color: transparent;
+  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   text-align: center;
-  z-index: -3;
 `;
 
 function Signature(

@@ -3,21 +3,22 @@
 .list {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   gap: 1rem;
-  justify-content: center;
-  list-style: none;
 }
 
 .list > .list-item {
   border: solid 1px;
-  padding: 1rem;
-  width: 100%;
-  height: fit-content;
+  border-radius: 4px;
+  padding: 2rem 0px;
 }
 
 @media only screen and (max-width: 600px) {
   tr.calendar-header {
     display: none !important;
   }
+}
+
+.demo__code {
+  text-wrap: break-word;
+  white-space: pre-wrap;
 }

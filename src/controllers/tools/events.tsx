@@ -47,7 +47,7 @@ export function createSyntheticEvent<T extends Element, E extends Event = Event>
   };
 }
 
-function createChangeEvent<T extends GenericInputElement, V extends boolean | string | string[]>(
+function createChangeEvent<T extends NativeInputElement, V extends boolean | string | string[]>(
   target: T,
   value?: V
 ): ChangeEvent<T> {

@@ -1,4 +1,4 @@
-interface IGenericInputElement {
+interface INativeInputElement {
   value: string;
   checked?: boolean;
   disabled?: boolean;
@@ -6,7 +6,7 @@ interface IGenericInputElement {
   placeholder?: string;
 }
 
-type GenericInputElement = IGenericInputElement & HTMLElement;
+type NativeInputElement = INativeInputElement & HTMLElement;
 
 interface ISelectInputProps extends React.ComponentProps<'select'> {
   'data-placeholder'?: string;

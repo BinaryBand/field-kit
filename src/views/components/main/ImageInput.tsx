@@ -221,7 +221,7 @@ import { createChangeEvent, useMergedRef } from '@utils';
 
 import Stack from '@inline/Stack';
 
-import ClearIconUrl from '@/assets/icons/x.svg';
+import XIcon from '@/assets/icons/XIcon';
 import UploadIconUrl from '@/assets/icons/image.svg';
 
 const CenterContainer: StyledComponent<StackProps> = styled(Stack)`
@@ -387,13 +387,7 @@ function ImageInput(
       >
         <CenterContainer align="center" gap={1} id="_image-input">
           <img alt="Upload button" id="_upload-icon" src={UploadIconUrl} height={32} />
-          <img
-            alt="Clear button"
-            hidden={readOnly}
-            id="_clear-icon"
-            src={ClearIconUrl}
-            height={32}
-          />
+          {!readOnly && <XIcon id="_clear-icon" height="32px" />}
           <label
             hidden={readOnly}
             htmlFor={props.id}

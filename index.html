@@ -6,19 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
 
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+
     <link href="/styles.scss" rel="stylesheet" />
     <script defer src="/scripts.js" type="module"></script>
   </head>
 
-  <body>
+  <body data-bs-theme="dark">
     <template id="code-demo-template">
       <hr />
 
-      <div class="bg-body-secondary my-2 p-2 rounded vstack">
+      <div class="bg-body-secondary my-2 p-2 rounded">
         <code class="code-demo__code"></code>
-        <div class="d-flex justify-content-end">
-          <button class="btn code-demo__copy" type="button">Copy</button>
-        </div>
+
+        <button class="btn code-demo__copy" type="button">
+          <i class="bi bi-copy"></i>
+        </button>
       </div>
     </template>
 
@@ -32,134 +38,221 @@
       <option class="tw-option" value="20">Corpus Christi</option>
     </template>
 
-    <div class="container list my-3 tw-filter-group">
-      <div class="list-item">
-        <div class="mb-3">
-          <input placeholder="Text Filter" type="filter" />
+    <form
+      action="https://google.com/"
+      class="container list py-3 tw-form"
+      method="post"
+      onsubmit="handleSubmit(event)"
+    >
+      <div class="row">
+        <div class="col-12 offset-lg-3 col-lg-6 d-flex flex-column gap-4">
+          <div aria-label="TW Components" class="text-center">
+            <h1>TW Components</h1>
+            <p>This extends</p>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">List Filter</h5>
+            </div>
+
+            <div class="card-body">
+              <div class="vstack gap-2 tw-filter-group">
+                <input class="form-control" placeholder="Text Filter" type="filter" />
+
+                <ul class="list-group">
+                  <li class="list-group-item tw-filter-item">An item</li>
+                  <li class="list-group-item tw-filter-item">A second item</li>
+                  <li class="list-group-item tw-filter-item">A third item</li>
+                </ul>
+              </div>
+
+              <div class="code-demo" data-target="div.tw-filter-group"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">List Input</h5>
+            </div>
+
+            <div class="card-body">
+              <input class="form-control" name="ListInput" placeholder="List Input" type="list" />
+              <div class="code-demo" data-target="input[type='list']"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Select</h5>
+            </div>
+
+            <div class="card-body">
+              <select
+                class="tw-select-group form-control"
+                data-placeholder="Single Select"
+                name="SingleSelect"
+                type="number"
+              ></select>
+
+              <div class="code-demo" data-target="select[name='SingleSelect']"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Multi-Select</h5>
+            </div>
+
+            <div class="card-body">
+              <select
+                class="tw-select-group form-control"
+                data-placeholder="Multiselect"
+                multiple
+                name="Multiselect"
+                type="number"
+              ></select>
+
+              <div class="code-demo" data-target="select[name='Multiselect']"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Auto-Resize Textarea</h5>
+            </div>
+
+            <div class="card-body">
+              <textarea
+                class="tw-auto-resize form-control"
+                name="Multiline"
+                placeholder="Multiline"
+              ></textarea>
+
+              <div class="code-demo" data-target="textarea.tw-auto-resize"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">PIN Input</h5>
+            </div>
+
+            <div class="card-body">
+              <input class="form-control" data-size="6" name="Pin" placeholder="0000" type="pin" />
+              <div class="code-demo" data-target="input[type='pin']"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Auto-Resize Textarea</h5>
+            </div>
+
+            <div class="card-body">
+              <input
+                class="form-control"
+                name="SignatureInput"
+                placeholder="Sign Here"
+                type="signature"
+              />
+
+              <button
+                class="btn btn-outline-danger ms-auto"
+                id="clear-signature-button"
+                type="button"
+              >
+                Clear Signature
+              </button>
+
+              <div class="code-demo" data-target="input[type='signature']"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Passkey Input</h5>
+            </div>
+
+            <div class="card-body">
+              <input
+                class="btn btn-outline-secondary"
+                data-identifier="sh@ne.com"
+                data-user="Shane"
+                name="Passkey"
+                type="passkey"
+              />
+
+              <div class="code-demo" data-target="input[type='passkey']"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Calendar</h5>
+            </div>
+
+            <div class="card-body">
+              <table class="table tw-calendar">
+                <tr class="calendar-header">
+                  <th>Sunday</th>
+                  <th>Monday</th>
+                  <th>Tuesday</th>
+                  <th>Wednesday</th>
+                  <th>Thursday</th>
+                  <th>Friday</th>
+                  <th>Saturday</th>
+                </tr>
+
+                <tr class="tw-calendar-month" data-tw-year="2021" data-tw-month="7">
+                  <td class="tw-calendar-day" data-tw-day="1">
+                    <div class="small text-secondary">First</div>
+                  </td>
+                  <td class="tw-calendar-day" data-tw-day="31">
+                    <div class="small text-secondary">Second</div>
+                  </td>
+                  <td class="tw-calendar-day" data-tw-day="5">
+                    <div class="small text-secondary">Third</div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <span hidden>End</span>
         </div>
-
-        <ul class="list-group">
-          <li class="list-group-item tw-filter-item">An item</li>
-          <li class="list-group-item tw-filter-item" data-active>A second item</li>
-          <li class="list-group-item tw-filter-item">A third item</li>
-          <li class="list-group-item tw-filter-item">A fourth item</li>
-          <li class="list-group-item tw-filter-item">And a fifth one</li>
-        </ul>
-
-        <div class="code-demo" data-target="input[type=filter]"></div>
-      </div>
-    </div>
-
-    <form action="https://google.com/" class="container list my-3 tw-form" method="post">
-      <div class="list-item">
-        <input name="ListInput" placeholder="List Input" type="list" />
-        <div class="code-demo" data-target="input[type='list']"></div>
       </div>
 
-      <div class="list-item">
-        <select
-          class="tw-select-group"
-          data-placeholder="Single Select"
-          name="SingleSelect"
-          type="number"
-        ></select>
-        <div class="code-demo" data-target="select[name='SingleSelect']"></div>
+      <div>
+        <button class="btn btn-primary" type="submit">Submit</button>
       </div>
-
-      <div class="list-item">
-        <select
-          class="tw-select-group"
-          data-placeholder="Multiselect"
-          multiple
-          name="Multiselect"
-          type="number"
-        ></select>
-        <div class="code-demo" data-target="select[name='Multiselect']"></div>
-      </div>
-
-      <div class="list-item">
-        <textarea class="tw-auto-resize" name="Multiline" placeholder="Multiline"></textarea>
-        <div class="code-demo" data-target="textarea.tw-auto-resize"></div>
-      </div>
-
-      <div class="list-item">
-        <input name="SignatureInput" placeholder="Sign Here" type="signature" />
-
-        <div class="d-flex my-1">
-          <button class="btn ms-auto" id="clear-signature-button" type="button">
-            Clear Signature
-          </button>
-        </div>
-
-        <div class="code-demo" data-target="input[type='signature']"></div>
-      </div>
-
-      <div class="list-item">
-        <table class="table tw-calendar" width="100%">
-          <tr class="calendar-header">
-            <th>Sunday</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-          </tr>
-
-          <tr class="tw-calendar-month" data-tw-year="2021" data-tw-month="7">
-            <td class="tw-calendar-day" data-tw-day="1">
-              <div class="small text-secondary">8:00 AM-4:00 PM</div>
-              <div>8 Hours</div>
-            </td>
-            <td class="tw-calendar-day" data-tw-day="3">
-              <div class="small text-secondary">8:00 AM-5:00 PM</div>
-              <div>9 Hours</div>
-            </td>
-            <td class="tw-calendar-day" data-tw-day="4">
-              <div class="small text-secondary">11:00 AM-5:00 PM</div>
-              <div>6 Hours</div>
-            </td>
-            <td class="tw-calendar-day" data-tw-day="7">
-              <div class="small text-secondary">8:00 AM-5:00 PM</div>
-              <div>9 Hours</div>
-            </td>
-            <td class="tw-calendar-day" data-tw-day="5">
-              <div class="small text-secondary">8:00 AM-5:00 PM</div>
-              <div>9 Hours</div>
-            </td>
-            <td class="tw-calendar-day" data-tw-day="31">
-              <div class="small text-secondary">8:00 AM-5:00 PM</div>
-              <div>9 Hours</div>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="list-item">
-        <input class="form-check-input" name="CheckTest" type="checkbox" value="1" />
-        <input class="form-check-input" name="CheckTest" type="checkbox" value="2" />
-        <input class="form-check-input" name="CheckTest" type="checkbox" value="3" />
-      </div>
-
-      <div class="list-item">
-        <input class="form-check-input" name="CheckBox" type="checkbox" checked />
-      </div>
-
-      <div class="list-item">
-        <input name="Number" type="number" />
-      </div>
-
-      <button class="btn btn-primary" id="submit-button">Submit</button>
     </form>
-
-    <div class="container d-none my-3">
-      <input type="editor" />
-    </div>
   </body>
 
   <script>
     function handleSubmit(event) {
-      console.log('Inline submit handler called!');
+      event.preventDefault();
+
       console.log(event.formData);
     }
   </script>

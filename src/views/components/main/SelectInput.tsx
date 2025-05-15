@@ -11,8 +11,8 @@ import React, {
 import styled, { StyledComponent } from '@emotion/styled';
 import { useDebounce } from 'use-debounce';
 
-import ClearIconUrl from '@/assets/icons/x.svg';
-import CaretDownUrl from '@/assets/icons/caret-down.svg';
+import CaretDownIcon from '@/assets/icons/CaretDownIcon';
+import XIcon from '@/assets/icons/XIcon';
 
 import AppContext from '@providers/AppContext';
 import SelectInputContext from '@providers/SelectInputContext';
@@ -21,32 +21,14 @@ import { StyledToken } from '@components/ListInput';
 
 import { createChangeEvent, tryParse, useMergedRef } from '@utils';
 
-export function SelectOption({
-  children,
-  value,
-  ...props
-}: ComponentProps<'option'>): ReactElement {
-  const { addOption } = React.useContext(SelectInputContext);
-
-  React.useEffect((): void => {
-    if (value !== undefined && typeof value === 'string') {
-      addOption(value, children ?? value);
-    }
-  }, [value, children]);
-
-  return <option {...props} children={children} value={value} />;
-}
-
 export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
-  background: none;
   border: transparent;
-  padding: 1px 2px;
 
   align-items: center;
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
-  gap: 0.25em;
+  gap: 0.5em;
   position: relative;
 
   &:not([data-multiple]) > div.token {
@@ -81,8 +63,6 @@ const StyledOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
 `;
 
 const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
-  background-color: white;
-  border: 1px solid var(--bs-gray-300, #d0d0d7);
   overflow-x: hidden;
   overflow-y: scroll;
   z-index: 4;
@@ -93,10 +73,13 @@ const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
   width: 100%;
 
   option {
+    background-color: inherit;
+    color: inherit;
     padding: 4px 6px;
 
+    &:checked,
     &:hover:not(:disabled) {
-      background-color: var(--bs-gray-300, #d0d0d7);
+      background-color: var(--bs-gray-300, #d0d0d088);
     }
 
     &._tw-no-options,
@@ -113,11 +96,6 @@ const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
   }
 `;
 
-const StyledCaretDown: StyledComponent<ComponentProps<'img'>> = styled.img`
-  transform: ${(props) => props['aria-expanded'] && 'rotate(180deg)'};
-  transform-origin: center;
-`;
-
 function normalizedInputValue(value?: string | number | readonly string[]): string[] {
   switch (typeof value) {
     case 'string':
@@ -128,6 +106,22 @@ function normalizedInputValue(value?: string | number | readonly string[]): stri
     default:
       return [];
   }
+}
+
+export function SelectOption({
+  children,
+  value,
+  ...props
+}: ComponentProps<'option'>): ReactElement {
+  const { addOption } = React.useContext(SelectInputContext);
+
+  React.useEffect((): void => {
+    if (value !== undefined && typeof value === 'string') {
+      addOption(value, children ?? value);
+    }
+  }, [value, children]);
+
+  return <option {...props} children={children} value={value} />;
 }
 
 function SelectInput(
@@ -294,7 +288,7 @@ function SelectInput(
           <StyledToken className="token" key={i}>
             <small>{options[item] ?? item}</small>
             <div className="icon-button" onClick={() => handleRemove(i)} role="button">
-              <img src={ClearIconUrl} />
+              <XIcon />
             </div>
           </StyledToken>
         ))}
@@ -303,9 +297,9 @@ function SelectInput(
 
         <StyledReference
           className={className}
+          onBlur={handleBlur}
           onChange={handleChange}
           onFocus={handleFocus}
-          onBlur={handleBlur}
           placeholder={placeholder}
           ref={inputRef}
           style={{ ...style, paddingLeft, paddingTop }}
@@ -314,8 +308,8 @@ function SelectInput(
       </ListInputContainer>
 
       <StyledOverlay target={containerRef}>
-        <StyledCaretDown aria-expanded={focused || undefined} src={CaretDownUrl} />
-        <img hidden={!multiple} onClick={clearAll} role="button" src={ClearIconUrl} />
+        <CaretDownIcon aria-expanded={focused || undefined} />
+        {multiple && <XIcon onClick={clearAll} role="button" />}
 
         <Dropdown
           className={className}

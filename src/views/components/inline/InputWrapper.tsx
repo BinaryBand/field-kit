@@ -15,7 +15,7 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
     isSelect ? getSelectedOptionValues(container) : []
   );
 
-  function handleChangeEvent(event: ChangeEvent<GenericInputElement>): void {
+  function handleChangeEvent(event: ChangeEvent<NativeInputElement>): void {
     const { currentTarget } = event;
     container.value = currentTarget.value ?? '';
 
@@ -60,7 +60,8 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
   }, [container, nativeChangeMemo]);
 
   // Props that can be passed to any and all input elements
-  const baseProps = {
+  const baseProps: ComponentProps<any> = {
+    className: container.className,
     disabled: container.disabled,
     onChange: handleChangeEvent,
     onClick: handleEvent,

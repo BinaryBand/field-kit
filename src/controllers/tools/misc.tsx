@@ -1,6 +1,6 @@
-export function assert(condition: boolean, message?: string): void {
+export function assert(condition: unknown, message?: string): asserts condition {
   if (!condition) {
-    throw new Error(message);
+    throw new Error(message ?? 'Assertion failed');
   }
 }
 
