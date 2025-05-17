@@ -42,6 +42,7 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
     case 'tw-calendar-month':
       return <Calendar children={children} target={element} key={key} />;
     case 'tw-auto-resize':
+      assert(element instanceof HTMLTextAreaElement, 'Element is not a textarea element');
       return <Multiline children={children} target={element} key={key} />;
     case 'tw-filter-group':
       return <FilterGroup children={children} container={element} key={key} />;

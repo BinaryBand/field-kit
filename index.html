@@ -29,13 +29,13 @@
     </template>
 
     <template id="select-option-template">
-      <option class="tw-option" value="26">Albuquerque</option>
-      <option class="tw-option" value="1">Austin</option>
-      <option class="tw-option" value="2">Charlotte</option>
-      <option class="tw-option" value="24">Chattanooga</option>
-      <option class="tw-option" value="33">Columbus</option>
-      <option class="tw-option" value="10">Corporate</option>
-      <option class="tw-option" value="20">Corpus Christi</option>
+      <option class="tw-option" value="1">Albuquerque</option>
+      <option class="tw-option" value="2">Boston</option>
+      <option class="tw-option" value="3">Chicago</option>
+      <option class="tw-option" value="4">Denver</option>
+      <option class="tw-option" value="5">El Paso</option>
+      <option class="tw-option" value="6">Flagstaff</option>
+      <option class="tw-option" value="7">Gilbert</option>
     </template>
 
     <form
@@ -45,10 +45,10 @@
       onsubmit="handleSubmit(event)"
     >
       <div class="row">
-        <div class="col-12 offset-lg-3 col-lg-6 d-flex flex-column gap-4">
+        <div class="col-12 offset-lg-2 col-lg-8 offset-xxl-3 col-xxl-6 d-flex flex-column gap-4">
           <div aria-label="TW Components" class="text-center">
             <h1>TW Components</h1>
-            <p>This extends</p>
+            <p>Custom components</p>
           </div>
 
           <!---------------------------------------------------------------------->
@@ -81,7 +81,13 @@
             </div>
 
             <div class="card-body">
-              <input class="form-control" name="ListInput" placeholder="List Input" type="list" />
+              <input
+                class="form-control"
+                name="ListInput"
+                placeholder="List Input"
+                type="list"
+                value='["One","Two","Three"]'
+              />
               <div class="code-demo" data-target="input[type='list']"></div>
             </div>
           </div>
@@ -133,11 +139,10 @@
             </div>
 
             <div class="card-body">
-              <textarea
-                class="tw-auto-resize form-control"
-                name="Multiline"
-                placeholder="Multiline"
-              ></textarea>
+              <textarea class="tw-auto-resize form-control" name="Multiline" placeholder="Text">
+                First Line
+                Second Line
+              </textarea>
 
               <div class="code-demo" data-target="textarea.tw-auto-resize"></div>
             </div>
@@ -151,7 +156,14 @@
             </div>
 
             <div class="card-body">
-              <input class="form-control" data-size="6" name="Pin" placeholder="0000" type="pin" />
+              <input
+                class="form-control"
+                data-size="6"
+                name="Pin"
+                placeholder="000000"
+                type="pin"
+                value="123456"
+              />
               <div class="code-demo" data-target="input[type='pin']"></div>
             </div>
           </div>
@@ -160,7 +172,7 @@
 
           <div class="card">
             <div class="card-header">
-              <h5 class="card-title">Auto-Resize Textarea</h5>
+              <h5 class="card-title">Signature</h5>
             </div>
 
             <div class="card-body">
@@ -170,6 +182,8 @@
                 placeholder="Sign Here"
                 type="signature"
               />
+
+              <br />
 
               <button
                 class="btn btn-outline-danger ms-auto"
@@ -239,12 +253,75 @@
 
           <!---------------------------------------------------------------------->
 
-          <span hidden>End</span>
-        </div>
-      </div>
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Form List</h5>
+            </div>
 
-      <div>
-        <button class="btn btn-primary" type="submit">Submit</button>
+            <div class="card-body">
+              <div data-tw-list="Array">
+                <input name="First" value="1st" />
+                <input name="Second" value="2nd" />
+                <input name="Third" value="3rd" />
+              </div>
+
+              <div class="code-demo" data-target="[data-tw-list]"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Form Objects</h5>
+            </div>
+
+            <div class="card-body">
+              <div class="gap-3 vstack" data-tw-group="Children">
+                <input name="First" value="1st" />
+                <input name="Second" value="2nd" />
+              </div>
+
+              <div class="code-demo" data-target="[data-tw-group='Children']"></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Complex Form Objects</h5>
+            </div>
+
+            <div class="card-body">
+              <div class="border p-3 ms-3 gap-3 vstack" data-tw-group="Children">
+                <input name="First" value="1st" />
+
+                <div class="gap-3 vstack" data-tw-list="Grandchildren">
+                  <div class="border p-3 ms-3 gap-3 vstack" data-tw-group="One">
+                    <input name="Second" value="2nd" />
+                    <input name="Third" value="3rd" />
+                  </div>
+
+                  <div class="border p-3 ms-3 gap-3 vstack" data-tw-group="Two">
+                    <input name="Fourth" value="4th" />
+                    <input name="Fifth" value="5th" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <input type="hidden" name="End" value="End of form" />
+
+          <hr />
+
+          <div>
+            <button class="btn btn-primary" type="submit">TW Submit</button>
+          </div>
+        </div>
       </div>
     </form>
   </body>
@@ -252,7 +329,6 @@
   <script>
     function handleSubmit(event) {
       event.preventDefault();
-
       console.log(event.formData);
     }
   </script>
