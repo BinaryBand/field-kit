@@ -1,4 +1,4 @@
 interface ISelectInputContext {
-  options: Record<string, ReactNode>;
-  addOption: (key: string, value: ReactNode) => void;
+  options: Record<string, React.ReactNode>;
+  addOption: (key: string, value: React.ReactNode) => void;
 }

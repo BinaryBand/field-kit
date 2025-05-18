@@ -1,5 +1,5 @@
 import React, { ChangeEvent, ComponentProps, JSX, ReactNode, SyntheticEvent } from 'react';
-import StyledPortalWrapperProps from '@inline/StyledPortalWrapper';
+import Wrapper from '@/views/components/inline/Wrapper';
 import { applySelectedOptions, getSelectedOptionValues } from '@tools/inputs';
 
 function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
@@ -87,7 +87,7 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
       value: selectedOptions,
     };
     const placeholder: string = container.getAttribute('data-placeholder') ?? '';
-    return <StyledPortalWrapperProps data-placeholder={placeholder} {...props} {...selectProps} />;
+    return <Wrapper data-placeholder={placeholder} {...props} {...selectProps} />;
   }
 
   // Props that can be passed to both input and textarea elements
@@ -103,11 +103,11 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
       value,
     };
 
-    return <StyledPortalWrapperProps {...props} {...inputProps} />;
+    return <Wrapper {...props} {...inputProps} />;
   }
 
   const textProps: ComponentProps<'textarea'> = { ...baseProps, placeholder, readOnly, value };
-  return <StyledPortalWrapperProps {...props} {...textProps} />;
+  return <Wrapper {...props} {...textProps} />;
 }
 
 export default InputWrapper;

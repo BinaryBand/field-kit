@@ -1,48 +1,17 @@
 import React, { ComponentProps, ForwardedRef, MutableRefObject, ReactNode, RefObject } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import { SignatureContainer, SignatureCanvas, SignatureInput } from '@/views/styled/Signature';
 import { createChangeEvent, useMergedRef } from '@utils';
 
 const CANVAS_WIDTH: number = 750;
 const CANVAS_HEIGHT: number = 375;
 
-const StyledContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
-  margin: 0;
-  padding: 0;
-  position: relative;
-
-  &._tw-signed input,
-  &[data-readonly] > input {
-    color: transparent;
-  }
-`;
-
-const StyledCanvas: StyledComponent<ComponentProps<'canvas'>> = styled.canvas`
-  aspect-ratio: 2 / 1;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-`;
-
-const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
-  background-color: transparent;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-`;
-
 function Signature(
   { defaultValue, disabled, onChange, readOnly, value = '', ...props }: ComponentProps<'input'>,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactNode {
-  const canvasRef: RefObject<HTMLCanvasElement> = React.createRef<HTMLCanvasElement>();
-  const internalRef: MutableRefObject<HTMLInputElement | null> =
-    React.useRef<HTMLInputElement | null>(null);
-  const isDrawing: MutableRefObject<boolean> = React.useRef<boolean>(false);
+  const canvasRef: RefObject<HTMLCanvasElement> = React.createRef();
+  const internalRef: MutableRefObject<HTMLInputElement | null> = React.useRef(null);
+  const isDrawing: MutableRefObject<boolean> = React.useRef(false);
   const [signatureDataUrl, setSignatureDataUrl] = React.useState<string>(`${defaultValue ?? ''}`);
 
   const isSigned: boolean = React.useMemo((): boolean => {
@@ -139,12 +108,15 @@ function Signature(
   }, [value]);
 
   return (
-    <StyledContainer className={isSigned ? '_tw-signed' : ''} data-readonly={readOnly || undefined}>
-      <StyledInput {...props} readOnly ref={useMergedRef(ref, internalRef)} value={value} />
-      <StyledCanvas ref={canvasRef}>
+    <SignatureContainer
+      className={isSigned ? '_tw-signed' : ''}
+      data-readonly={readOnly || undefined}
+    >
+      <SignatureInput {...props} readOnly ref={useMergedRef(ref, internalRef)} value={value} />
+      <SignatureCanvas ref={canvasRef}>
         Your browser does not support the HTML5 canvas tag.
-      </StyledCanvas>
-    </StyledContainer>
+      </SignatureCanvas>
+    </SignatureContainer>
   );
 }
 

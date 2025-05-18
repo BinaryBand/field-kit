@@ -1,1 +1,36 @@
-{"root":["./src/app.tsx","./src/index.tsx","./src/vite-env.d.ts","./src/controllers/utils.tsx","./src/controllers/components/calendar.tsx","./src/controllers/components/multiline.tsx","./src/controllers/providers/appcontext.tsx","./src/controllers/tools/events.tsx","./src/controllers/tools/images.tsx","./src/controllers/tools/misc.tsx","./src/controllers/tools/ref.tsx","./src/models/components/app.d.ts","./src/models/components/controller.d.ts","./src/models/components/editor.d.ts","./src/models/components/image-input.d.ts","./src/models/components/portal.d.ts","./src/models/components/signature.d.ts","./src/models/mui/stack.d.ts","./src/views/components/inline/inputwrapper.tsx","./src/views/components/inline/portal.tsx","./src/views/components/inline/stack.tsx","./src/views/components/inline/wrapper.tsx","./src/views/components/main/imageinput.tsx","./src/views/components/main/listinput.tsx","./src/views/components/main/selectinput.tsx","./src/views/components/main/signature.tsx","./src/views/components/main/editor/image.tsx","./src/views/components/main/editor/paragraph.tsx","./src/views/components/main/editor/toolbar.tsx","./src/views/components/main/editor/index.tsx","./src/views/components/main/editor/tools.tsx"],"version":"5.6.3"}
+{
+  "root": [
+    "./src/app.tsx",
+    "./src/index.tsx",
+    "./src/vite-env.d.ts",
+    "./src/controllers/utils.tsx",
+    "./src/controllers/components/calendar.tsx",
+    "./src/controllers/components/multiline.tsx",
+    "./src/controllers/providers/appcontext.tsx",
+    "./src/controllers/tools/events.tsx",
+    "./src/controllers/tools/images.tsx",
+    "./src/controllers/tools/misc.tsx",
+    "./src/controllers/tools/ref.tsx",
+    "./src/models/components/app.d.ts",
+    "./src/models/components/controller.d.ts",
+    "./src/models/components/editor.d.ts",
+    "./src/models/components/image-input.d.ts",
+    "./src/models/components/portal.d.ts",
+    "./src/models/components/signature.d.ts",
+    "./src/models/mui/stack.d.ts",
+    "./src/views/components/inline/inputwrapper.tsx",
+    "./src/views/components/inline/portal.tsx",
+    "./src/views/components/inline/stack.tsx",
+    "./src/views/components/inline/wrapper.tsx",
+    "./src/views/components/main/imageinput.tsx",
+    "./src/views/components/main/listinput.tsx",
+    "./src/views/components/main/selectinput.tsx",
+    "./src/views/components/main/signature.tsx",
+    "./src/views/components/main/editor/image.tsx",
+    "./src/views/components/main/editor/paragraph.tsx",
+    "./src/views/components/main/editor/toolbar.tsx",
+    "./src/views/components/main/editor/index.tsx",
+    "./src/views/components/main/editor/tools.tsx"
+  ],
+  "version": "5.6.3"
+}

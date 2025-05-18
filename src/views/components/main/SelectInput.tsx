@@ -8,93 +8,24 @@ import React, {
   ReactElement,
   ReactNode,
 } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
 import { useDebounce } from 'use-debounce';
+
+import {
+  ListInputContainer,
+  InputToken,
+  StyledListInput,
+  HiddenInput,
+  StyledOverlay,
+} from '@styled/ListInput';
+import Dropdown from '@styled/Dropdown';
 
 import CaretDownIcon from '@/assets/icons/CaretDownIcon';
 import XIcon from '@/assets/icons/XIcon';
 
 import AppContext from '@providers/AppContext';
 import SelectInputContext from '@providers/SelectInputContext';
-import Overlay from '@inline/Overlay';
-import { StyledToken } from '@components/ListInput';
 
 import { createChangeEvent, tryParse, useMergedRef } from '@utils';
-
-export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
-  border: transparent;
-
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-  gap: 0.5em;
-  position: relative;
-
-  &:not([data-multiple]) > div.token {
-    display: none;
-  }
-`;
-
-export const StyledInput: StyledComponent<ComponentProps<'input'>> = styled.input`
-  pointer-events: none;
-  visibility: hidden;
-`;
-
-const StyledReference: StyledComponent<ComponentProps<'input'>> = styled.input`
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-
-  padding-left: ${(props) => props.style?.paddingLeft ?? 0}px !important;
-  padding-top: ${(props) => props.style?.paddingTop ?? 0}px !important;
-  margin: 0 !important;
-`;
-
-const StyledOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
-  align-items: center;
-  display: flex;
-  justify-content: end;
-
-  gap: 0.5em;
-  padding-right: 0.5em;
-`;
-
-const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
-  overflow-x: hidden;
-  overflow-y: scroll;
-  z-index: 4;
-
-  left: 0;
-  top: 100%;
-  position: absolute;
-  width: 100%;
-
-  option {
-    background-color: inherit;
-    color: inherit;
-    padding: 4px 6px;
-
-    &:checked,
-    &:hover:not(:disabled) {
-      background-color: var(--bs-gray-300, #d0d0d088);
-    }
-
-    &._tw-no-options,
-    &[data-blurred='true'],
-    &[value=''] {
-      display: none;
-    }
-  }
-
-  &:not(:has(option[data-blurred='false'])) {
-    & > option._tw-no-options {
-      display: block;
-    }
-  }
-`;
 
 function normalizedInputValue(value?: string | number | readonly string[]): string[] {
   switch (typeof value) {
@@ -285,17 +216,17 @@ function SelectInput(
         style={style}
       >
         {list?.map?.((item: string, i: number) => (
-          <StyledToken className="token" key={i}>
+          <InputToken className="token" key={i}>
             <small>{options[item] ?? item}</small>
             <div className="icon-button" onClick={() => handleRemove(i)} role="button">
               <XIcon />
             </div>
-          </StyledToken>
+          </InputToken>
         ))}
 
-        <StyledInput readOnly ref={placeholderRef} value={internalValue} />
+        <HiddenInput readOnly ref={placeholderRef} value={internalValue} />
 
-        <StyledReference
+        <StyledListInput
           className={className}
           onBlur={handleBlur}
           onChange={handleChange}

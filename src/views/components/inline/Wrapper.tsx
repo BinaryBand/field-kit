@@ -1,24 +1,16 @@
-import React, { ComponentProps, ElementType, ReactNode } from 'react';
+import React, { ComponentType, ElementType, ReactNode } from 'react';
 import styled from '@emotion/styled';
 import Portal from '@inline/Portal';
 
-interface IWrapperOwnProps<C extends ElementType> {
-  component: C;
-  container?: HTMLElement | null;
-}
-
-type StyledPortalWrapperProps<C extends ElementType> = IWrapperOwnProps<C> &
-  Omit<ComponentProps<C>, keyof IWrapperOwnProps<C>>;
-
-function StyledPortalWrapper<C extends ElementType>({
+function Wrapper<C extends ElementType>({
   component,
   container,
   ...rest
-}: StyledPortalWrapperProps<C>): ReactNode {
+}: WrapperProps<C>): ReactNode {
   const [shuttle, setShuttle] = React.useState<HTMLDivElement>();
 
   const StyledComponent = React.useMemo(() => {
-    return styled(component as any)(container?.style.cssText);
+    return styled(component as ComponentType)(container?.style.cssText);
   }, [component, container]);
 
   React.useEffect((): (() => void) => {
@@ -42,4 +34,4 @@ function StyledPortalWrapper<C extends ElementType>({
   );
 }
 
-export default StyledPortalWrapper;
+export default Wrapper;

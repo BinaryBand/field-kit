@@ -11,9 +11,10 @@ if (codeTemplate instanceof HTMLTemplateElement) {
 
     if (target !== null && clone instanceof DocumentFragment) {
       const codeString = target.outerHTML;
+      const actualValue = codeString.replace(/&quot;/g, '"');
 
       clone.querySelectorAll('.code-demo__code').forEach((codeContainer) => {
-        codeContainer.textContent = codeString;
+        codeContainer.textContent = actualValue;
       });
 
       clone.querySelectorAll('.code-demo__copy').forEach((copyButton) => {

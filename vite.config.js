@@ -16,6 +16,7 @@ export default defineConfig({
       '@providers': path.resolve(root, 'controllers/providers'),
       '@components': path.resolve(root, 'views/components/main'),
       '@inline': path.resolve(root, 'views/components/inline'),
+      '@styled': path.resolve(root, 'views/styled'),
     },
   },
   build: {

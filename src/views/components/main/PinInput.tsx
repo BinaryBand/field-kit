@@ -8,10 +8,10 @@ import React, {
   ReactElement,
   RefObject,
 } from 'react';
-import styled from '@emotion/styled';
+import styled, { StyledComponent } from '@emotion/styled';
 import { createChangeEvent } from '@/controllers/utils';
 
-const PinInputContainer = styled.span`
+const PinInputContainer: StyledComponent<ComponentProps<'span'>> = styled.span`
   display: flex;
   gap: 8px;
   justify-content: space-between;
@@ -55,12 +55,6 @@ function valueToDigits(
 
   return Array(size).fill(undefined);
 }
-
-interface IPinInputProps {
-  size?: number;
-}
-
-type PinInputProps = Omit<ComponentProps<'input'>, 'type'> & IPinInputProps;
 
 function PinInput(
   { defaultValue, onChange, onKeyDown, placeholder, size = 6, value, ...props }: PinInputProps,
@@ -208,7 +202,7 @@ function PinInput(
             placeholder={_placeholder?.[i % _placeholder.length]}
             readOnly
             ref={activeIndex === i ? ref : undefined}
-            // type="password"
+            type="password"
             value={digit}
           />
         ))}

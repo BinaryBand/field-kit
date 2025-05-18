@@ -11,15 +11,10 @@ type InputWrapperProps<T extends InputTags, P extends JSX.IntrinsicAttributes> =
 > &
   React.ComponentProps<T>;
 
-interface IWrapperProps<
-  P extends JSX.IntrinsicAttributes,
-  C extends keyof JSX.IntrinsicElements | React.ComponentType<P>,
-> {
+interface IWrapperOwnProps<C extends React.ElementType> {
   component: C;
   container?: HTMLElement | null;
 }
 
-type WrapperProps<
-  P extends JSX.IntrinsicAttributes,
-  C extends keyof JSX.IntrinsicElements | React.ComponentType<P>,
-> = IWrapperProps<P, C> & React.ComponentType<C>;
+type WrapperProps<C extends React.ElementType> = IWrapperOwnProps<C> &
+  Omit<React.ComponentProps<C>, keyof IWrapperOwnProps<C>>;

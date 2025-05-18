@@ -219,7 +219,7 @@ import React, {
 import styled, { StyledComponent } from '@emotion/styled';
 import { createChangeEvent, useMergedRef } from '@utils';
 
-import Stack from '@inline/Stack';
+import Stack from '@/views/styled/Stack';
 
 import XIcon from '@/assets/icons/XIcon';
 import UploadIconUrl from '@/assets/icons/image.svg';
