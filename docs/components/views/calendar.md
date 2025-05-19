@@ -17,7 +17,7 @@
 </table>
 
 ```html
-<table class="table tw-calendar">
+<table class="tw-calendar">
   <tr class="tw-calendar-month" data-tw-year="2021" data-tw-month="7">
     <td class="tw-calendar-day" data-tw-day="1">First</td>
     <td class="tw-calendar-day" data-tw-day="31">Second</td>

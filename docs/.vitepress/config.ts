@@ -11,18 +11,16 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Quick Start', link: '/getting-started' },
+      { text: 'Read Me', link: '/readme' },
     ],
 
     sidebar: [
-      { text: 'Getting Started', link: '/getting-started' },
+      { text: 'Getting Started', link: '/readme' },
       {
         text: 'Components',
-        link: '/components',
         items: [
           {
             text: 'Inputs',
-            link: '/components/inputs',
             items: [
               { text: 'Auto Resize', link: '/components/inputs/auto-resize' },
               { text: 'List', link: '/components/inputs/list' },
@@ -34,7 +32,6 @@ export default defineConfig({
           },
           {
             text: 'Views',
-            link: '/components/views',
             items: [
               { text: 'Calendar', link: '/components/views/calendar' },
               { text: 'Filter', link: '/components/views/filter' },

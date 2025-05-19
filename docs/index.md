@@ -7,17 +7,17 @@ hero:
   tagline: Custom HTML components for use in Bulwark Exterminating LLC projects.
   actions:
     - theme: brand
-      text: Quick Start
-      link: /getting-started
+      text: Get Started
+      link: /readme
     - theme: alt
       text: Component Examples
       link: /components
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Enhanced User Input
+    details: Provide users with intuitive and specialized input fields like auto-resizing textareas, PIN verification, and customizable selects.
+  - title: Native HTML Behavior
+    details: Built to behave like standard HTML elements, ensuring ease of integration and familiarity for developers.
+  - title: Easy to Integrate
+    details: Simple to include in your HTML with minimal setup, as demonstrated in the getting started guide.
 ---
