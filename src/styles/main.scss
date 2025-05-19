@@ -19,3 +19,10 @@ textarea.tw-auto-resize {
 .tw-filter-group .tw-filter-item[data-tw-blurry] {
   display: none;
 }
+
+.icon-button {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}

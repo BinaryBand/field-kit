@@ -39,12 +39,6 @@ export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
     pointer-events: none;
     visibility: hidden;
   }
-
-  .icon-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 `;
 
 export const HiddenInput: StyledComponent<ComponentProps<'input'>> = styled.input`

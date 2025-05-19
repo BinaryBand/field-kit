@@ -1,8 +1,10 @@
-import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+
+import react from '@vitejs/plugin-react';
 import path from 'path';
 
-var root = path.resolve(__dirname, 'src');
+const root: string = path.resolve(__dirname, 'src');
+
 export default defineConfig({
   plugins: [react()],
   define: {

@@ -19,7 +19,7 @@ import Form from '@/controllers/components/Form';
 import Multiline from '@/controllers/components/Multiline';
 import { FilterGroup, TextFilter } from '@/controllers/components/Filter';
 
-import { assert, createRandomKey } from '@utils';
+import { createRandomKey } from '@utils';
 
 function getStableKey(htmlElement: HTMLElement): string {
   return htmlElement.id || htmlElement.dataset.stableId || createRandomKey();
@@ -30,20 +30,26 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
 
   switch (className.toLowerCase()) {
     case 'tw-select-group':
-      assert(element instanceof HTMLSelectElement, 'Element is not a select element');
-      return (
-        <InputWrapper children={children} component={SelectInput} container={element} key={key} />
-      );
+      if (element instanceof HTMLSelectElement) {
+        return (
+          <InputWrapper children={children} component={SelectInput} container={element} key={key} />
+        );
+      }
+      break;
     case 'tw-option':
-      assert(element instanceof HTMLOptionElement, 'Element is not an option element');
-      const { className, textContent, style, value } = element;
-      const props: ComponentProps<'option'> = { className, value };
-      return <SelectOption children={textContent} css={style.cssText} {...props} key={key} />;
+      if (element instanceof HTMLOptionElement) {
+        const { className, textContent, style, value } = element;
+        const props: ComponentProps<'option'> = { className, value };
+        return <SelectOption children={textContent} css={style.cssText} {...props} key={key} />;
+      }
+      break;
     case 'tw-calendar-month':
       return <Calendar children={children} target={element} key={key} />;
     case 'tw-auto-resize':
-      assert(element instanceof HTMLTextAreaElement, 'Element is not a textarea element');
-      return <Multiline children={children} target={element} key={key} />;
+      if (element instanceof HTMLTextAreaElement) {
+        return <Multiline children={children} target={element} key={key} />;
+      }
+      break;
     case 'tw-filter-group':
       return <FilterGroup children={children} container={element} key={key} />;
     case 'tw-form':
@@ -117,6 +123,19 @@ export default function init(element: HTMLElement = document.body): void {
 
     appRoot.render(app);
     element.appendChild(root);
+
+    let callback: () => void;
+    callback = () => {
+      element.removeEventListener('update', callback);
+      element.removeChild(root);
+      appRoot.unmount();
+
+      window.setTimeout(() => {
+        init(element);
+      }, 50);
+    };
+
+    element.addEventListener('update', callback);
   } catch (error) {
     console.error('Error initializing Inline:', error);
   }

@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+/docs/.vitepress/dist
+/docs/.vitepress/cache
 
 package-lock.json
 
@@ -24,5 +26,3 @@ package-lock.json
 *.njsproj
 *.sln
 *.sw?
-
-post-compile.js

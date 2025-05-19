@@ -10,13 +10,8 @@ import React, {
 } from 'react';
 import { useDebounce } from 'use-debounce';
 
-import {
-  ListInputContainer,
-  InputToken,
-  StyledListInput,
-  HiddenInput,
-  StyledOverlay,
-} from '@styled/ListInput';
+import { InputToken, StyledListInput, HiddenInput, StyledOverlay } from '@styled/ListInput';
+import { SelectInputContainer } from '@styled/SelectInput';
 import Dropdown from '@styled/Dropdown';
 
 import CaretDownIcon from '@/assets/icons/CaretDownIcon';
@@ -209,7 +204,7 @@ function SelectInput(
 
   return (
     <SelectInputContext.Provider value={{ options, addOption }}>
-      <ListInputContainer
+      <SelectInputContainer
         className={className}
         data-multiple={multiple || undefined}
         ref={containerRef}
@@ -236,11 +231,15 @@ function SelectInput(
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}
         />
-      </ListInputContainer>
+      </SelectInputContainer>
 
       <StyledOverlay target={containerRef}>
         <CaretDownIcon aria-expanded={focused || undefined} />
-        {multiple && <XIcon onClick={clearAll} role="button" />}
+        {multiple && (
+          <div className="icon-button" onClick={clearAll} role="button">
+            <XIcon />
+          </div>
+        )}
 
         <Dropdown
           className={className}

@@ -159,7 +159,9 @@ function ListInput(
       </ListInputContainer>
 
       <StyledOverlay target={containerRef}>
-        <XIcon onClick={clearAll} role="button" />
+        <div className="icon-button" onClick={clearAll} role="button">
+          <XIcon />
+        </div>
       </StyledOverlay>
     </Fragment>
   );
