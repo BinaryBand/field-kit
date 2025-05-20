@@ -13,9 +13,15 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Read Me', link: '/readme' },
     ],
-
     sidebar: [
-      { text: 'Getting Started', link: '/readme' },
+      {
+        text: 'Getting Started',
+        link: '/readme',
+        items: [
+          { text: 'Installation', link: '/readme#installation' },
+          { text: 'Usage', link: '/readme#usage' },
+        ],
+      },
       {
         text: 'Components',
         items: [
@@ -40,15 +46,12 @@ export default defineConfig({
         ],
       },
     ],
-
     socialLinks: [{ icon: 'github', link: 'https://github.com/BinaryBand/bulwark-client-app' }],
   },
-
   head: [
     ['link', { rel: 'icon', href: '/vite.svg' }],
     ['link', { rel: 'stylesheet', href: '/style.scss', type: 'text/css' }],
   ],
-
   vite: {
     resolve: {
       alias: {
@@ -58,7 +61,6 @@ export default defineConfig({
         '@providers': path.resolve(reactSrc, 'controllers/providers'),
         '@components': path.resolve(reactSrc, 'views/components/main'),
         '@inline': path.resolve(reactSrc, 'views/components/inline'),
-        '@styled': path.resolve(reactSrc, 'views/styled'),
       },
     },
   },

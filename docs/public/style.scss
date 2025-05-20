@@ -3,7 +3,11 @@
 }
 
 .text-secondary {
-  color: var(--vp-c-brand-2);
+  color: var(--vp-c-soft);
+}
+
+.text-danger {
+  color: red;
 }
 
 .btn {
@@ -23,6 +27,13 @@
     background-color: var(--vp-c-text-1);
     cursor: not-allowed;
   }
+}
+
+.paper {
+  background-color: var(--vp-input-bg-color);
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-control {

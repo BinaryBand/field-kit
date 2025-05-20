@@ -1,16 +1,21 @@
-### List Input
+## List Input `input[type="list"]`
 
+<DemoView query="input[type='list']">
 <input
-    class="form-control"
-    placeholder="List Input"
-    type="list"
-    value='["One","Two","Three"]'
+  class="form-control"
+  name="ListInput"
+  placeholder="List Input"
+  type="list"
+  value='["One","Two","Three"]'
 />
 
 ```html
-<input type="list" value='["One","Two","Three"]' />
+<input name="ListInput" type="list" />
 ```
 
+</DemoView>
+
 <script setup>
+  import DemoView from './../../vue/DemoView.vue';
   document.body.dispatchEvent(new Event('update'));
 </script>

@@ -10,8 +10,8 @@ hero:
       text: Get Started
       link: /readme
     - theme: alt
-      text: Component Examples
-      link: /components
+      text: Examples
+      link: /components/inputs/auto-resize
 
 features:
   - title: Enhanced User Input

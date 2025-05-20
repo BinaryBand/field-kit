@@ -3,6 +3,6 @@
 </template>
 
 <script setup>
-// Ensure the components load.
+// Ensure the custom components load.
 import '@/index';
 </script>

@@ -1,18 +1,21 @@
-### Select Input
+## Select Input
 
-<select class="tw-select-group form-control" data-placeholder="Single Select">
+<DemoView query='select.tw-select-group[name="SingleSelect"]'>
+<select class="tw-select-group form-control" data-placeholder="Single Select" name="SingleSelect">
   <option class="tw-option" value="alb">Albuquerque</option>
   <option class="tw-option" value="bos">Boston</option>
   <option class="tw-option" value="chi">Chicago</option>
 </select>
 
 ```html
-<select class="tw-select-group" data-placeholder="Single Select">
+<select class="tw-select-group" data-placeholder="Single Select" name="SingleSelect">
   <option class="tw-option" value="alb">Albuquerque</option>
   <option class="tw-option" value="bos">Boston</option>
   <option class="tw-option" value="chi">Chicago</option>
 </select>
 ```
+
+</DemoView>
 
 <hr />
 
@@ -33,5 +36,6 @@
 ```
 
 <script setup>
+  import DemoView from './../../vue/DemoView.vue';
   document.body.dispatchEvent(new Event('update'));
 </script>

@@ -30,4 +30,11 @@ export default defineConfig({
     },
     emptyOutDir: true,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      },
+    },
+  },
 });

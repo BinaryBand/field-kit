@@ -1,4 +1,4 @@
-### Filter
+## Filter
 
 <div class="tw-filter-group">
   <input class="form-control" placeholder="Text Filter" type="filter" />
