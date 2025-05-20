@@ -19,5 +19,8 @@ First Line
 
 <script setup>
   import DemoView from './../../vue/DemoView.vue';
-  document.body.dispatchEvent(new Event('update'));
+
+  if (typeof document !== 'undefined') {
+    document.body.dispatchEvent(new Event('update'));
+  }
 </script>

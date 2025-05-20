@@ -130,7 +130,7 @@ export default function init(element: HTMLElement = document.body): void {
       element.removeChild(root);
       appRoot.unmount();
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         init(element);
       }, 50);
     };
@@ -141,4 +141,6 @@ export default function init(element: HTMLElement = document.body): void {
   }
 }
 
-window.addEventListener('load', (): void => init(document.body));
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', (): void => init(document.body));
+}

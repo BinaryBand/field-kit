@@ -22,7 +22,7 @@ function PasskeyInput(
 
   const [passkey, setPasskey] = React.useState<IPasskey | null>(null);
 
-  const isSupported: boolean = React.useMemo(() => Boolean(window.PublicKeyCredential), []);
+  const isSupported: boolean = React.useMemo(() => Boolean(PublicKeyCredential), []);
   const isDisabled: boolean = React.useMemo(
     () => disabled || !isSupported,
     [disabled, isSupported]

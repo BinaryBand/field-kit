@@ -63,6 +63,10 @@ const updateButton: Ref<HTMLButtonElement | null> = ref(null);
 const displayData: Ref<string> = ref('');
 
 onMounted(() => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
   const externalTarget: Element | null = document.querySelector(queryString);
 
   if (updateButton.value !== null) {

@@ -13,13 +13,18 @@ The signature input provides an interactive canvas for users to draw their signa
 
 </DemoView>
 
-<script setup>
+<script setup lang='ts'>
   import DemoView from './../../vue/DemoView.vue';
-  document.body.dispatchEvent(new Event('update'));
+
+  if (typeof document !== 'undefined') {
+    document.body.dispatchEvent(new Event('update'));
+  }
 
   function handleClearClick() {
-    const signatureInput = document.querySelector("input[type='signature']");
-    signatureInput.value = '';
-    signatureInput.dispatchEvent(new Event('change'));
+    if (typeof document !== undefined) {
+      const signatureInput = document.querySelector("input[type='signature']");
+      signatureInput.value = '';
+      signatureInput.dispatchEvent(new Event('change'));
+    }
   };
 </script>

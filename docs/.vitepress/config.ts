@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 
-const reactSrc = path.resolve(__dirname, '../../src');
+const reactSrc: string = path.resolve(__dirname, '../../src');
 
 export default defineConfig({
   title: 'TW Components',
@@ -61,6 +61,7 @@ export default defineConfig({
         '@providers': path.resolve(reactSrc, 'controllers/providers'),
         '@components': path.resolve(reactSrc, 'views/components/main'),
         '@inline': path.resolve(reactSrc, 'views/components/inline'),
+        '@styled': path.resolve(reactSrc, 'views/styled'),
       },
     },
   },

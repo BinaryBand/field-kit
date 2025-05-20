@@ -17,7 +17,7 @@ export function toDataUrl(url: string): Promise<string | undefined> {
 }
 
 export async function uploadImage(): Promise<string | undefined> {
-  const target: HTMLInputElement = window.document.createElement('input');
+  const target: HTMLInputElement = document.createElement('input');
 
   return new Promise((resolve) => {
     target.onchange = (event: Event): void => {

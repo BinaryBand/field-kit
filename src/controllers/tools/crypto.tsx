@@ -57,7 +57,7 @@ export function getPasskey(identifier: string): IPasskey | null {
 }
 
 export async function createPasskey(identifier: string, name: string): Promise<void> {
-  const hostname: string = window.location.hostname;
+  const hostname: string = location.hostname;
   const id: BufferSource = TEXT_ENCODER.encode(identifier);
   const challenge: BufferSource = crypto.getRandomValues(new Uint8Array(32));
 
@@ -93,7 +93,7 @@ export async function signChallenge(
   passkey: IPasskey,
   challenge: BufferSource
 ): Promise<AuthenticatorAssertionResponse> {
-  const rpId: string = window.location.hostname;
+  const rpId: string = location.hostname;
   const id: BufferSource = Buffer.from(passkey.id);
 
   const authenticationOptions: CredentialRequestOptions = {

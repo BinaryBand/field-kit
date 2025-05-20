@@ -7,13 +7,13 @@
     "start": "npm run dev",
     "dev": "vite",
     "build": "vite build",
-    "build:docs": "vitepress build docs",
-    "dev:docs": "vitepress dev docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@base-ui-components/react": "^1.0.0-alpha.5",
     "@emotion/css": "^11.13.5",
     "@emotion/styled": "^11.14.0",
     "buffer": "^6.0.3",

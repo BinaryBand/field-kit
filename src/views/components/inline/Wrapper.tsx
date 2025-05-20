@@ -13,8 +13,10 @@ function Wrapper<C extends ElementType>({
     return styled(component as ComponentType)(container?.style.cssText);
   }, [component, container]);
 
-  React.useEffect((): (() => void) => {
-    if (!container || !container?.parentElement) return () => undefined;
+  React.useEffect((): (() => void) | void => {
+    if (!container || !container?.parentElement || typeof document === undefined) {
+      return;
+    }
 
     const shuttle: HTMLDivElement = document.createElement('div');
     shuttle.classList.add('_tw-wrapper');

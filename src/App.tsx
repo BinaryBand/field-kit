@@ -36,17 +36,19 @@ function App({ children, root }: IAppProps): ReactElement {
     setUpdateTrigger((prev) => prev + 1);
   }
 
-  React.useEffect((): (() => void) => {
-    handleResize();
-    handleScroll();
+  React.useEffect((): (() => void) | undefined => {
+    if (typeof window !== 'undefined') {
+      handleResize();
+      handleScroll();
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('scroll', handleScroll);
 
-    return (): void => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
-    };
+      return (): void => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
   }, []);
 
   React.useEffect((): (() => void) => {
