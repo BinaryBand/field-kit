@@ -1,6 +1,8 @@
-## List Input `input[type="list"]`
+## List Input
 
-<DemoView query="input[type='list']">
+## Demo
+
+<FormDemo>
 <input
   class="form-control"
   name="ListInput"
@@ -8,17 +10,12 @@
   type="list"
   value='["One","Two","Three"]'
 />
+</FormDemo>
 
 ```html
 <input name="ListInput" type="list" />
 ```
 
-</DemoView>
-
-<script setup>
-  import DemoView from './../../vue/DemoView.vue';
-
-  if (typeof document !== 'undefined') {
-    document.body.dispatchEvent(new Event('update'));
-  }
+<script setup lang='ts'>
+  import FormDemo from './../../vue/FormDemo.vue';
 </script>

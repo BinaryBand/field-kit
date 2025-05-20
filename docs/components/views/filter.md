@@ -1,5 +1,7 @@
 ## Filter
 
+## Demo
+
 <div class="tw-filter-group">
   <input class="form-control" placeholder="Text Filter" type="filter" />
 
@@ -20,9 +22,3 @@
   </ul>
 </div>
 ```
-
-<script setup>
-  if (typeof document !== 'undefined') {
-    document.body.dispatchEvent(new Event('update'));
-  }
-</script>

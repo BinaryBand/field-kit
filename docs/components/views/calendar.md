@@ -1,6 +1,8 @@
 ## Calendar
 
-<table class="table tw-calendar">
+## Demo
+
+<table class="tw-calendar">
   <tbody>
     <tr class="tw-calendar-month" data-tw-year="2021" data-tw-month="7">
       <td class="tw-calendar-day" data-tw-day="1">
@@ -25,9 +27,3 @@
   </tr>
 </table>
 ```
-
-<script setup>
-  if (typeof document !== 'undefined') {
-    document.body.dispatchEvent(new Event('update'));
-  }
-</script>

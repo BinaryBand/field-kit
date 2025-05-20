@@ -1,26 +1,22 @@
-## Auto-Resize Textarea `textarea.tw-auto-resize`
+## Auto-Resize Textarea
 
-<DemoView query="textarea.tw-auto-resize">
+## Demo
+
+<FormDemo query="textarea.tw-auto-resize">
 <textarea class="tw-auto-resize form-control" name="Multiline" placeholder="Text">
 First Line
-    Second Line
-        Third Line
-</textarea>
+  Second Line
+    Third Line</textarea>
+</FormDemo>
 
 ```html
 <textarea class="tw-auto-resize" name="Multiline">
 First Line
-    Second Line
-        Third Line
+  Second Line
+    Third Line
 </textarea>
 ```
 
-</DemoView>
-
-<script setup>
-  import DemoView from './../../vue/DemoView.vue';
-
-  if (typeof document !== 'undefined') {
-    document.body.dispatchEvent(new Event('update'));
-  }
+<script setup lang='ts'>
+  import FormDemo from './../../vue/FormDemo.vue';
 </script>

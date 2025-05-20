@@ -1,30 +1,27 @@
-## Signature Input `input[type="signature"]`
+## Signature Input
 
 The signature input provides an interactive canvas for users to draw their signatures. The value attribute of this input will contain a base-64 encoded string representing the drawn 2D image of the signature.
 
-<DemoView query="input[type='signature']">
-<input class="form-control" name="Signature" placeholder="Sign Here" type="signature" />
+## Demo
 
-<button class="btn" @click="handleClearClick">Clear</button>
+<FormDemo>
+<SignatureDemo />
+</FormDemo>
 
 ```html
 <input name="Signature" placeholder="Sign Here" type="signature" />
+<button onClick="handleClearClick">Clear Input</button>
 ```
 
-</DemoView>
+```js
+function handleClearClick() {
+  const signatureElement = document.querySelector("input[name='Signature']");
+  signatureInput.value = '';
+  signatureInput.dispatchEvent(new Event('change'));
+}
+```
 
 <script setup lang='ts'>
-  import DemoView from './../../vue/DemoView.vue';
-
-  if (typeof document !== 'undefined') {
-    document.body.dispatchEvent(new Event('update'));
-  }
-
-  function handleClearClick() {
-    if (typeof document !== undefined) {
-      const signatureInput = document.querySelector("input[type='signature']");
-      signatureInput.value = '';
-      signatureInput.dispatchEvent(new Event('change'));
-    }
-  };
+  import FormDemo from './../../vue/FormDemo.vue';
+  import SignatureDemo from './../../vue/SignatureDemo.vue'
 </script>

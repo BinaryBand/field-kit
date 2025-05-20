@@ -17,18 +17,6 @@
 
     <div class="paper display" ref="displayElement">{{ displayData }}</div>
 
-    <p>
-      <small class="text-secondary">
-        * When a form is submitted, the library intercepts the standard <code>submit</code> event
-        and adds a custom <code>formData</code> property to the event object. This
-        <code>event.formData</code> is a <code>FormData</code> object, automatically populated with
-        the key-value pairs from the submitted form's input fields (where the keys are the
-        <code>name</code> attributes of the fields and the values are their current values). You can
-        access this data within the <code>submitForm</code> handler function using
-        <code>event.formData</code>.
-      </small>
-    </p>
-
     <button hidden ref="updateButton" type="submit">Submit</button>
   </form>
 </template>
@@ -37,7 +25,7 @@
 import { ref, onMounted, Ref } from 'vue';
 import { reduceFormData } from '../../src/controllers/components/Form';
 
-function handleSubmit(event: Event) {
+function handleSubmit(event: Event): void {
   event.preventDefault();
 
   const { currentTarget } = event;
@@ -63,16 +51,13 @@ const updateButton: Ref<HTMLButtonElement | null> = ref(null);
 const displayData: Ref<string> = ref('');
 
 onMounted(() => {
-  if (typeof document === 'undefined') {
-    return;
-  }
-
-  const externalTarget: Element | null = document.querySelector(queryString);
+  if (typeof document === 'undefined') return;
 
   if (updateButton.value !== null) {
     updateButton.value.click();
   }
 
+  const externalTarget: Element | null = document.querySelector(queryString);
   if (externalTarget !== null) {
     externalTarget.addEventListener('change', () => {
       if (updateButton.value) {

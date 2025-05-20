@@ -26,6 +26,15 @@ export default defineConfig({
         text: 'Components',
         items: [
           {
+            text: 'Form',
+            link: '/components/form',
+            items: [
+              { text: 'Array', link: '/components/form#array-value' },
+              { text: 'Group', link: '/components/form#group-value' },
+              { text: 'Complex', link: '/components/form#nested-complex-values' },
+            ],
+          },
+          {
             text: 'Inputs',
             items: [
               { text: 'Auto Resize', link: '/components/inputs/auto-resize' },

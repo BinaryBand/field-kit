@@ -1,8 +1,9 @@
 import React, { Fragment, ReactNode } from 'react';
 import { tryParse } from '@utils';
 
-function normalizeInputValue(element: HTMLInputElement): string | string[] | number | boolean {
-  const type: string = element.getAttribute('type') ?? element.type;
+function normalizeInputValue(element: HTMLInputElement): FormType {
+  const type: string =
+    element.getAttribute('data-type') ?? element.getAttribute('type') ?? element.type;
 
   switch (type) {
     case 'checkbox':
@@ -22,7 +23,7 @@ function normalizeTextAreaValue(element: HTMLTextAreaElement): string {
 }
 
 function normalizeSelectValue(element: HTMLSelectElement): TWFormData {
-  const type: string = element.getAttribute('type') ?? '';
+  const type: string = element.getAttribute('data-type') || element.getAttribute('type') || '';
 
   const normalizeValue = (val: string) => {
     switch (type) {
@@ -61,8 +62,8 @@ function getChildren(element: Element): Element[] {
 }
 
 export function reduceFormData(acc: Map<string, TWFormData>, element: Element): void {
-  if (element.hasAttribute('data-tw-list')) {
-    const listName: string = element.getAttribute('data-tw-list') ?? 'list';
+  if (element.hasAttribute('data-tw-array')) {
+    const listName: string = element.getAttribute('data-tw-array') ?? 'list';
 
     const formData: IFormData = new Map();
     const children: Element[] = getChildren(element);
@@ -110,12 +111,22 @@ function Form(props: IControllerProps): ReactNode {
 
   React.useEffect(() => {
     const onSubmit: ((event: SubmitEvent) => void) | null = target.onsubmit;
-    target.onsubmit = (event: SubmitEvent) => onSubmit?.(preSubmit(event));
+    const onSubmitExists: boolean = Boolean(onSubmit);
+
+    if (onSubmitExists) {
+      target.onsubmit = (event: SubmitEvent) => onSubmit?.(preSubmit(event));
+    } else {
+      target.addEventListener('submit', preSubmit);
+    }
 
     return () => {
-      target.onsubmit = onSubmit;
+      if (onSubmitExists) {
+        target.onsubmit = onSubmit;
+      } else {
+        target.removeEventListener('submit', preSubmit);
+      }
     };
-  }, []);
+  }, [target]);
 
   return <Fragment children={children} />;
 }

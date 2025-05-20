@@ -33,5 +33,5 @@
     }
   },
   "exclude": ["node_modules", "dist", "build"],
-  "include": ["src", "public", "index.d.ts"]
+  "include": ["src", "public", "index.d.ts", "docs"]
 }
