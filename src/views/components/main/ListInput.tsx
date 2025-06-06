@@ -23,7 +23,16 @@ import AppContext from '@providers/AppContext';
 import { createChangeEvent, tryParse, useMergedRef } from '@utils';
 
 function ListInput(
-  { className, defaultValue, onChange, onKeyDown, style, value, ...props }: ComponentProps<'input'>,
+  {
+    className,
+    defaultValue,
+    onChange,
+    onKeyDown,
+    placeholder,
+    style,
+    value,
+    ...props
+  }: ComponentProps<'input'>,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactElement {
   const { scrollHeight, scrollWidth, pageWidth, pageHeight } = React.useContext(AppContext);
@@ -48,6 +57,10 @@ function ListInput(
 
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
   const [paddingTop, setPaddingTop] = React.useState<number>(0);
+
+  const _placeholder: string | undefined = React.useMemo(() => {
+    return list.length === 0 ? placeholder : undefined;
+  }, [placeholder, list]);
 
   function clearAll(): void {
     if (onChange !== undefined && internalRef.current !== null) {
@@ -153,6 +166,7 @@ function ListInput(
           className={className}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          placeholder={_placeholder}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}
         />

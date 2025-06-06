@@ -5,15 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
-
     <link href="/styles.scss" rel="stylesheet" />
-
-    <script>
-      function handleSubmit(event) {
-        event.preventDefault();
-        console.log(event.formData);
-      }
-    </script>
   </head>
 
   <body data-bs-theme="dark">
@@ -252,7 +244,7 @@
             </div>
 
             <div class="card-body">
-              <div data-tw-array="Array">
+              <div class="border border-primary p-2" data-tw-array="Array">
                 <input name="First" value="1st" />
                 <input name="Second" value="2nd" />
                 <input name="Third" value="3rd" />
@@ -270,7 +262,7 @@
             </div>
 
             <div class="card-body">
-              <div class="gap-3 vstack" data-tw-group="Children">
+              <div class="gap-3 vstack border border-success p-2" data-tw-group="Children">
                 <input name="First" value="1st" />
                 <input name="Second" value="2nd" />
               </div>
@@ -287,16 +279,19 @@
             </div>
 
             <div class="card-body">
-              <div class="border p-3 ms-3 gap-3 vstack" data-tw-group="Children">
+              <div
+                class="border p-3 ms-3 gap-3 vstack border border-success p-2"
+                data-tw-group="ComplexObject"
+              >
                 <input name="First" value="1st" />
 
-                <div class="gap-3 vstack" data-tw-list="Grandchildren">
-                  <div class="border p-3 ms-3 gap-3 vstack" data-tw-array="One">
+                <div class="gap-3 vstack border border-primary p-2" data-tw-array="Child">
+                  <div class="p-3 ms-3 gap-3 vstack border border-primary p-2" data-tw-array="One">
                     <input name="Second" value="2nd" />
                     <input name="Third" value="3rd" />
                   </div>
 
-                  <div class="border p-3 ms-3 gap-3 vstack" data-tw-group="Two">
+                  <div class="p-3 ms-3 gap-3 vstack border border-success p-2" data-tw-group="Two">
                     <input name="Fourth" value="4th" />
                     <input name="Fifth" value="5th" />
                   </div>
@@ -319,5 +314,12 @@
     </form>
 
     <script src="/scripts.js" type="module"></script>
+
+    <script>
+      function handleSubmit(event) {
+        event.preventDefault();
+        console.log(event.formData.get('ComplexObject').get('Child'));
+      }
+    </script>
   </body>
 </html>

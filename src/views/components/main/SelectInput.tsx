@@ -91,6 +91,10 @@ function SelectInput(
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
   const [paddingTop, setPaddingTop] = React.useState<number>(0);
 
+  const _placeholder: string | undefined = React.useMemo(() => {
+    return list.length === 0 ? placeholder : undefined;
+  }, [placeholder, list]);
+
   const activeLabel: string | undefined = React.useMemo((): string | undefined => {
     const activeLabel: unknown = options[debouncedList[0]] ?? debouncedList[0];
     return typeof activeLabel === 'string' ? activeLabel : undefined;
@@ -226,7 +230,7 @@ function SelectInput(
           onBlur={handleBlur}
           onChange={handleChange}
           onFocus={handleFocus}
-          placeholder={placeholder}
+          placeholder={_placeholder}
           ref={inputRef}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}

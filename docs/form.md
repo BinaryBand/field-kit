@@ -28,7 +28,7 @@ function handleSubmit(event) {
 </FormDemo>
 
 ```html
-<div data-tw-list="Array">
+<div data-tw-list="ArrayName">
   <input name="First" value="1st" />
   <input name="Second" value="2nd" />
   <input name="Third" value="3rd" />
@@ -93,5 +93,5 @@ Complex form values can be nested.
 </FormDemo>
 
 <script setup lang='ts'>
-  import FormDemo from './../vue/FormDemo.vue';
+  import FormDemo from './vue/FormDemo.vue';
 </script>

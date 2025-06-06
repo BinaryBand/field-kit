@@ -8,7 +8,9 @@ const reactSrc: string = path.resolve(__dirname, '../../src');
 export default defineConfig({
   title: 'TW Components',
   description: 'Custom HTML components for use in Bulwark Exterminating LLC projects.',
+  base: '/docs/',
   themeConfig: {
+    siteTitle: 'Docs',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Read Me', link: '/readme' },
@@ -25,15 +27,6 @@ export default defineConfig({
       {
         text: 'Components',
         items: [
-          {
-            text: 'Form',
-            link: '/components/form',
-            items: [
-              { text: 'Array', link: '/components/form#array-value' },
-              { text: 'Group', link: '/components/form#group-value' },
-              { text: 'Complex', link: '/components/form#nested-complex-values' },
-            ],
-          },
           {
             text: 'Inputs',
             items: [
@@ -54,13 +47,18 @@ export default defineConfig({
           },
         ],
       },
+      {
+        text: 'Form Events',
+        link: '/form',
+        items: [
+          { text: 'Arrays', link: '/form#array-value' },
+          { text: 'Groups', link: '/form#group-value' },
+          { text: 'Complex', link: '/form#nested-complex-values' },
+        ],
+      },
     ],
     socialLinks: [{ icon: 'github', link: 'https://github.com/BinaryBand/bulwark-client-app' }],
   },
-  head: [
-    ['link', { rel: 'icon', href: '/vite.svg' }],
-    ['link', { rel: 'stylesheet', href: '/style.scss', type: 'text/css' }],
-  ],
   vite: {
     resolve: {
       alias: {

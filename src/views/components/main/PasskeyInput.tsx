@@ -29,7 +29,7 @@ function PasskeyInput(
   );
 
   const text: ReactNode = React.useMemo(
-    () => children ?? (!passkey ? 'Not registered' : 'Registered'),
+    () => children ?? (!passkey ? 'Register with password' : 'Clear passkey'),
     [children, passkey]
   );
 

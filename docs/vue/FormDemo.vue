@@ -2,18 +2,30 @@
   <form class="tw-form" @submit.prevent="handleSubmit">
     <slot />
 
-    <br />
+    <hr />
 
-    <button class="btn" ref="submitButton" type="submit">Submit Form Demo</button>
+    <div class="center-container">
+      <span>
+        <button class="btn" ref="submitButton" type="submit">Mock Submit Form</button>
+      </span>
+    </div>
   </form>
 
   <Toast ref="toastComponent" />
 </template>
 
+<style scoped>
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+</style>
+
 <script setup lang="ts">
 import Toast from './Toast.vue';
 import { ref, Ref } from 'vue';
-
 import { reduceFormData } from '../../src/controllers/components/Form';
 
 function triggerToast(title: string, message: string): void {

@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: 'TW Components'
+  name: 'TW Docs'
   tagline: Custom HTML components for use in Bulwark Exterminating LLC projects.
   actions:
     - theme: brand
