@@ -109,6 +109,30 @@ function Form(props: IControllerProps): ReactNode {
     return event;
   }
 
+  async function handleSubmit(event: TwSubmitEvent): Promise<TwSubmitEvent> {
+    event.preventDefault();
+
+    const { currentTarget } = event;
+
+    if (currentTarget instanceof HTMLFormElement) {
+      const response = await fetch(currentTarget.action, {
+        method: currentTarget.method,
+        headers: { 'Content-Type': 'application/json' },
+        body: event.formData ? JSON.stringify(event.formData) : undefined,
+      });
+
+      if (response.type === 'opaqueredirect') {
+        window.location.href = response.url;
+      } else if (response.type === 'basic' || response.type === 'cors') {
+        window.location.href = response.url;
+      } else {
+        window.location.reload();
+      }
+    }
+
+    return event;
+  }
+
   React.useEffect(() => {
     const onSubmit: ((event: SubmitEvent) => void) | null = target.onsubmit;
     const onSubmitExists: boolean = Boolean(onSubmit);
@@ -116,7 +140,10 @@ function Form(props: IControllerProps): ReactNode {
     if (onSubmitExists) {
       target.onsubmit = (event: SubmitEvent) => onSubmit?.(preSubmit(event));
     } else {
-      target.addEventListener('submit', preSubmit);
+      target.addEventListener('submit', (event: SubmitEvent) => {
+        event = preSubmit(event);
+        handleSubmit(event);
+      });
     }
 
     return () => {
