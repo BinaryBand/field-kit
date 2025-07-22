@@ -25,11 +25,11 @@
     "paths": {
       "@/*": ["src/*"],
       "@tools/*": ["src/controllers/tools/*"],
-      "@utils": ["src/controllers/utils.tsx"],
       "@providers/*": ["src/controllers/providers/*"],
       "@components/*": ["src/views/components/main/*"],
       "@inline/*": ["src/views/components/inline/*"],
-      "@styled/*": ["src/views/styled/*"]
+      "@styled/*": ["src/views/styled/*"],
+      "@utils": ["src/controllers/utils.tsx"]
     }
   },
   "exclude": ["node_modules", "dist", "build"],
