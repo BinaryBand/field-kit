@@ -21,9 +21,9 @@
     <template id="select-option-template">
       <option class="tw-option" value="1">Albuquerque</option>
       <option class="tw-option" value="2">Boston</option>
-      <option class="tw-option" value="3">Chicago</option>
+      <option class="tw-option" selected value="3">Chicago</option>
       <option class="tw-option" value="4">Denver</option>
-      <option class="tw-option" value="5">El Paso</option>
+      <option class="tw-option" selected value="5">El Paso</option>
       <option class="tw-option" value="6">Flagstaff</option>
       <option class="tw-option" value="7">Gilbert</option>
     </template>
@@ -317,8 +317,8 @@
 
     <script>
       function handleSubmit(event) {
-        event.preventDefault();
-        console.log(event.formData.get('ComplexObject').get('Child'));
+        // event.preventDefault();
+        console.log(event.formData);
       }
     </script>
   </body>

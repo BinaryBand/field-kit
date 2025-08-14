@@ -61,31 +61,31 @@ function getChildren(element: Element): Element[] {
   return Array.from(element.children).filter((e) => e instanceof Element);
 }
 
-export function reduceFormData(acc: Map<string, TWFormData>, element: Element): void {
+export function reduceFormData(acc: Record<string, TWFormData>, element: Element): void {
   if (element.hasAttribute('data-tw-array')) {
     const listName: string = element.getAttribute('data-tw-array') ?? 'list';
 
-    const formData: IFormData = new Map();
+    const formData: IFormData = {};
     const children: Element[] = getChildren(element);
     for (const child of children) {
       reduceFormData(formData, child);
     }
 
-    acc.set(listName, Array.from(formData.values()));
+    acc[listName] = Array.from(Object.values(formData));
     return;
   }
 
   if (element.hasAttribute('data-tw-group')) {
     const groupName: string = element.getAttribute('data-tw-group') ?? 'group';
-    const formData: IFormData = new Map();
-    acc.set(groupName, formData);
+    const formData: IFormData = {};
+    acc[groupName] = formData;
     acc = formData;
   }
 
   const name: string | null = element.getAttribute('name');
   const value: TWFormData | null = normalizeValue(element);
   if (name !== null && value !== null) {
-    acc.set(name, value);
+    acc[name] = value;
   }
 
   const children: Element[] = getChildren(element);
@@ -101,7 +101,7 @@ function Form(props: IControllerProps): ReactNode {
     const { currentTarget } = event;
 
     if (currentTarget instanceof HTMLFormElement) {
-      const formData: IFormData = new Map();
+      const formData: IFormData = {};
       reduceFormData(formData, currentTarget);
       event.formData = formData;
     }

@@ -9,6 +9,7 @@ const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
   top: 100%;
   position: absolute;
   width: 100%;
+  max-height: 256px !important;
 
   option {
     background-color: inherit;
