@@ -55,13 +55,31 @@ export function FilterGroup({
 
   React.useEffect((): void => {
     if (container !== null && container !== undefined) {
-      const escapedFragments: RegExp[] = Object.values(textFilters)
-        .map((text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-        .map((text) => new RegExp(text, 'i'));
+      const takeData: string | undefined = container.dataset.twTake;
 
+      let limit: number;
+      if (takeData !== undefined) {
+        try {
+          limit = parseInt(takeData, 10);
+        } catch {
+          limit = Infinity;
+        }
+      }
+
+      const escapedRegex: RegExp[] = Object.values(textFilters)
+        .map((text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .map((text: string) => new RegExp(text, 'i'));
+
+      let i: number = 0;
       container.querySelectorAll('.tw-filter-item').forEach((child: Element) => {
         const fillString: string = child.textContent ?? '';
-        const isVisible: boolean = escapedFragments.every((reg: RegExp) => reg.test(fillString));
+        const isVisible: boolean =
+          escapedRegex.every((reg: RegExp) => reg.test(fillString)) && i < limit;
+
+        if (isVisible) {
+          i++;
+        }
+
         child.toggleAttribute('data-tw-blurry', !isVisible);
       });
     }

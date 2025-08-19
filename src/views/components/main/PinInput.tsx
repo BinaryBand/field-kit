@@ -1,15 +1,20 @@
 import React, {
+  ChangeEvent,
   ClipboardEvent,
   ComponentProps,
+  FocusEvent,
   ForwardedRef,
   KeyboardEvent,
   MouseEvent,
-  MutableRefObject,
   ReactElement,
   RefObject,
 } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
-import { createChangeEvent } from '@/controllers/utils';
+import { createChangeEvent, useMergedRef } from '@/controllers/utils';
+
+export interface PinInputProps extends ComponentProps<'input'> {
+  size?: number;
+}
 
 const PinInputContainer: StyledComponent<ComponentProps<'span'>> = styled.span`
   display: flex;
@@ -57,28 +62,48 @@ function valueToDigits(
 }
 
 function PinInput(
-  { defaultValue, onChange, onKeyDown, placeholder, size = 6, value, ...props }: PinInputProps,
+  { defaultValue, onChange, onKeyDown, size = 6, value, ...props }: PinInputProps,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactElement {
-  const initialized: MutableRefObject<boolean> = React.useRef<boolean>(false);
-
   const containerRef: RefObject<HTMLSpanElement> = React.useRef<HTMLSpanElement | null>(null);
   const internalRef: RefObject<HTMLInputElement> = React.useRef<HTMLInputElement | null>(null);
 
   const [activeIndex, _setActiveIndex] = React.useState<number>(0);
-  const [digits, setDigits] = React.useState<(number | undefined)[]>(() =>
+  const [pinValue, setPinValue] = React.useState<(number | undefined)[]>(() =>
     valueToDigits(defaultValue, size)
   );
 
-  const isEmpty: boolean = React.useMemo(
-    () => digits.every((digit?: number) => digit === undefined),
-    [digits]
-  );
+  const refs: RefObject<HTMLInputElement>[] = React.useRef(
+    Array.from({ length: size }, () => React.createRef<HTMLInputElement>())
+  ).current;
 
-  const _placeholder: string | undefined = React.useMemo(
-    () => (isEmpty && placeholder) || undefined,
-    [isEmpty, placeholder]
-  );
+  const placeholder: string = props.placeholder ?? '0'.repeat(size);
+
+  function focusOn(index: number): void {
+    const targetRef: RefObject<HTMLInputElement> = refs[index];
+    if (targetRef?.current) {
+      targetRef.current.focus();
+    }
+  }
+
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
+    const { currentTarget } = event;
+    const { index } = currentTarget.dataset;
+
+    const newDigit: string = currentTarget.value[0];
+
+    if (!newDigit) {
+      // Clear the current digit and keep the focus
+      const newValue = pinValue.map((d, i) => (i === Number(index) ? undefined : d));
+      setPinValue(newValue);
+    } else if (isValidDigit(newDigit)) {
+      const newValue = pinValue.map((d, i) => (i === Number(index) ? Number(newDigit) : d));
+      setPinValue(newValue);
+      if (Number(index) < size - 1) {
+        focusOn(Number(index) + 1);
+      }
+    }
+  }
 
   function setActiveIndex(index: number): void {
     const activeIndex: number = Math.max(0, Math.min(size - 1, index));
@@ -87,13 +112,13 @@ function PinInput(
 
   function setDigit(digit?: number): void {
     if (activeIndex >= 0 && activeIndex < size) {
-      digits[activeIndex] = digit;
+      pinValue[activeIndex] = digit;
 
       if (internalRef.current && onChange) {
-        const value: string = digits.map((d) => d ?? '_').join('');
+        const value: string = pinValue.map((d) => d ?? '_').join('');
         onChange?.(createChangeEvent(internalRef.current, value));
       } else {
-        setDigits([...digits]);
+        setPinValue([...pinValue]);
       }
     }
   }
@@ -112,17 +137,19 @@ function PinInput(
 
     switch (key) {
       case 'Backspace':
-      case 'Delete':
         event.preventDefault();
         setDigit();
         setActiveIndex(index - 1);
+        return;
+      case 'Delete':
+        event.preventDefault();
+        setDigit();
         return;
       case 'ArrowLeft':
         event.preventDefault();
         setActiveIndex(index - 1);
         return;
       case 'ArrowRight':
-      case 'Tab':
         event.preventDefault();
         setActiveIndex(index + 1);
         return;
@@ -138,43 +165,44 @@ function PinInput(
     onKeyDown?.(event);
   }
 
+  function handleFocus(event: FocusEvent<HTMLInputElement>): void {
+    const { currentTarget } = event;
+    const datasetIndex: string | undefined = currentTarget.dataset.index;
+    const index: number = isValidInteger(datasetIndex) ? Number(datasetIndex) : 0;
+    setActiveIndex(index);
+  }
+
   function handlePaste(event: ClipboardEvent): void {
     event.preventDefault();
 
-    const pasteData: string = event.clipboardData.getData('text') ?? '';
+    const dataToPaste: string = event.clipboardData.getData('text') ?? '';
+    const _pinValue: (number | undefined)[] = [...pinValue];
 
-    let _activeIndex: number = activeIndex;
-    const _digits: (number | undefined)[] = [...digits];
-
-    for (let i: number = _activeIndex; i < pasteData.length && _activeIndex < size; i++) {
-      const digit: string = pasteData[i];
-      if (isValidDigit(digit)) {
-        _digits[_activeIndex] = Number(digit);
-        _activeIndex++;
+    let j: number = activeIndex;
+    for (let i: number = 0; i < dataToPaste.length && j < size; i++) {
+      const digit: string = dataToPaste[i];
+      if (isValidInteger(digit)) {
+        _pinValue[j] = Number(digit);
+        j++;
       }
     }
 
-    setActiveIndex(_activeIndex);
+    setActiveIndex(j);
 
     if (internalRef.current && onChange) {
-      const value: string = _digits.map((d) => d ?? '_').join('');
+      const value: string = _pinValue.map((d) => d ?? '_').join('');
       onChange?.(createChangeEvent(internalRef.current, value));
     } else {
-      setDigits(_digits);
+      setPinValue(_pinValue);
     }
   }
 
   React.useEffect((): void => {
-    if (!initialized.current) {
-      initialized.current = true;
-      return;
-    }
-
     const query: string = `input[data-index="${activeIndex}"]`;
     const nextTarget: HTMLInputElement | null =
       containerRef.current?.querySelector<HTMLInputElement>(query) ?? null;
 
-    if (nextTarget) {
+    if (nextTarget !== null) {
       nextTarget.focus();
       nextTarget.select();
     }
@@ -183,31 +211,33 @@ function PinInput(
   React.useEffect((): void => {
     if (value !== undefined) {
       const digits: (number | undefined)[] = valueToDigits(value, size);
-      setDigits(digits);
+      setPinValue(digits);
     }
   }, [value]);
 
   return (
-    <PinInputContainer ref={containerRef}>
-      {digits
+    <PinInputContainer data-testid="pin-input" ref={containerRef}>
+      {pinValue
         .map((digit?: number) => `${digit ?? ''}`)
         .map((digit: string, i: number) => (
           <input
             {...props}
             data-index={i}
             key={i}
+            maxLength={1}
+            onChange={handleInputChange}
             onClick={handleClick}
+            onFocus={handleFocus}
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
-            placeholder={_placeholder?.[i % _placeholder.length]}
+            placeholder={placeholder[i]}
             readOnly
-            ref={activeIndex === i ? ref : undefined}
-            type="password"
+            ref={refs[i]}
             value={digit}
           />
         ))}
 
-      <input ref={internalRef} {...props} hidden readOnly />
+      <input ref={useMergedRef(ref, internalRef)} {...props} hidden readOnly />
     </PinInputContainer>
   );
 }

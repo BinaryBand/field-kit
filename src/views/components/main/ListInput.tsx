@@ -149,7 +149,12 @@ function ListInput(
 
   return (
     <Fragment>
-      <ListInputContainer className={className} ref={containerRef} style={style}>
+      <ListInputContainer
+        className={className}
+        data-testid="list-input"
+        ref={containerRef}
+        style={style}
+      >
         {list.map((item: string, i: number) => (
           <InputToken className="token" key={i}>
             <small>{item}</small>

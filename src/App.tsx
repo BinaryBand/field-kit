@@ -2,7 +2,12 @@ import React, { ReactElement } from 'react';
 import { useDebounce } from 'use-debounce';
 import AppContext from '@providers/AppContext';
 
-function App({ children, root }: IAppProps): ReactElement {
+export type AppProps = {
+  children?: React.ReactNode;
+  root: HTMLElement;
+};
+
+function App({ children, root }: AppProps): ReactElement {
   const [_updateTrigger, setUpdateTrigger] = React.useState<number>(0);
 
   const [scrollWidth, setScrollWidth] = React.useState<number>(0);
@@ -17,7 +22,7 @@ function App({ children, root }: IAppProps): ReactElement {
   const bodyObserver: MutationObserver = React.useMemo(
     () =>
       new MutationObserver((muts: MutationRecord[]) => {
-        muts.map((mut) => mut.type).forEach((type) => root.dispatchEvent(new Event(type)));
+        muts.forEach((mut) => root.dispatchEvent(new Event(mut.type)));
       }),
     [root]
   );
@@ -32,6 +37,7 @@ function App({ children, root }: IAppProps): ReactElement {
     setScrollHeight(window.scrollY);
   }
 
+  // The single event handler for our custom 'mutation' event
   function handleUpdate(): void {
     setUpdateTrigger((prev) => prev + 1);
   }
@@ -49,19 +55,17 @@ function App({ children, root }: IAppProps): ReactElement {
         window.removeEventListener('scroll', handleScroll);
       };
     }
+    return;
   }, []);
 
   React.useEffect((): (() => void) => {
     bodyObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
 
-    root.addEventListener('childList', handleUpdate);
-    root.addEventListener('subtree', handleUpdate);
-    root.addEventListener('attributes', handleUpdate);
+    // Listen for the single, custom 'mutation' event
+    root.addEventListener('mutation', handleUpdate);
 
     return (): void => {
-      root.removeEventListener('childList', handleUpdate);
-      root.removeEventListener('subtree', handleUpdate);
-      root.removeEventListener('attributes', handleUpdate);
+      root.removeEventListener('mutation', handleUpdate);
       bodyObserver.disconnect();
     };
   }, [bodyObserver, root]);

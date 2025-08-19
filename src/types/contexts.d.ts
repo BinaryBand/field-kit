@@ -1,3 +1,12 @@
+interface IAppContext {
+  root: HTMLElement;
+  updateTrigger: number;
+  scrollHeight: number;
+  scrollWidth: number;
+  pageWidth: number;
+  pageHeight: number;
+}
+
 interface IFilterContext {
   textFilters: Record<string, string>;
   registerFilter: (key: string, value: string) => void;

@@ -7,8 +7,9 @@ function normalizeInputValue(element: HTMLInputElement): FormType {
 
   switch (type) {
     case 'checkbox':
-    case 'radio':
       return Boolean(element.checked);
+    case 'radio':
+      return element.value;
     case 'number':
       return parseInt(element.value) || 0;
     case 'list':
@@ -62,34 +63,55 @@ function getChildren(element: Element): Element[] {
 }
 
 export function reduceFormData(acc: Record<string, TWFormData>, element: Element): void {
-  if (element.hasAttribute('data-tw-array')) {
-    const listName: string = element.getAttribute('data-tw-array') ?? 'list';
-
-    const formData: IFormData = {};
-    const children: Element[] = getChildren(element);
-    for (const child of children) {
-      reduceFormData(formData, child);
-    }
-
-    acc[listName] = Array.from(Object.values(formData));
-    return;
-  }
-
+  // 1. Process Group/Array first
   if (element.hasAttribute('data-tw-group')) {
     const groupName: string = element.getAttribute('data-tw-group') ?? 'group';
     const formData: IFormData = {};
     acc[groupName] = formData;
-    acc = formData;
+
+    // Recursively process children and store in the new group object
+    const children: Element[] = getChildren(element);
+    for (const child of children) {
+      reduceFormData(formData, child);
+    }
+    return; // Exit here to prevent processing children again
   }
 
+  if (element.hasAttribute('data-tw-array')) {
+    const listName: string = element.getAttribute('data-tw-array') ?? 'list';
+    const formData: IFormData = {};
+
+    const children: Element[] = getChildren(element);
+    for (const child of children) {
+      reduceFormData(formData, child);
+    }
+    acc[listName] = Array.from(Object.values(formData));
+    return; // Exit here to prevent processing children again
+  }
+
+  // 2. Process individual element only if it has a name
   const name: string | null = element.getAttribute('name');
-  const value: TWFormData | null = normalizeValue(element);
-  if (name !== null && value !== null) {
-    acc[name] = value;
+  if (name !== null) {
+    const value: TWFormData | null = normalizeValue(element);
+
+    // Special handling for unchecked radio buttons.
+    // This logic ensures that only the checked radio button is considered.
+    // If the name already exists, and the current element is an unchecked radio, skip it.
+    if (element instanceof HTMLInputElement && element.type === 'radio' && !element.checked) {
+      if (acc[name] !== undefined) {
+        return;
+      }
+    }
+
+    if (value !== null) {
+      acc[name] = value;
+    }
   }
 
+  // 3. Continue recursion for children without custom attributes
   const children: Element[] = getChildren(element);
   for (const child of children) {
+    // Pass the same accumulator down for non-group/array elements
     reduceFormData(acc, child);
   }
 }
@@ -112,13 +134,13 @@ function Form(props: IControllerProps): ReactNode {
   async function handleSubmit(event: TwSubmitEvent): Promise<TwSubmitEvent> {
     event.preventDefault();
 
-    const { currentTarget } = event;
+    const { currentTarget, formData } = event;
 
     if (currentTarget instanceof HTMLFormElement) {
       const response = await fetch(currentTarget.action, {
         method: currentTarget.method,
         headers: { 'Content-Type': 'application/json' },
-        body: event.formData ? JSON.stringify(event.formData) : undefined,
+        body: formData ? JSON.stringify(formData) : undefined,
       });
 
       if (response.type === 'opaqueredirect') {

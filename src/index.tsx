@@ -7,7 +7,6 @@ import '@/styles/main.scss';
 
 import InputWrapper from '@inline/InputWrapper';
 
-import ImageInput from '@components/ImageInput';
 import ListInput from '@components/ListInput';
 import PasskeyInput from '@components/PasskeyInput';
 import PinInput from '@components/PinInput';
@@ -64,8 +63,6 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
   switch (type?.toLowerCase()) {
     case 'filter':
       return <TextFilter target={element} key={key} />;
-    case 'img':
-      return <InputWrapper component={ImageInput} container={element} key={key} />;
     case 'list':
       return <InputWrapper component={ListInput} container={element} key={key} />;
     case 'passkey':
@@ -81,7 +78,7 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
   }
 }
 
-function renderComponents(parent: HTMLElement): ReactNode {
+export function renderComponents(parent: HTMLElement): ReactNode {
   let reactElement: ReactNode = null;
 
   // 1. Recursively process children.

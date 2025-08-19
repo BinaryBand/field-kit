@@ -18,7 +18,9 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": false,
+
+    "typeRoots": ["./node_modules/@types"],
 
     /* Base URL and paths */
     "baseUrl": "./",
@@ -32,6 +34,7 @@
       "@utils": ["src/controllers/utils.tsx"]
     }
   },
+
   "exclude": ["node_modules", "dist", "build"],
-  "include": ["src", "public", "index.d.ts", "docs/vue"]
+  "include": ["src", "public", "index.d.ts", "docs/vue", "src/vitest.d.ts"]
 }
