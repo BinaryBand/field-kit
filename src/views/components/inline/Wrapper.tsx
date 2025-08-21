@@ -1,4 +1,4 @@
-import React, { ComponentType, ElementType, ReactNode } from 'react';
+import React, { ComponentType, ElementType } from 'react';
 import styled from '@emotion/styled';
 import Portal from '@inline/Portal';
 
@@ -6,26 +6,26 @@ function Wrapper<C extends ElementType>({
   component,
   container,
   ...rest
-}: WrapperProps<C>): ReactNode {
-  const [shuttle, setShuttle] = React.useState<HTMLDivElement>();
+}: WrapperProps<C>): JSX.Element | null {
+  if (!container) return null;
+
+  const [shuttle, setShuttle] = React.useState<HTMLDivElement | null>(null);
 
   const StyledComponent = React.useMemo(() => {
     return styled(component as ComponentType)(container?.style.cssText);
   }, [component, container]);
 
-  React.useEffect((): (() => void) | void => {
-    if (!container || !container?.parentElement || typeof document === undefined) {
-      return;
-    }
+  React.useLayoutEffect((): (() => void) | void => {
+    if (!container?.parentElement || typeof document === 'undefined') return;
 
     const shuttle: HTMLDivElement = document.createElement('div');
-    shuttle.classList.add('_tw-wrapper');
+    shuttle.className = '_tw-wrapper';
     container.parentElement.insertBefore(shuttle, container);
     setShuttle(shuttle);
 
     return (): void => {
       shuttle.remove();
-      setShuttle(undefined);
+      setShuttle(null);
     };
   }, [container]);
 

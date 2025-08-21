@@ -1,11 +1,15 @@
-import React, { ChangeEvent, ComponentProps, JSX, ReactNode, SyntheticEvent } from 'react';
+import React, { ChangeEvent, ComponentProps, JSX, SyntheticEvent } from 'react';
 import Wrapper from '@/views/components/inline/Wrapper';
+
 import { applySelectedOptions, getSelectedOptionValues } from '@tools/inputs';
+import { assert } from '@tools/misc';
 
 function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
   props: InputWrapperProps<T, P>
-): ReactNode {
+): JSX.Element | null {
   const { container } = props;
+  if (!container) return null;
+
   const isInput = container instanceof HTMLInputElement;
   const isSelect = container instanceof HTMLSelectElement;
 
@@ -15,54 +19,63 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
     isSelect ? getSelectedOptionValues(container) : []
   );
 
-  function handleChangeEvent(event: ChangeEvent<NativeInputElement>): void {
-    const { currentTarget } = event;
-    container.value = currentTarget.value ?? '';
-
-    if (isInput) {
-      container.checked = Boolean(event.currentTarget.checked);
-    } else if (isSelect && currentTarget instanceof HTMLSelectElement) {
-      const values: string[] = getSelectedOptionValues(currentTarget);
-      applySelectedOptions(container, values);
-    }
-
-    handleEvent(event);
-  }
-
-  function handleEvent(event: SyntheticEvent<HTMLElement>): void {
-    const eventInit: CustomEventInit = {
-      bubbles: event.bubbles,
-      cancelable: event.cancelable,
-      detail: { syntheticEvent: event },
-    };
-
-    const nativeEvent: CustomEvent = new CustomEvent(event.type, eventInit);
+  function dispatchNativeEvent(type: string, detail: Record<string, any> = {}): void {
+    const eventInit: CustomEventInit = { bubbles: true, cancelable: true, detail };
+    const nativeEvent = new CustomEvent(type, eventInit);
     container.dispatchEvent(nativeEvent);
   }
 
-  const nativeChangeMemo = React.useMemo(
-    () => (): void => {
+  function handleEvent({ type }: SyntheticEvent): void {
+    dispatchNativeEvent(type, {
+      value: container.value,
+      checked: isInput ? Boolean(container.checked) : undefined,
+      type,
+    });
+  }
+
+  function handleChangeEvent(event: ChangeEvent<NativeInputElement>): void {
+    const current = event.currentTarget;
+    container.value = current.value ?? '';
+
+    if (isInput) {
+      assert(current instanceof HTMLInputElement);
+      container.checked = Boolean(current.checked);
+    } else if (isSelect) {
+      assert(current instanceof HTMLSelectElement);
+      const values: string[] = getSelectedOptionValues(current);
+      applySelectedOptions(container, values);
+    }
+
+    dispatchNativeEvent(event.type, {
+      value: container.value,
+      checked: isInput ? Boolean(container.checked) : undefined,
+      selectedOptions: isSelect ? getSelectedOptionValues(container) : undefined,
+    });
+  }
+
+  React.useLayoutEffect((): (() => void) => {
+    const onNativeChange = (): void => {
       setValue(container.value);
-
       if (isInput) {
-        setChecked(container.checked);
+        setChecked(Boolean(container.checked));
       } else if (isSelect) {
-        const values: string[] = getSelectedOptionValues(container);
-        setSelectedOptions(values);
+        const selectedOptions: string[] = getSelectedOptionValues(container);
+        setSelectedOptions(selectedOptions);
       }
-    },
-    [container]
-  );
+    };
 
-  React.useEffect((): (() => void) => {
-    container.addEventListener('change', nativeChangeMemo);
-    return () => container.removeEventListener('change', nativeChangeMemo);
-  }, [container, nativeChangeMemo]);
+    container.addEventListener('change', onNativeChange);
+    return () => container.removeEventListener('change', onNativeChange);
+  }, [container]);
 
-  // Props that can be passed to any and all input elements
-  const baseProps: ComponentProps<any> = {
+  const baseProps = {
+    id: container.id,
+    name: container.name,
     className: container.className,
     disabled: container.disabled,
+    required: container.required,
+    tabIndex: container.tabIndex,
+    // event handlers
     onChange: handleChangeEvent,
     onClick: handleEvent,
     onInput: handleEvent,
@@ -92,21 +105,20 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
 
   // Props that can be passed to both input and textarea elements
   const { placeholder, readOnly } = container;
+  const expandedBaseProps = { ...baseProps, placeholder, readOnly };
 
   if (isInput) {
     const inputProps: ComponentProps<'input'> = {
-      ...baseProps,
-      type: container.type,
+      ...expandedBaseProps,
+      type: container.type || 'text',
       checked,
-      placeholder,
-      readOnly,
       value,
     };
 
     return <Wrapper {...props} {...inputProps} />;
   }
 
-  const textProps: ComponentProps<'textarea'> = { ...baseProps, placeholder, readOnly, value };
+  const textProps: ComponentProps<'textarea'> = { ...baseProps, value };
   return <Wrapper {...props} {...textProps} />;
 }
 
