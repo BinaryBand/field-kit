@@ -3,21 +3,28 @@
 layout: home
 
 hero:
-  name: 'TW Docs'
-  tagline: Custom HTML components for use in Bulwark Exterminating LLC projects.
+  name: 'TW Components'
+  text: 'Modern HTML Components'
+  tagline: Custom HTML components for Bulwark Exterminating LLC projects that enhance user interfaces while maintaining native HTML behavior.
   actions:
     - theme: brand
       text: Get Started
-      link: /readme
+      link: /guide/getting-started
     - theme: alt
-      text: Examples
-      link: /components/inputs/auto-resize
+      text: View Components
+      link: /components/
 
 features:
-  - title: Enhanced User Input
-    details: Provide users with intuitive and specialized input fields like auto-resizing textareas, PIN verification, and customizable selects.
-  - title: Native HTML Behavior
-    details: Built to behave like standard HTML elements, ensuring ease of integration and familiarity for developers.
-  - title: Easy to Integrate
-    details: Simple to include in your HTML with minimal setup, as demonstrated in the getting started guide.
+  - title: 🎯 Native HTML Behavior
+    details: Components work like standard HTML elements with forms, events, and styling. No framework lock-in required.
+  - title: ⚡ Enhanced Functionality
+    details: Auto-resizing textareas, PIN inputs, signature capture, passkey authentication, and smart select dropdowns.
+  - title: 🛠️ Developer Friendly
+    details: Simple HTML integration, comprehensive TypeScript support, and extensive documentation with live examples.
+  - title: ♿ Accessible by Default
+    details: Built with ARIA support, keyboard navigation, screen reader compatibility, and WCAG 2.1 compliance.
+  - title: 🎨 Highly Customizable
+    details: CSS custom properties, flexible styling options, and seamless integration with existing design systems.
+  - title: 🚀 Production Ready
+    details: Optimized for performance, tested across modern browsers, and designed for enterprise applications.
 ---

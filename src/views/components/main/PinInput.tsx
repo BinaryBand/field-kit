@@ -14,6 +14,7 @@ import { createChangeEvent, useMergedRef } from '@/controllers/utils';
 
 export interface PinInputProps extends ComponentProps<'input'> {
   size?: number;
+  autoFocus?: boolean;
 }
 
 const PinInputContainer: StyledComponent<ComponentProps<'span'>> = styled.span`
@@ -62,13 +63,22 @@ function valueToDigits(
 }
 
 function PinInput(
-  { defaultValue, onChange, onKeyDown, size = 6, value, ...props }: PinInputProps,
+  {
+    autoFocus = false,
+    defaultValue,
+    onChange,
+    onKeyDown,
+    size = 6,
+    value,
+    ...props
+  }: PinInputProps,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactElement {
   const containerRef: RefObject<HTMLSpanElement> = React.useRef<HTMLSpanElement | null>(null);
   const internalRef: RefObject<HTMLInputElement> = React.useRef<HTMLInputElement | null>(null);
 
   const [activeIndex, _setActiveIndex] = React.useState<number>(0);
+  const [hasInteracted, setHasInteracted] = React.useState<boolean>(false);
   const [pinValue, setPinValue] = React.useState<(number | undefined)[]>(() =>
     valueToDigits(defaultValue, size)
   );
@@ -127,6 +137,7 @@ function PinInput(
     const { currentTarget } = event;
     const datasetIndex: string | undefined = currentTarget.dataset.index;
     const index: number = isValidInteger(datasetIndex) ? Number(datasetIndex) : 0;
+    setHasInteracted(true);
     setActiveIndex(index);
   }
 
@@ -169,6 +180,7 @@ function PinInput(
     const { currentTarget } = event;
     const datasetIndex: string | undefined = currentTarget.dataset.index;
     const index: number = isValidInteger(datasetIndex) ? Number(datasetIndex) : 0;
+    setHasInteracted(true);
     setActiveIndex(index);
   }
 
@@ -198,6 +210,11 @@ function PinInput(
   }
 
   React.useEffect((): void => {
+    // Only auto-focus if autoFocus is enabled or user has already interacted with the component
+    if (!autoFocus && !hasInteracted) {
+      return;
+    }
+
     const query: string = `input[data-index="${activeIndex}"]`;
     const nextTarget: HTMLInputElement | null =
       containerRef.current?.querySelector<HTMLInputElement>(query) ?? null;
@@ -206,7 +223,7 @@ function PinInput(
       nextTarget.focus();
       nextTarget.select();
     }
-  }, [activeIndex]);
+  }, [activeIndex, autoFocus, hasInteracted]);
 
   React.useEffect((): void => {
     if (value !== undefined) {

@@ -1,164 +1,203 @@
-# Getting Started
+# TW Components Documentation
 
-Custom HTML components for use in Bulwark Exterminating LLC projects. This document provides instructions on how to integrate the TW Components library into your Bulwark Exterminating LLC projects. This library offers a set of custom HTML components designed to enhance the user interface.
+This directory contains the VitePress documentation for TW Components. The documentation has been reorganized following best practices and includes automated tooling for adding new component documentation.
 
-## Installation
+## Documentation Structure
 
-### Prerequisites
+```
+docs/
+├── .vitepress/
+│   ├── config.ts              # Main VitePress configuration
+│   ├── utils/
+│   │   └── sidebar.ts         # Automated sidebar generation
+│   ├── templates/
+│   │   └── component-template.md  # Template for new components
+│   └── scripts/
+│       └── create-component-docs.js  # Automation script
+├── guide/                     # Getting started guides
+│   ├── getting-started.md
+│   ├── installation.md
+│   └── quick-start.md
+├── components/                # Component documentation
+│   ├── index.md              # Components overview
+│   ├── inputs/               # Input components
+│   └── views/                # View components
+├── examples/                  # Usage examples (planned)
+└── vue/                      # Vue demo components
+```
 
-Ensure NPM is installed and up-to-date: [NPM installation guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+## Development
 
-- **npm (Node Package Manager):** Version 8 or higher is recommended. You can update npm using:
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Download and Compile
-
-Follow these steps to download and build the component library:
+### Running the Documentation
 
 ```bash
-# Clone project from GitHub
-git clone https://github.com/BinaryBand/bulwark-client-app.git
+# Start the development server
+npm run docs:dev
 
-# Navigate to the project directory
-cd bulwark-client-app
+# Build for production
+npm run docs:build
 
-# Install all dependencies
-npm install
-
-# Build: This will compile into the relative /dist directory
-npm run build
+# Preview production build
+npm run docs:preview
 ```
 
-#### Deep Dive
+### Adding New Component Documentation
 
-Run `npm run build:docs` to generate and explore more thorough documentation instructions.
+#### Option 1: Using the Automation Script (Recommended)
 
-### Migrate to Targeted HTML File
+```bash
+# Navigate to the docs directory
+cd docs/.vitepress/scripts
 
-To use the custom Components in your HTML file, include the following tags within the `head` and before the closing `body` tags:
-
-```html
-<head>
-  <link rel="stylesheet" href="/dist/tw-client.css" type="text/css" />
-</head>
-<body>
-  <!-- content -->
-  <script src="/dist/main.umd.js" type="text/javascript" defer></script>
-</body>
+# Run the component documentation generator
+node create-component-docs.js
 ```
 
-**Note**: The paths `/dist/tw-client.css` and `/dist/main.umd.js` are relative to the root of your web project. Adjust these paths if your dist directory is located elsewhere.
+The script will prompt you for:
 
-## Usage
+- Component name (e.g., "range-input", "color-picker")
+- Category (inputs/views)
+- Brief description
+- HTML type/selector
 
-### Components
+This will automatically:
 
-#### Inputs
+1. Create a new documentation file from the template
+2. Update the sidebar configuration
+3. Provide next steps for customization
 
-These components are designed to behave like native HTML `input`, `textarea`, and `select` elements, inheriting their fundamental properties and events while providing enhanced styling and potentially custom behaviors.
+#### Option 2: Manual Creation
 
-##### Auto Resize Textarea
+1. Copy `docs/.vitepress/templates/component-template.md`
+2. Rename and place in appropriate category folder
+3. Update the content with your component details
+4. Manually add to sidebar in `docs/.vitepress/utils/sidebar.ts`
 
-`textarea.tw-auto-resize`
+### Documentation Template
 
-```html
-<textarea class="tw-auto-resize">
-    <!-- content -->
-</textarea>
-```
+The component template includes:
 
-##### List Input
+- **Frontmatter**: Title and description for SEO
+- **Demo Section**: Live interactive examples
+- **Basic Usage**: Quick start code
+- **Properties**: HTML attributes, data attributes, CSS classes
+- **Examples**: Various usage scenarios
+- **Styling**: CSS custom properties and styling guide
+- **Events**: Event handling documentation
+- **Accessibility**: ARIA and keyboard support
+- **Browser Support**: Compatibility information
+- **Use Cases**: When to use this component
+- **Related Components**: Cross-references
 
-`input[type=list]`
+## Configuration Features
 
-The list input type allows users to input a list of values. The value attribute should be a JSON string representing an array of strings.
+### Enhanced VitePress Configuration
 
-```html
-<input type="list" value='["One","Two","Three"]' />
-```
+The documentation includes several VitePress best practices:
 
-##### Passkey Input
+- **SEO Optimization**: Meta tags, sitemap generation
+- **Search**: Local search with custom labels
+- **Clean URLs**: Better URL structure
+- **Last Updated**: Automatic timestamp tracking
+- **Social Links**: GitHub integration
+- **Edit Links**: Direct editing on GitHub
+- **Footer**: Consistent branding
 
-`input[type=passkey]`
+### Automated Sidebar
 
-The passkey input type is designed for WebAuthn passkey authentication.
+The sidebar is automatically generated from `sidebar.ts`, making it easy to:
 
-```html
-<input data-identifier="j@ne.com" data-user="Jane" type="passkey" />
-```
+- Add new components without manual configuration
+- Maintain consistent navigation structure
+- Group components by category
+- Provide clear hierarchical organization
 
-- `[data-identifier]`: This attribute typically holds a unique identifier for the user, such as their email address.
-- `[data-user]`: This attribute provides a human-readable username for display during the authentication process.
+### Responsive Design
 
-##### PIN Input
+The documentation is fully responsive and includes:
 
-`input[type=pin]`
+- Mobile-friendly navigation
+- Collapsible sidebar sections
+- Optimized reading experience across devices
+- Touch-friendly interactive elements
 
-```html
-<input data-size="6" type="pin" />
-```
+## Content Guidelines
 
-- `[data-size]`: You can customize the number of required digits.
+### Writing Style
 
-##### Select
+- Use clear, concise language
+- Include practical examples
+- Provide both basic and advanced usage scenarios
+- Explain "why" not just "how"
+- Include accessibility considerations
 
-`select.tw-select-group`
+### Code Examples
 
-```html
-<select class="tw-select-group" data-placeholder="placeholder">
-  <!-- ... -->
-  <option class="tw-option" value>Option</option>
-  <!-- ... -->
-</select>
-```
+- Always include working HTML examples
+- Show form integration patterns
+- Provide JavaScript event handling examples
+- Include CSS customization examples
+- Test all examples before documenting
 
-- `[data-placeholder]`: Select inputs don't have a native `placeholder` property so we have to make one.
+### Component Documentation
 
-##### Signature Input
+Each component page should include:
 
-`input[type=signature]`
+1. **Clear Description**: What the component does and why use it
+2. **Live Demo**: Interactive example users can test
+3. **Basic Usage**: Minimal working example
+4. **Full API Reference**: All properties and options
+5. **Real-world Examples**: Common integration patterns
+6. **Styling Guide**: How to customize appearance
+7. **Accessibility Info**: ARIA support and keyboard interaction
+8. **Browser Support**: Compatibility matrix
 
-The signature input allows users to draw on a canvas. The value attribute should be a base-64 string representing a 2-D image.
+## Deployment
 
-```html
-<input type="signature" />
-```
+The documentation is deployed to GitHub Pages automatically when changes are pushed to the main branch. The build process:
 
-#### Calendar
+1. Runs `npm run docs:build`
+2. Generates static files in `.vitepress/dist`
+3. Deploys to GitHub Pages
+4. Updates at the configured base URL
 
-`table.tw-calendar`
+## Best Practices
 
-```html
-<table class="tw-calendar">
-  <tr class="tw-calendar-month" data-tw-year="2000" data-tw-month="1">
-    <!-- ... -->
-    <td class="tw-calendar-day" data-tw-day="1">
-      <!-- content -->
-    </td>
-    <!-- ... -->
-  </tr>
-</table>
-```
+### Adding New Components
 
-- `tr.tw-calendar-month`: Represents the month row.
-  - `tr.tw-calendar-month[data-tw-year]`: Specifies the year.
-  - `tr.tw-calendar-month[data-tw-month]`: Specifies the month (1-indexed).
-- `td.tw-calendar-day`: Represents an individual day cell.
-  - `td.tw-calendar-day[data-tw-day]`: Specifies the day.
+When you create a new component in your project:
 
-#### Filter
+1. **Use the automation script** to create documentation
+2. **Add a demo** to the FormDemo.vue component
+3. **Update properties and examples** with accurate information
+4. **Test all code examples** to ensure they work
+5. **Include accessibility information**
+6. **Add related component links**
 
-`.tw-filter-group`
+### Maintaining Documentation
 
-```html
-<div class="tw-filter-group">
-  <input type="filter" />
-  <ul>
-    <li class="tw-filter-item">An item</li>
-    <li class="tw-filter-item">A second item</li>
-    <li class="tw-filter-item">A third item</li>
-  </ul>
-</div>
-```
+- Keep examples up to date with component changes
+- Update browser support information regularly
+- Review and improve content based on user feedback
+- Ensure all links work and point to correct locations
+- Test documentation builds before deploying
+
+### Performance
+
+- Optimize images and media files
+- Use VitePress features for better performance
+- Minimize external dependencies
+- Test loading times on various devices
+- Monitor bundle size impact
+
+## Migration Notes
+
+This reorganized documentation structure provides:
+
+- **Better Navigation**: Logical grouping of content
+- **Easier Maintenance**: Automated tooling for new components
+- **Better SEO**: Improved meta tags and structure
+- **Enhanced UX**: Better mobile experience and search
+- **Scalability**: Easy to add new sections and components
+
+The old structure is preserved in git history, and existing links will be redirected appropriately.
