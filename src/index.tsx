@@ -37,8 +37,8 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
       break;
     case 'tw-option':
       if (element instanceof HTMLOptionElement) {
-        const { className, textContent, style, value } = element;
-        const props: ComponentProps<'option'> = { className, value };
+        const { className, disabled, textContent, style, value } = element;
+        const props: ComponentProps<'option'> = { className, value, disabled };
         return <SelectOption children={textContent} css={style.cssText} {...props} key={key} />;
       }
       break;

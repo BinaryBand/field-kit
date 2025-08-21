@@ -2,7 +2,6 @@ import React, {
   ChangeEvent,
   ComponentProps,
   ForwardedRef,
-  Fragment,
   MouseEvent,
   MutableRefObject,
   ReactElement,
@@ -132,7 +131,7 @@ function SelectInput(
   }
 
   function handleMouseDown({ target }: MouseEvent): void {
-    if (target instanceof HTMLOptionElement) {
+    if (target instanceof HTMLOptionElement && !target.disabled) {
       const { value } = target;
 
       let updatedList: string[];
@@ -252,7 +251,14 @@ function SelectInput(
           ref={dropdownRef}
           style={style}
         >
-          <Fragment children={children} />
+          {React.Children.map(children, (child) => {
+            if (React.isValidElement(child) && child.type === SelectOption) {
+              return React.cloneElement(child, {
+                'aria-disabled': child.props.disabled ? 'true' : 'false',
+              });
+            }
+            return child;
+          })}
           <option className="_tw-no-options" disabled>
             No Options
           </option>
