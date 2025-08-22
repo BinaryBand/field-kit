@@ -46,7 +46,6 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Components', link: '/components/' },
-      { text: 'Examples', link: '/examples/' },
     ],
 
     // Auto-generated sidebar
@@ -74,8 +73,7 @@ export default defineConfig({
 
     // Footer
     footer: {
-      message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024 Bulwark Exterminating LLC',
+      copyright: 'Copyright © 2025 Bulwark Exterminating LLC',
     },
 
     // Edit link

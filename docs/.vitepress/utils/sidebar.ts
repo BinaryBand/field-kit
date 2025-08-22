@@ -18,12 +18,11 @@ export function generateSidebar(): DefaultTheme.Sidebar {
         ],
       },
       {
-        text: 'Core Concepts',
+        text: 'Advanced Topics',
         collapsed: false,
         items: [
           { text: 'Form Integration', link: '/guide/form-integration' },
           { text: 'Event Handling', link: '/guide/event-handling' },
-          { text: 'Styling', link: '/guide/styling' },
         ],
       },
     ],
@@ -51,31 +50,6 @@ export function generateSidebar(): DefaultTheme.Sidebar {
         items: [
           { text: 'Calendar', link: '/components/views/calendar' },
           { text: 'Filter', link: '/components/views/filter' },
-        ],
-      },
-    ],
-
-    '/examples/': [
-      {
-        text: 'Examples',
-        link: '/examples/',
-      },
-      {
-        text: 'Common Use Cases',
-        collapsed: false,
-        items: [
-          { text: 'Form Validation', link: '/examples/form-validation' },
-          { text: 'Dynamic Forms', link: '/examples/dynamic-forms' },
-          { text: 'Multi-step Forms', link: '/examples/multi-step-forms' },
-        ],
-      },
-      {
-        text: 'Integration Examples',
-        collapsed: false,
-        items: [
-          { text: 'React Integration', link: '/examples/react-integration' },
-          { text: 'Vue Integration', link: '/examples/vue-integration' },
-          { text: 'Vanilla JS', link: '/examples/vanilla-js' },
         ],
       },
     ],

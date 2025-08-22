@@ -41,10 +41,9 @@ TW Components works in all modern browsers:
 1. [Install TW Components](/guide/installation) in your project
 2. Follow the [Quick Start Guide](/guide/quick-start) to get up and running
 3. Explore the [Components](/components/) to see what's available
-4. Check out [Examples](/examples/) for common use cases
+4. Learn about [Form Integration](/guide/form-integration) and [Event Handling](/guide/event-handling)
 
 ## Need Help?
 
 - Browse the [Components documentation](/components/) for detailed API references
-- Check the [Examples section](/examples/) for integration patterns
 - Visit the [GitHub repository](https://github.com/BinaryBand/bulwark-client-app) to report issues or contribute

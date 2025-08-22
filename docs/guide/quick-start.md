@@ -275,5 +275,4 @@ Here's a complete working example:
 
 - Explore all available [Components](/components/) and their options
 - Learn about [Form Integration](/guide/form-integration) patterns
-- Check out more [Examples](/examples/) for specific use cases
-- Learn about [Styling](/guide/styling) components to match your design
+- Learn about [Event Handling](/guide/event-handling) for advanced interactions
