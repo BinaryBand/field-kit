@@ -156,7 +156,7 @@ function ListInput(
         style={style}
       >
         {list.map((item: string, i: number) => (
-          <InputToken className="token" key={i}>
+          <InputToken className="token" data-value={item} key={i}>
             <small>{item}</small>
             <div className="icon-button" onClick={() => handleRemove(i)} role="button">
               <XIcon />

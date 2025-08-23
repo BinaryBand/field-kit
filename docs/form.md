@@ -28,7 +28,7 @@ function handleSubmit(event) {
 </FormDemo>
 
 ```html
-<div data-tw-list="ArrayName">
+<div data-tw-array="ArrayName">
   <input name="First" value="1st" />
   <input name="Second" value="2nd" />
   <input name="Third" value="3rd" />
@@ -78,7 +78,7 @@ Complex form values can be nested.
 <div data-tw-group="Complex">
   <input name="Sixth" value="6th" />
 
-  <div data-tw-list="Array">
+  <div data-tw-array="Array">
     <input name="Seventh" value="7th" />
     <input name="Eighth" value="8th" />
   </div>

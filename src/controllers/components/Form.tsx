@@ -131,17 +131,67 @@ function Form(props: IControllerProps): ReactNode {
     return event;
   }
 
+  function formDataToUrlParams(data: IFormData): URLSearchParams {
+    const params = new URLSearchParams();
+
+    function addParam(key: string, value: TWFormData): void {
+      if (Array.isArray(value)) {
+        // Handle arrays by adding multiple parameters with the same name
+        value.forEach((item) => {
+          if (typeof item === 'object' && item !== null) {
+            params.append(key, JSON.stringify(item));
+          } else {
+            params.append(key, String(item));
+          }
+        });
+      } else if (typeof value === 'object' && value !== null) {
+        // Handle objects by JSON stringifying them
+        params.append(key, JSON.stringify(value));
+      } else {
+        // Handle primitive types
+        params.append(key, String(value));
+      }
+    }
+
+    Object.entries(data).forEach(([key, value]) => {
+      addParam(key, value);
+    });
+
+    return params;
+  }
+
   async function handleSubmit(event: TwSubmitEvent): Promise<TwSubmitEvent> {
     event.preventDefault();
 
     const { currentTarget, formData } = event;
 
     if (currentTarget instanceof HTMLFormElement) {
-      const response = await fetch(currentTarget.action, {
-        method: currentTarget.method,
-        headers: { 'Content-Type': 'application/json' },
-        body: formData ? JSON.stringify(formData) : undefined,
-      });
+      const method = currentTarget.method.toUpperCase();
+      const action = currentTarget.action;
+
+      let response: Response;
+
+      if (method === 'GET' && formData) {
+        // For GET requests, append form data to URL as search parameters
+        const url = new URL(action);
+        const params = formDataToUrlParams(formData);
+
+        // Merge with existing search parameters
+        params.forEach((value, key) => {
+          url.searchParams.append(key, value);
+        });
+
+        response = await fetch(url.toString(), {
+          method: 'GET',
+        });
+      } else {
+        // For POST and other methods, send data in body
+        response = await fetch(action, {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          body: formData ? JSON.stringify(formData) : undefined,
+        });
+      }
 
       if (response.type === 'opaqueredirect') {
         window.location.href = response.url;
