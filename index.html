@@ -49,16 +49,6 @@
   </head>
 
   <body data-bs-theme="dark">
-    <template id="select-option-template">
-      <option class="tw-option" value="1">Albuquerque</option>
-      <option class="tw-option" value="2">Boston</option>
-      <option class="tw-option" selected value="3">Chicago</option>
-      <option class="tw-option" disabled value="4">Denver</option>
-      <option class="tw-option" selected value="5">El Paso</option>
-      <option class="tw-option" value="6">Flagstaff</option>
-      <option class="tw-option" value="7">Gilbert</option>
-    </template>
-
     <main class="container py-4">
       <div class="mx-auto" style="max-width: 800px">
         <header class="text-center mb-5">
@@ -121,7 +111,15 @@
                 data-placeholder="Single Select"
                 name="SingleSelect"
                 type="number"
-              ></select>
+              >
+                <option class="tw-option" value="1">Albuquerque</option>
+                <option class="tw-option" value="2">Boston</option>
+                <option class="tw-option" selected value="3">Chicago</option>
+                <option class="tw-option" disabled value="4">Denver</option>
+                <option class="tw-option" value="5">El Paso</option>
+                <option class="tw-option" value="6">Flagstaff</option>
+                <option class="tw-option" value="7">Gilbert</option>
+              </select>
 
               <div class="code-demo" data-target="select[name='SingleSelect']"></div>
             </div>
@@ -141,7 +139,15 @@
                 multiple
                 name="Multiselect"
                 type="number"
-              ></select>
+              >
+                <option class="tw-option" value="1">Albuquerque</option>
+                <option class="tw-option" value="2">Boston</option>
+                <option class="tw-option" selected value="3">Chicago</option>
+                <option class="tw-option" disabled value="4">Denver</option>
+                <option class="tw-option" value="5">El Paso</option>
+                <option class="tw-option" value="6">Flagstaff</option>
+                <option class="tw-option" value="7">Gilbert</option>
+              </select>
 
               <div class="code-demo" data-target="select[name='Multiselect']"></div>
             </div>
@@ -157,8 +163,8 @@
             <div class="card-body">
               <textarea class="tw-auto-resize form-control" name="Multiline" placeholder="Text">
 First Line
-Second Line
-              </textarea>
+Second Line</textarea
+              >
 
               <div class="code-demo" data-target="textarea.tw-auto-resize"></div>
             </div>

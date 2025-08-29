@@ -29,7 +29,7 @@ describe('Form Component', () => {
       name: 'Native Values',
       html: html`
         <form action="/submit-data" method="POST">
-          <input name="username" type="text" value="testuser" />
+          <input name="username" type="text" value="testUser" />
           <input name="age" type="number" value="30" />
           <input name="isSubscribed" type="checkbox" checked />
           <select name="country">
@@ -39,7 +39,7 @@ describe('Form Component', () => {
           <button type="submit">Submit</button>
         </form>
       `,
-      expectedPayload: { username: 'testuser', age: 30, isSubscribed: true, country: 'CAN' },
+      expectedPayload: { username: 'testUser', age: 30, isSubscribed: true, country: 'CAN' },
     },
     {
       name: 'Nested Data',
@@ -119,7 +119,7 @@ describe('Form Component', () => {
     const receivedPayload = JSON.parse(requestInit?.body as string);
 
     expect(url).toBe('http://localhost:3000/submit-data');
-    expect(requestInit?.method).toBe('post');
+    expect(requestInit?.method).toBe('POST');
     expect(receivedPayload).toEqual(expectedPayload);
   });
 });
