@@ -5,20 +5,21 @@ import ReactDOM, { Root } from 'react-dom/client';
 import App from '@/App';
 import '@/styles/main.scss';
 
-import InputWrapper from '@inline/InputWrapper';
+import InputWrapper from '@/views/inline/InputWrapper';
 
 import ListInput from '@components/ListInput';
 import PasskeyInput from '@components/PasskeyInput';
 import PinInput from '@components/PinInput';
 import SelectInput, { SelectOption } from '@components/SelectInput';
 import Signature from '@components/Signature';
+import SimpleInput from '@components/SimpleInput';
 
-import Calendar from '@/controllers/components/Calendar';
-import Form from '@/controllers/components/Form';
-import Multiline from '@/controllers/components/Multiline';
-import { FilterGroup, TextFilter } from '@/controllers/components/Filter';
+import Calendar from '@controllers/Calendar';
+import { FilterGroup, TextFilter } from '@controllers/Filter';
+import Form from '@controllers/Form';
+import Multiline from '@controllers/Multiline';
 
-import { createRandomKey } from '@utils';
+import { createRandomKey } from '@tools/misc';
 
 function getStableKey(htmlElement: HTMLElement): string {
   return htmlElement.id || htmlElement.dataset.stableId || createRandomKey();
@@ -75,6 +76,8 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
       return <InputWrapper component={PinInput} container={element} size={size} key={key} />;
     case 'signature':
       return <InputWrapper component={Signature} container={element} key={key} />;
+    case 'simple':
+      return <InputWrapper component={SimpleInput} container={element} key={key} />;
   }
 }
 

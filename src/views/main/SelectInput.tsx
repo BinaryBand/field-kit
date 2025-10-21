@@ -9,17 +9,19 @@ import React, {
 } from 'react';
 import { useDebounce } from 'use-debounce';
 
-import { InputToken, StyledListInput, HiddenInput, StyledOverlay } from '@styled/ListInput';
-import { SelectInputContainer } from '@styled/SelectInput';
-import Dropdown from '@styled/Dropdown';
+import { InputToken, StyledListInput, HiddenInput, StyledOverlay } from '@/views/styled/ListInput';
+import { SelectInputContainer } from '@/views/styled/SelectInput';
+import Dropdown from '@/views/styled/Dropdown';
 
-import CaretDownIcon from '@/assets/icons/CaretDownIcon';
-import XIcon from '@/assets/icons/XIcon';
+import CaretDownIcon from '@/assets/native/CaretDownIcon';
+import XIcon from '@/assets/native/XIcon';
 
 import AppContext from '@providers/AppContext';
 import SelectInputContext from '@providers/SelectInputContext';
 
-import { createChangeEvent, tryParse, useMergedRef } from '@utils';
+import { createChangeEvent } from '@tools/events';
+import { useMergedRef } from '@tools/ref';
+import { tryParse } from '@tools/misc';
 
 function normalizedInputValue(value?: string | number | readonly string[]): string[] {
   switch (typeof value) {

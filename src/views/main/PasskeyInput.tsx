@@ -1,7 +1,8 @@
 import React, { ForwardedRef, Fragment, ReactElement, ReactNode, RefObject } from 'react';
 
 import { decodeKey, getPasskey, removePasskey, createPasskey, verifyPasskey } from '@tools/crypto';
-import { createChangeEvent, useMergedRef } from '@/controllers/utils';
+import { createChangeEvent } from '@tools/events';
+import { useMergedRef } from '@tools/ref';
 import { assert } from '@tools/misc';
 
 function PasskeyInput(

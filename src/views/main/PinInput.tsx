@@ -10,7 +10,8 @@ import React, {
   RefObject,
 } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
-import { createChangeEvent, useMergedRef } from '@/controllers/utils';
+import { createChangeEvent } from '@tools/events';
+import { useMergedRef } from '@tools/ref';
 
 export interface PinInputProps extends ComponentProps<'input'> {
   size?: number;

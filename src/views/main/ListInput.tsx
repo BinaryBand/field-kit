@@ -15,12 +15,14 @@ import {
   InputToken,
   HiddenInput,
   StyledOverlay,
-} from '@styled/ListInput';
-
-import XIcon from '@/assets/icons/XIcon';
+} from '@/views/styled/ListInput';
 
 import AppContext from '@providers/AppContext';
-import { createChangeEvent, tryParse, useMergedRef } from '@utils';
+import { createChangeEvent } from '@tools/events';
+import { useMergedRef } from '@tools/ref';
+import { tryParse } from '@tools/misc';
+
+import XIcon from '@/assets/native/XIcon';
 
 function ListInput(
   {

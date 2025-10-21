@@ -26,15 +26,25 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@tools/*": ["src/controllers/tools/*"],
+      "@components/*": ["src/views/main/*"],
+      "@controllers/*": ["src/controllers/components/*"],
       "@providers/*": ["src/controllers/providers/*"],
-      "@components/*": ["src/views/components/main/*"],
-      "@inline/*": ["src/views/components/inline/*"],
-      "@styled/*": ["src/views/styled/*"],
-      "@utils": ["src/controllers/utils.tsx"]
-    }
+      "@tools/*": ["src/controllers/tools/*"]
+    },
+
+    // Silence baseUrl deprecation error
+    "ignoreDeprecations": "6.0"
   },
 
-  "exclude": ["node_modules", "dist", "build"],
-  "include": ["src", "public", "index.d.ts", "docs/vue", "src/vitest.d.ts"]
+  "exclude": ["build", "dist", "node_modules"],
+  "include": [
+    "src",
+    "static",
+    "docs/vue",
+    "index.d.ts",
+    "src/types/global.d.ts",
+    "src/vitest.d.ts",
+    "src/views/.editor",
+    "vite-env.d.ts"
+  ]
 }

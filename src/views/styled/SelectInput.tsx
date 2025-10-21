@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
-import Overlay from '@inline/Overlay';
+import Overlay from '@/views/inline/Overlay';
 
 export const SelectInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
   border: transparent;

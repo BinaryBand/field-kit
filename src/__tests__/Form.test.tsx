@@ -3,7 +3,7 @@ import { act } from '@testing-library/react';
 import { vi } from 'vitest';
 
 import Form from '@/controllers/components/Form';
-import { html } from '@/controllers/utils';
+import { html } from '@tools/misc';
 
 // Centralize all mocks and hooks for better organization and test isolation.
 // This ensures consistency across all tests in this file.

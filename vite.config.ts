@@ -1,11 +1,12 @@
-import { defineConfig } from 'vite';
-
 import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 import path from 'path';
 
 const root: string = path.resolve(__dirname, 'src');
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  root: __dirname,
+  publicDir: command === 'serve' ? 'static' : false, // Use static for dev, false for build
   plugins: [react()],
   define: {
     'process.env': {},
@@ -13,17 +14,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': root,
-      '@tools': path.resolve(root, 'controllers/tools'),
-      '@utils': path.resolve(root, 'controllers/utils'),
+      '@components': path.resolve(root, 'views/main'),
+      '@controllers': path.resolve(root, 'controllers/components'),
       '@providers': path.resolve(root, 'controllers/providers'),
-      '@components': path.resolve(root, 'views/components/main'),
-      '@inline': path.resolve(root, 'views/components/inline'),
-      '@styled': path.resolve(root, 'views/styled'),
+      '@tools': path.resolve(root, 'controllers/tools'),
     },
   },
   build: {
     lib: {
-      entry: { main: path.resolve(root, 'index.tsx') },
+      entry: { main: path.resolve(__dirname, 'src/index.tsx') },
       name: 'tw-client',
       formats: ['umd'],
       fileName: (format) => `main.${format}.js`,
@@ -42,4 +41,4 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/setupTests.ts',
   },
-});
+}));

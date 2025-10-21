@@ -1,6 +1,6 @@
 import React, { ComponentType, ElementType } from 'react';
 import styled from '@emotion/styled';
-import Portal from '@inline/Portal';
+import Portal from '@/views/inline/Portal';
 
 function Wrapper<C extends ElementType>({
   component,

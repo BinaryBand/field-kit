@@ -1,5 +1,5 @@
 import React, { Fragment, ReactNode } from 'react';
-import { tryParse } from '@utils';
+import { tryParse } from '@tools/misc';
 
 function normalizeInputValue(element: HTMLInputElement): FormType {
   const type: string =
@@ -119,10 +119,70 @@ export function reduceFormData(acc: Record<string, TWFormData>, element: Element
 function Form(props: IControllerProps): ReactNode {
   const { children, target } = props;
 
+  function validateRequired(form: HTMLFormElement): { valid: boolean; invalid: HTMLElement[] } {
+    const requiredElements: NodeListOf<HTMLElement> = form.querySelectorAll('[required]');
+    const invalidFields: HTMLElement[] = [];
+
+    requiredElements.forEach((el) => {
+      let valid = true;
+      if (el instanceof HTMLInputElement) {
+        switch (el.type) {
+          case 'checkbox':
+            valid = el.checked;
+            break;
+          case 'radio':
+            if (!form.querySelector(`input[name="${el.name}"]:checked`)) {
+              valid = false;
+            }
+            break;
+          default:
+            valid = el.value.trim().length > 0;
+        }
+      } else if (el instanceof HTMLTextAreaElement) {
+        valid = el.value.trim().length > 0;
+      } else if (el instanceof HTMLSelectElement) {
+        if (el.multiple) {
+          valid = Array.from(el.selectedOptions).length > 0;
+        } else {
+          valid = el.value.trim().length > 0;
+        }
+      }
+      if (!valid) invalidFields.push(el);
+    });
+
+    // Clear previous markers
+    form
+      .querySelectorAll('[data-tw-invalid]')
+      .forEach((el) => el.removeAttribute('data-tw-invalid'));
+
+    if (invalidFields.length) {
+      invalidFields.forEach((el) => el.setAttribute('data-tw-invalid', 'true'));
+      const invalidEvent = new CustomEvent('twinvalid', {
+        bubbles: true,
+        cancelable: true,
+        detail: { invalidFields },
+      });
+      form.dispatchEvent(invalidEvent);
+      invalidFields[0].focus();
+    }
+
+    return { valid: invalidFields.length === 0, invalid: invalidFields };
+  }
+
   function preSubmit(event: TwSubmitEvent): SubmitEvent {
     const { currentTarget } = event;
 
     if (currentTarget instanceof HTMLFormElement) {
+      // Validate BEFORE constructing form data so invalid attempts don't expose data
+      const { valid } = validateRequired(currentTarget);
+      if (!valid) {
+        // Prevent further propagation / handlers
+        event.preventDefault();
+        // Stop other listeners (like a user-assigned onsubmit after ours)
+        // @ts-ignore - stopImmediatePropagation exists on Event
+        event.stopImmediatePropagation?.();
+        return event; // Do not build formData
+      }
       const formData: IFormData = {};
       reduceFormData(formData, currentTarget);
       event.formData = formData;
@@ -166,6 +226,7 @@ function Form(props: IControllerProps): ReactNode {
     const { currentTarget, formData } = event;
 
     if (currentTarget instanceof HTMLFormElement) {
+      // At this point required validation already passed in preSubmit
       const method = currentTarget.method.toUpperCase();
       const action = currentTarget.action;
 

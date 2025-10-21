@@ -1,11 +1,10 @@
 import { ComponentProps } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
-import Overlay from '@inline/Overlay';
+import Overlay from '@/views/inline/Overlay';
 
 export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
   background: none;
   border: transparent;
-
   position: relative;
   display: flex;
   flex-wrap: wrap;

@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import App from '@/App';
 import init from '@/index';
-import { html } from '@/controllers/utils';
+import { html } from '@tools/misc';
 
 // Global cleanup for tests
 let cleanupRender: (() => void) | undefined;

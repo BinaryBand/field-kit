@@ -1,6 +1,8 @@
 import React, { ComponentProps, ForwardedRef, MutableRefObject, ReactNode, RefObject } from 'react';
 import { SignatureContainer, SignatureCanvas, SignatureInput } from '@/views/styled/Signature';
-import { createChangeEvent, useMergedRef } from '@utils';
+
+import { createChangeEvent } from '@tools/events';
+import { useMergedRef } from '@tools/ref';
 
 const CANVAS_WIDTH: number = 750;
 const CANVAS_HEIGHT: number = 375;

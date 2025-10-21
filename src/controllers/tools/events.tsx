@@ -1,5 +1,6 @@
 import { ChangeEvent, SyntheticEvent } from 'react';
-import { applySelectedOptions, tryParse } from '@utils';
+import { applySelectedOptions } from './inputs';
+import { tryParse } from './misc';
 
 export function createNativeEvent<T extends HTMLElement = HTMLElement>(
   type: string,

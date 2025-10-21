@@ -7,6 +7,7 @@
     "start": "npm run dev",
     "dev": "vite",
     "build": "vite build",
+    "build:external": "vite build && powershell -NoLogo -NoProfile -Command \"$dst='C:/Users/Shane/source/repos/TWMainSolutionCore/ReportsWeb/wwwroot/lib/tw-client'; if(-not (Test-Path $dst)){ New-Item -ItemType Directory -Path $dst -Force | Out-Null }; Copy-Item -Recurse -Force -Path ./dist/* -Destination $dst\"",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",

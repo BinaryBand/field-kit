@@ -1,9 +1,8 @@
 import React, { ComponentProps, ForwardedRef, ReactElement } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
 
-import Portal from './Portal';
-
 import AppContext from '@providers/AppContext';
+import Portal from '@/views/inline/Portal';
 
 const StyledOverlay: StyledComponent<ComponentProps<'div'>> = styled.div`
   background: none;
