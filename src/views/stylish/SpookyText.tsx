@@ -7,13 +7,11 @@ function SpookyText<T extends TextTag = 'p'>(
   { bounce, magnitude = 0.5, children, ...props }: SpookyProps,
   ref: ForwardedRef<HTMLElementTagNameMap[T]>
 ): ReactElement {
-  const _magnitude: number = React.useMemo(() => magnitude / 2, [magnitude]);
-
   const ghostBounce =
     bounce !== false
       ? keyframes`
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-${_magnitude}em); }
+    50% { transform: translateY(-${magnitude}em); }
   `
       : '';
 

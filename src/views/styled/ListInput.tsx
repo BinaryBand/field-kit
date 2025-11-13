@@ -24,7 +24,7 @@ export const StyledListInput: StyledComponent<ComponentProps<'input'>> = styled.
   margin: 0 !important;
 `;
 
-export const InputToken: StyledComponent<ComponentProps<'button'>> = styled.button`
+export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
   align-items: center;
   border: 1px solid;
   border-radius: 12px;
@@ -34,21 +34,9 @@ export const InputToken: StyledComponent<ComponentProps<'button'>> = styled.butt
   position: relative;
   z-index: 3;
 
-  > * {
-    pointer-events: none;
-  }
-
   &._tw-placeholder-token {
     pointer-events: none;
     visibility: hidden;
-  }
-
-  &[data-active='true'] {
-    background-color: currentColor;
-    i,
-    small {
-      color: Canvas;
-    }
   }
 `;
 

@@ -37,10 +37,9 @@ function normalizedInputValue(value?: string | number | readonly string[]): stri
 
 export function SelectOption({
   children,
-  group,
   value,
   ...props
-}: ComponentProps<'option'> & { group?: string }): ReactElement {
+}: ComponentProps<'option'>): ReactElement {
   const { addOption } = React.useContext(SelectInputContext);
 
   React.useEffect((): void => {
@@ -49,7 +48,7 @@ export function SelectOption({
     }
   }, [value, children]);
 
-  return <option {...props} children={children} data-group={group} value={value} />;
+  return <option {...props} children={children} value={value} />;
 }
 
 function SelectInput(
@@ -212,14 +211,16 @@ function SelectInput(
     <SelectInputContext.Provider value={{ options, addOption }}>
       <SelectInputContainer
         className={className}
-        data-multiple={Boolean(multiple)}
+        data-multiple={multiple || undefined}
         ref={containerRef}
         style={style}
       >
         {list?.map?.((item: string, i: number) => (
-          <InputToken className="token" key={i} onClick={() => handleRemove(i)} role="button">
+          <InputToken className="token" key={i}>
             <small>{options[item] ?? item}</small>
-            <XIcon />
+            <div className="icon-button" onClick={() => handleRemove(i)} role="button">
+              <XIcon />
+            </div>
           </InputToken>
         ))}
 
@@ -250,7 +251,7 @@ function SelectInput(
           hidden={!focused}
           onMouseDown={handleMouseDown}
           ref={dropdownRef}
-          style={{ ...style, display: 'flex', flexDirection: 'column' }}
+          style={style}
         >
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child) && child.type === SelectOption) {

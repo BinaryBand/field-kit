@@ -2,18 +2,12 @@ import { ComponentProps } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
 
 const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
-  /* Define CSS variables with system color fallbacks */
-  --tw-dropdown-bg: var(--bs-body-bg, Canvas);
-  --tw-dropdown-border-color: var(
-    --bs-border-color-translucent,
-    color-mix(in srgb, currentColor 20%, transparent)
-  );
-  --tw-dropdown-text-color: var(--bs-body-color, CanvasText);
-  --tw-dropdown-hover-bg: var(--bs-secondary-bg, color-mix(in srgb, currentColor 8%, transparent));
-  --tw-dropdown-disabled-color: var(
-    --bs-secondary-color,
-    color-mix(in srgb, currentColor 35%, transparent)
-  );
+  /* Define CSS variables with Bootstrap's variables as fallbacks */
+  --tw-dropdown-bg: var(--bs-body-bg, #fff);
+  --tw-dropdown-border-color: var(--bs-border-color-translucent, #ced4da);
+  --tw-dropdown-text-color: var(--bs-body-color, #212529);
+  --tw-dropdown-hover-bg: var(--bs-secondary-bg, #e9ecef);
+  --tw-dropdown-disabled-color: var(--bs-secondary-color, #6c757d);
 
   background-color: var(--tw-dropdown-bg);
   border: 1px solid var(--tw-dropdown-border-color);
@@ -37,7 +31,6 @@ const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
     cursor: pointer;
 
     &:checked,
-    &[data-selected='true'],
     &:hover:not(:disabled) {
       background-color: var(--tw-dropdown-hover-bg);
       color: var(--tw-dropdown-text-color);

@@ -10,7 +10,6 @@ import InputWrapper from '@/views/inline/InputWrapper';
 import ListInput from '@components/ListInput';
 import PasskeyInput from '@components/PasskeyInput';
 import PinInput from '@components/PinInput';
-import GroupedInput, { GroupedOption } from './views/main/GroupedInput';
 import SelectInput, { SelectOption } from '@components/SelectInput';
 import Signature from '@components/Signature';
 import SimpleInput from '@components/SimpleInput';
@@ -30,38 +29,10 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
   const key: string = getStableKey(element);
 
   switch (className.toLowerCase()) {
-    case 'tw-test':
-      if (element instanceof HTMLSelectElement) {
-        return (
-          <InputWrapper
-            children={children}
-            component={GroupedInput}
-            container={element}
-            key={key}
-          />
-        );
-      }
-      break;
     case 'tw-select-group':
       if (element instanceof HTMLSelectElement) {
         return (
           <InputWrapper children={children} component={SelectInput} container={element} key={key} />
-        );
-      }
-      break;
-    case 'tw-option2':
-      if (element instanceof HTMLOptionElement) {
-        const { className, disabled, textContent, style, value } = element;
-        const props: ComponentProps<'option'> = { className, value, disabled };
-        const group = element.getAttribute('data-tw-group') ?? undefined;
-        return (
-          <GroupedOption
-            children={textContent}
-            css={style.cssText}
-            group={group}
-            {...props}
-            key={key}
-          />
         );
       }
       break;

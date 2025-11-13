@@ -8,7 +8,6 @@ import React, {
 
 import { createChangeEvent } from '@tools/events';
 import { useMergedRef } from '@tools/ref';
-import SpookyText from '../stylish/SpookyText';
 
 function SimpleInput(
   { defaultValue = '', onChange, value, ...props }: ComponentProps<'input'>,
@@ -36,15 +35,12 @@ function SimpleInput(
   }, [value]);
 
   return (
-    <>
-      <input
-        {...props}
-        onChange={handleChange}
-        ref={useMergedRef(ref, internalRef)}
-        value={internalValue}
-      />
-      <SpookyText>Boo! I'm floating...</SpookyText>
-    </>
+    <input
+      {...props}
+      onChange={handleChange}
+      ref={useMergedRef(ref, internalRef)}
+      value={internalValue}
+    />
   );
 }
 
