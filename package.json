@@ -1,0 +1,56 @@
+{
+  "name": "tw-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "vite",
+    "build": "vite build",
+    "build:external": "vite build && powershell -NoLogo -NoProfile -Command \"$dst='C:/Users/Shane/source/repos/TWMainSolutionCore/ReportsWeb/wwwroot/lib/tw-client'; if(-not (Test-Path $dst)){ New-Item -ItemType Directory -Path $dst -Force | Out-Null }; Copy-Item -Recurse -Force -Path ./dist/* -Destination $dst\"",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.13.5",
+    "@emotion/styled": "^11.14.0",
+    "buffer": "^6.0.3",
+    "prismjs": "^1.30.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "use-debounce": "^10.0.4"
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@testing-library/jest-dom": "^6.7.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^22.10.7",
+    "@types/prismjs": "^1.26.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.27.0",
+    "eslint": "^9.23.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "sass-embedded": "^1.83.4",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.5",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitepress": "^1.6.4",
+    "vitest": "^3.2.4",
+    "vue": "^3.5.14",
+    "whatwg-fetch": "^3.6.20"
+  },
+  "overrides": {
+    "esbuild": "^0.27.0"
+  }
+}

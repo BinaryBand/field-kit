@@ -1,0 +1,28 @@
+@use './calendar.scss';
+
+div._tw-wrapper {
+  background-color: inherit;
+  color: inherit;
+  display: contents;
+
+  & + * {
+    display: none;
+  }
+}
+
+textarea.tw-auto-resize {
+  box-sizing: border-box;
+  overflow: hidden;
+  resize: none;
+}
+
+.tw-filter-group .tw-filter-item[data-tw-blurry] {
+  display: none;
+}
+
+.icon-button {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}

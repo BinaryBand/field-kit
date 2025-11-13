@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": false,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": false,
+
+    "typeRoots": ["./node_modules/@types"],
+
+    /* Base URL and paths */
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/views/main/*"],
+      "@controllers/*": ["src/controllers/components/*"],
+      "@providers/*": ["src/controllers/providers/*"],
+      "@tools/*": ["src/controllers/tools/*"]
+    },
+
+    // Silence baseUrl deprecation error
+    "ignoreDeprecations": "6.0"
+  },
+
+  "exclude": ["build", "dist", "node_modules"],
+  "include": [
+    "src",
+    "static",
+    "docs/vue",
+    "index.d.ts",
+    "src/types/global.d.ts",
+    "src/vitest.d.ts",
+    "src/views/.editor",
+    "vite-env.d.ts"
+  ]
+}
