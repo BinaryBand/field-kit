@@ -30,10 +30,7 @@
       "@controllers/*": ["src/controllers/components/*"],
       "@providers/*": ["src/controllers/providers/*"],
       "@tools/*": ["src/controllers/tools/*"]
-    },
-
-    // Silence baseUrl deprecation error
-    "ignoreDeprecations": "6.0"
+    }
   },
 
   "exclude": ["build", "dist", "node_modules"],
