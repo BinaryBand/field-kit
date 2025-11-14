@@ -34,6 +34,19 @@ export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
   position: relative;
   z-index: 3;
 
+  // Token hover effects for removal indication
+  > svg:last-child {
+    border-radius: 50%;
+    transition: background-color var(--transition-fast);
+    box-sizing: content-box;
+    padding: 0.15em;
+    margin: -0.15em;
+  }
+
+  &:hover > svg:last-child {
+    background-color: var(--hover-bg-light);
+  }
+
   &._tw-placeholder-token {
     pointer-events: none;
     visibility: hidden;

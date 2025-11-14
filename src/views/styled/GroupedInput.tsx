@@ -44,5 +44,56 @@ export const GroupedInputContainer: StyledComponent<ComponentProps<'div'>> = sty
 
   .option-toggle {
     cursor: pointer;
+    transition:
+      padding-left var(--transition-medium),
+      padding-right var(--transition-medium),
+      background-color var(--transition-fast);
+
+    // Checkmark icon with smooth reveal animation
+    .bi-check {
+      width: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition:
+        width var(--transition-medium),
+        opacity var(--transition-fast);
+    }
+
+    // Hover states
+    &:hover {
+      background-color: var(--hover-bg-light);
+    }
+
+    // Active/selected state
+    &[data-active='true'] {
+      padding: {
+        left: 0.7em;
+        right: 0.7em;
+      }
+
+      .bi-check {
+        width: 1em;
+        opacity: 1;
+      }
+
+      &:hover {
+        background-color: var(--hover-bg-medium);
+      }
+    }
+
+    // Special highlighting for selected ungrouped options (third state)
+    &:not(.group-options .option-toggle) {
+      border: none !important;
+      padding: 0.5em 0.25em 0.5em 0.25em;
+      margin: 0.25em 0 0.25em 0;
+
+      &[data-active='true'] {
+        background-color: var(--hover-bg-medium);
+
+        &:hover {
+          background-color: var(--hover-bg-strong);
+        }
+      }
+    }
   }
 `;

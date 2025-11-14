@@ -1,6 +1,16 @@
 @use './calendar.scss';
 
-div._tw-wrapper {
+// CSS Custom Properties for consistent theming
+:root {
+  --hover-bg-light: rgba(128, 128, 128, 0.15);
+  --hover-bg-medium: rgba(128, 128, 128, 0.25);
+  --hover-bg-strong: rgba(128, 128, 128, 0.35);
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.2s ease;
+}
+
+// Wrapper component styles
+._tw-wrapper {
   background-color: inherit;
   color: inherit;
   display: contents;
@@ -10,16 +20,19 @@ div._tw-wrapper {
   }
 }
 
-textarea.tw-auto-resize {
+// Auto-resize textarea
+.tw-auto-resize {
   box-sizing: border-box;
   overflow: hidden;
   resize: none;
 }
 
+// Filter group styles
 .tw-filter-group .tw-filter-item[data-tw-blurry] {
   display: none;
 }
 
+// Interactive button components
 .icon-button {
   align-items: center;
   cursor: pointer;

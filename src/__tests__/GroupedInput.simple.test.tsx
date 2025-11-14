@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import GroupedInput, { GroupedOption } from '@/views/main/GroupedInput';
+import SelectInput, { GroupedOption } from '@/views/main/SelectInput';
 import GroupedInputContext from '@providers/GroupedInputContext';
 import AppContext from '@providers/AppContext';
 
@@ -43,19 +43,15 @@ const AppContextWrapper = ({ children }: { children: React.ReactNode }) => {
     pageWidth: 1024,
     pageHeight: 768,
   };
-  
-  return (
-    <AppContext.Provider value={mockAppContext}>
-      {children}
-    </AppContext.Provider>
-  );
+
+  return <AppContext.Provider value={mockAppContext}>{children}</AppContext.Provider>;
 };
 
 describe('GroupedInput Basic Tests', () => {
   const defaultProps = {
     'data-placeholder': 'Select options...',
-    multiple: true,
-    onChange: vi.fn(),
+    'multiple': true,
+    'onChange': vi.fn(),
   };
 
   beforeEach(() => {
@@ -66,7 +62,7 @@ describe('GroupedInput Basic Tests', () => {
     expect(() => {
       render(
         <AppContextWrapper>
-          <GroupedInput {...defaultProps} />
+          <SelectInput {...defaultProps} />
         </AppContextWrapper>
       );
     }).not.toThrow();
@@ -76,9 +72,9 @@ describe('GroupedInput Basic Tests', () => {
     expect(() => {
       render(
         <AppContextWrapper>
-          <GroupedInput {...defaultProps}>
+          <SelectInput {...defaultProps}>
             <GroupedOption value="test">Test Option</GroupedOption>
-          </GroupedInput>
+          </SelectInput>
         </AppContextWrapper>
       );
     }).not.toThrow();
@@ -88,7 +84,7 @@ describe('GroupedInput Basic Tests', () => {
     expect(() => {
       render(
         <AppContextWrapper>
-          <GroupedInput {...defaultProps} value={undefined} />
+          <SelectInput {...defaultProps} value={undefined} />
         </AppContextWrapper>
       );
     }).not.toThrow();
@@ -98,7 +94,7 @@ describe('GroupedInput Basic Tests', () => {
     expect(() => {
       render(
         <AppContextWrapper>
-          <GroupedInput {...defaultProps} value="" />
+          <SelectInput {...defaultProps} value="" />
         </AppContextWrapper>
       );
     }).not.toThrow();
@@ -108,7 +104,7 @@ describe('GroupedInput Basic Tests', () => {
     expect(() => {
       render(
         <AppContextWrapper>
-          <GroupedInput {...defaultProps} value={['option1']} />
+          <SelectInput {...defaultProps} value={['option1']} />
         </AppContextWrapper>
       );
     }).not.toThrow();
@@ -118,7 +114,7 @@ describe('GroupedInput Basic Tests', () => {
     expect(() => {
       render(
         <AppContextWrapper>
-          <GroupedInput {...defaultProps} value={123} />
+          <SelectInput {...defaultProps} value={123} />
         </AppContextWrapper>
       );
     }).not.toThrow();
@@ -133,7 +129,9 @@ describe('GroupedInput Basic Tests', () => {
 
     render(
       <GroupedInputContext.Provider value={mockContext}>
-        <GroupedOption value="test" group="group1">Test Option</GroupedOption>
+        <GroupedOption value="test" group="group1">
+          Test Option
+        </GroupedOption>
       </GroupedInputContext.Provider>
     );
 
@@ -159,7 +157,7 @@ describe('GroupedInput Basic Tests', () => {
   test('renders placeholder when no value', () => {
     render(
       <AppContextWrapper>
-        <GroupedInput {...defaultProps} />
+        <SelectInput {...defaultProps} />
       </AppContextWrapper>
     );
 
@@ -170,7 +168,7 @@ describe('GroupedInput Basic Tests', () => {
   test('renders with className prop', () => {
     const { container } = render(
       <AppContextWrapper>
-        <GroupedInput {...defaultProps} className="test-class" />
+        <SelectInput {...defaultProps} className="test-class" />
       </AppContextWrapper>
     );
 

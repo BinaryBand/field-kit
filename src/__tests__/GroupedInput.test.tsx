@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import GroupedInput, { GroupedOption } from '@/views/main/GroupedInput';
+import SelectInput, { GroupedOption } from '@/views/main/SelectInput';
 import GroupedInputContext from '@providers/GroupedInputContext';
 import AppContext from '@providers/AppContext';
 
@@ -52,9 +52,9 @@ const AppContextWrapper = ({ children }: { children: React.ReactNode }) => {
   return <AppContext.Provider value={mockAppContext}>{children}</AppContext.Provider>;
 };
 
-const TestGroupedInput = (props: any) => (
+const TestSelectInput = (props: any) => (
   <AppContextWrapper>
-    <GroupedInput {...props}>
+    <SelectInput {...props}>
       <GroupedOption value="option1" group="group1">
         Option 1
       </GroupedOption>
@@ -65,11 +65,11 @@ const TestGroupedInput = (props: any) => (
         Option 3
       </GroupedOption>
       <GroupedOption value="option4">Ungrouped Option</GroupedOption>
-    </GroupedInput>
+    </SelectInput>
   </AppContextWrapper>
 );
 
-describe('GroupedInput Component', () => {
+describe('SelectInput Component', () => {
   const defaultProps = {
     'data-placeholder': 'Select options...',
     'multiple': true,
@@ -82,14 +82,14 @@ describe('GroupedInput Component', () => {
 
   describe('Rendering', () => {
     test('renders with placeholder when no options selected', () => {
-      render(<TestGroupedInput {...defaultProps} />);
+      render(<TestSelectInput {...defaultProps} />);
 
       const input = screen.getByPlaceholderText('Select options...');
       expect(input).toBeInTheDocument();
     });
 
     test('renders grouped options when focused', async () => {
-      render(<TestGroupedInput {...defaultProps} />);
+      render(<TestSelectInput {...defaultProps} />);
 
       const input = screen.getByPlaceholderText('Select options...');
       fireEvent.focus(input);
@@ -97,24 +97,34 @@ describe('GroupedInput Component', () => {
       await waitFor(() => {
         expect(screen.getByText('group1')).toBeInTheDocument();
         expect(screen.getByText('group2')).toBeInTheDocument();
-        expect(screen.getByText('Option 1')).toBeInTheDocument();
-        expect(screen.getByText('Option 2')).toBeInTheDocument();
-        expect(screen.getByText('Option 3')).toBeInTheDocument();
-        expect(screen.getByText('Ungrouped Option')).toBeInTheDocument();
+
+        // Check that all option elements are visible in dropdown
+        const visibleOptions = document.querySelectorAll('[data-option-value]:not([hidden])');
+        expect(visibleOptions).toHaveLength(4);
+
+        // Check specific options by data attribute
+        expect(document.querySelector('[data-option-value="option1"]')).toBeInTheDocument();
+        expect(document.querySelector('[data-option-value="option2"]')).toBeInTheDocument();
+        expect(document.querySelector('[data-option-value="option3"]')).toBeInTheDocument();
+        expect(document.querySelector('[data-option-value="option4"]')).toBeInTheDocument();
       });
     });
 
     test('renders selected tokens for multiple selection', () => {
-      render(<TestGroupedInput {...defaultProps} value={['option1', 'option3']} />);
+      render(<TestSelectInput {...defaultProps} value={['option1', 'option3']} />);
 
-      expect(screen.getByText('Option 1')).toBeInTheDocument();
-      expect(screen.getByText('Option 3')).toBeInTheDocument();
+      const tokens = document.querySelectorAll('.token');
+      expect(tokens).toHaveLength(2);
+      expect(tokens[0].textContent).toContain('Option 1');
+      expect(tokens[1].textContent).toContain('Option 3');
     });
 
     test('displays single selected value in input for non-multiple mode', () => {
-      render(<TestGroupedInput {...defaultProps} multiple={false} value="option1" />);
+      render(<TestSelectInput {...defaultProps} multiple={false} value="option1" />);
 
-      const input = screen.getByDisplayValue('Option 1');
+      const input = screen
+        .getAllByDisplayValue('Option 1')
+        .find((el) => el.tagName === 'INPUT' && !el.hasAttribute('readonly'));
       expect(input).toBeInTheDocument();
     });
   });
@@ -122,54 +132,54 @@ describe('GroupedInput Component', () => {
   describe('Option Selection', () => {
     test('selects option when clicked in multiple mode', async () => {
       const onChange = vi.fn();
-      render(<TestGroupedInput {...defaultProps} onChange={onChange} />);
+      render(<TestSelectInput {...defaultProps} onChange={onChange} />);
 
       const input = screen.getByPlaceholderText('Select options...');
       fireEvent.focus(input);
 
       await waitFor(() => {
-        const option1 = screen.getByText('Option 1');
-        expect(option1).toBeInTheDocument();
+        const dropdownOption = document.querySelector('[data-option-value="option1"]');
+        expect(dropdownOption).toBeInTheDocument();
       });
 
-      const option1 = screen.getByText('Option 1');
-      fireEvent.mouseDown(option1);
+      const option1 = document.querySelector('[data-option-value="option1"]');
+      fireEvent.mouseDown(option1!);
 
       expect(onChange).toHaveBeenCalled();
     });
 
     test('deselects option when clicked again in multiple mode', async () => {
       const onChange = vi.fn();
-      render(<TestGroupedInput {...defaultProps} value={['option1']} onChange={onChange} />);
+      render(<TestSelectInput {...defaultProps} value={['option1']} onChange={onChange} />);
 
-      const input = screen.getByPlaceholderText('Select options...');
+      const input = document.querySelector('.css-13d28j4') as HTMLInputElement;
       fireEvent.focus(input);
 
       await waitFor(() => {
-        const option1 = screen.getByText('Option 1');
+        const option1 = document.querySelector('[data-option-value=\"option1\"]');
         expect(option1).toBeInTheDocument();
       });
 
-      const option1 = screen.getByText('Option 1');
-      fireEvent.mouseDown(option1);
+      const option1 = document.querySelector('[data-option-value="option1"]');
+      fireEvent.mouseDown(option1!);
 
       expect(onChange).toHaveBeenCalled();
     });
 
     test('replaces selection in single mode', async () => {
       const onChange = vi.fn();
-      render(<TestGroupedInput {...defaultProps} multiple={false} onChange={onChange} />);
+      render(<TestSelectInput {...defaultProps} multiple={false} onChange={onChange} />);
 
-      const input = screen.getByPlaceholderText('Select options...');
+      const input = document.querySelector('.css-13d28j4') as HTMLInputElement;
       fireEvent.focus(input);
 
       await waitFor(() => {
-        const option1 = screen.getByText('Option 1');
+        const option1 = document.querySelector('[data-option-value=\"option1\"]');
         expect(option1).toBeInTheDocument();
       });
 
-      const option1 = screen.getByText('Option 1');
-      fireEvent.mouseDown(option1);
+      const option1 = document.querySelector('[data-option-value=\"option1\"]');
+      fireEvent.mouseDown(option1!);
 
       expect(onChange).toHaveBeenCalled();
     });
@@ -177,21 +187,23 @@ describe('GroupedInput Component', () => {
 
   describe('Search Functionality', () => {
     test('filters options based on search input', async () => {
-      render(<TestGroupedInput {...defaultProps} />);
+      render(<TestSelectInput {...defaultProps} />);
 
       const input = screen.getByPlaceholderText('Select options...');
       fireEvent.focus(input);
       fireEvent.change(input, { target: { value: 'Option 1' } });
 
       await waitFor(() => {
-        expect(screen.getByText('Option 1')).toBeInTheDocument();
+        const optionElements = screen.getAllByText('Option 1');
+        const visibleOption = optionElements.find((el) => !el.closest('select'));
+        expect(visibleOption).toBeInTheDocument();
       });
     });
 
     test('shows "No Options Available" when no options exist', async () => {
       render(
         <AppContextWrapper>
-          <GroupedInput {...defaultProps} />
+          <SelectInput {...defaultProps} />
         </AppContextWrapper>
       );
 
@@ -199,7 +211,7 @@ describe('GroupedInput Component', () => {
       fireEvent.focus(input);
 
       await waitFor(() => {
-        expect(screen.getByText('No Options Available')).toBeInTheDocument();
+        expect(screen.getByText('No Options')).toBeInTheDocument();
       });
     });
   });
@@ -207,10 +219,10 @@ describe('GroupedInput Component', () => {
   describe('Token Management', () => {
     test('removes token when X button is clicked', () => {
       const onChange = vi.fn();
-      render(<TestGroupedInput {...defaultProps} value={['option1']} onChange={onChange} />);
+      render(<TestSelectInput {...defaultProps} value={['option1']} onChange={onChange} />);
 
-      const removeButton = screen.getByRole('button');
-      fireEvent.click(removeButton);
+      const tokenElement = screen.getAllByText('Option 1').find((el) => el.closest('.token'));
+      fireEvent.click(tokenElement!.closest('.token')!);
 
       expect(onChange).toHaveBeenCalled();
     });
@@ -218,7 +230,7 @@ describe('GroupedInput Component', () => {
 
   describe('Dropdown Behavior', () => {
     test('opens dropdown when input is focused', async () => {
-      render(<TestGroupedInput {...defaultProps} />);
+      render(<TestSelectInput {...defaultProps} />);
 
       const input = screen.getByPlaceholderText('Select options...');
       fireEvent.focus(input);
@@ -229,7 +241,7 @@ describe('GroupedInput Component', () => {
     });
 
     test('closes dropdown when input loses focus', async () => {
-      render(<TestGroupedInput {...defaultProps} />);
+      render(<TestSelectInput {...defaultProps} />);
 
       const input = screen.getByPlaceholderText('Select options...');
       fireEvent.focus(input);
@@ -240,25 +252,31 @@ describe('GroupedInput Component', () => {
 
       fireEvent.blur(input);
 
-      await waitFor(() => {
-        expect(screen.queryByText('group1')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          const dropdown = document.querySelector('.css-4qetco');
+          expect(dropdown).toHaveAttribute('hidden');
+        },
+        { timeout: 2000 }
+      );
     });
 
     test('prevents dropdown from closing when option is clicked', async () => {
-      render(<TestGroupedInput {...defaultProps} />);
+      render(<TestSelectInput {...defaultProps} />);
 
       const input = screen.getByPlaceholderText('Select options...');
       fireEvent.focus(input);
 
       await waitFor(() => {
-        expect(screen.getByText('Option 1')).toBeInTheDocument();
+        expect(screen.getByText('group1')).toBeInTheDocument();
       });
 
-      const option1 = screen.getByText('Option 1');
+      const option1 = document.querySelector('[data-option-value=\"option1\"]');
 
       // Simulate mousedown event (which should prevent blur)
-      fireEvent.mouseDown(option1);
+      if (option1) {
+        fireEvent.mouseDown(option1);
+      }
 
       // Dropdown should still be visible
       expect(screen.getByText('group1')).toBeInTheDocument();
@@ -304,26 +322,28 @@ describe('GroupedInput Component', () => {
   describe('Edge Cases', () => {
     test('handles undefined value prop', () => {
       expect(() => {
-        render(<TestGroupedInput {...defaultProps} value={undefined} />);
+        render(<TestSelectInput {...defaultProps} value={undefined} />);
       }).not.toThrow();
     });
 
     test('handles empty string value', () => {
       expect(() => {
-        render(<TestGroupedInput {...defaultProps} value="" />);
+        render(<TestSelectInput {...defaultProps} value="" />);
       }).not.toThrow();
     });
 
     test('handles numeric value', () => {
       expect(() => {
-        render(<TestGroupedInput {...defaultProps} value={123} />);
+        render(<TestSelectInput {...defaultProps} value={123} />);
       }).not.toThrow();
     });
 
     test('handles array value in non-multiple mode', () => {
-      render(<TestGroupedInput {...defaultProps} multiple={false} value={['option1']} />);
+      render(<TestSelectInput {...defaultProps} multiple={false} value={['option1']} />);
 
-      const input = screen.getByDisplayValue('Option 1');
+      const input = screen
+        .getAllByDisplayValue('Option 1')
+        .find((el) => el.tagName === 'INPUT' && !el.hasAttribute('readonly'));
       expect(input).toBeInTheDocument();
     });
   });

@@ -61,67 +61,25 @@
 
           <div class="card mb-4">
             <div class="card-header">
-              <h5 class="card-title">List Filter</h5>
-            </div>
-
-            <div class="card-body">
-              <div class="vstack gap-2 tw-filter-group">
-                <input class="form-control" placeholder="Text Filter" type="filter" />
-
-                <ul class="list-group">
-                  <li class="list-group-item tw-filter-item">An item</li>
-                  <li class="list-group-item tw-filter-item">A second item</li>
-                  <li class="list-group-item tw-filter-item">A third item</li>
-                </ul>
-              </div>
-
-              <div class="code-demo" data-target="div.tw-filter-group" data-language="html"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">List Input</h5>
-            </div>
-
-            <div class="card-body">
-              <input
-                class="form-control"
-                name="ListInput"
-                placeholder="List Input"
-                type="list"
-                value='["One","Two","Three"]'
-              />
-              <div class="code-demo" data-target="input[type='list']"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Select</h5>
+              <h5 class="card-title">Single-Select Component</h5>
             </div>
 
             <div class="card-body">
               <select
-                class="tw-select-group form-control"
-                data-placeholder="Single Select"
+                class="form-control tw-select-group"
                 name="SingleSelect"
-                type="number"
+                data-placeholder="Choose items from groups..."
               >
-                <option class="tw-option" value="1">Albuquerque</option>
-                <option class="tw-option" value="2">Boston</option>
-                <option class="tw-option" selected value="3">Chicago</option>
-                <option class="tw-option" disabled value="4">Denver</option>
-                <option class="tw-option" value="5">El Paso</option>
-                <option class="tw-option" value="6">Flagstaff</option>
-                <option class="tw-option" value="7">Gilbert</option>
+                <option class="tw-option" value="salt">Salt</option>
+                <option class="tw-option" value="pepper" selected>Pepper</option>
+                <option class="tw-option" value="olive-oil">Olive Oil</option>
               </select>
 
-              <div class="code-demo" data-target="select[name='SingleSelect']"></div>
+              <div
+                class="code-demo"
+                data-target="select.tw-select-group[name='SingleSelect']"
+                data-language="html"
+              ></div>
             </div>
           </div>
 
@@ -129,222 +87,73 @@
 
           <div class="card mb-4">
             <div class="card-header">
-              <h5 class="card-title">Multi-Select</h5>
+              <h5 class="card-title">Multi-Select Component</h5>
             </div>
 
             <div class="card-body">
               <select
-                class="tw-select-group form-control"
-                data-placeholder="Multiselect"
+                class="form-control tw-select-group"
                 multiple
-                name="Multiselect"
-                type="number"
+                name="MultiSelect"
+                data-placeholder="Choose items from groups..."
               >
-                <option class="tw-option" value="1">Albuquerque</option>
-                <option class="tw-option" value="2">Boston</option>
-                <option class="tw-option" selected value="3">Chicago</option>
-                <option class="tw-option" disabled value="4">Denver</option>
-                <option class="tw-option" value="5">El Paso</option>
-                <option class="tw-option" value="6">Flagstaff</option>
-                <option class="tw-option" value="7">Gilbert</option>
+                <option class="tw-option" value="salt">Salt</option>
+                <option class="tw-option" value="pepper" selected>Pepper</option>
+                <option class="tw-option" value="olive-oil">Olive Oil</option>
               </select>
 
-              <div class="code-demo" data-target="select[name='Multiselect']"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Auto-Resize Textarea</h5>
-            </div>
-
-            <div class="card-body">
-              <textarea class="tw-auto-resize form-control" name="Multiline" placeholder="Text">
-First Line
-Second Line</textarea
-              >
-
-              <div class="code-demo" data-target="textarea.tw-auto-resize"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">PIN Input</h5>
-            </div>
-
-            <div class="card-body">
-              <input
-                class="form-control"
-                data-size="6"
-                name="Pin"
-                placeholder="000000"
-                type="pin"
-                value="123456"
-              />
-              <div class="code-demo" data-target="input[type='pin']"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Signature</h5>
-            </div>
-
-            <div class="card-body">
-              <input
-                class="form-control"
-                name="SignatureInput"
-                placeholder="Sign Here"
-                type="signature"
-              />
-
-              <br />
-
-              <button
-                class="btn btn-outline-danger ms-auto"
-                id="clear-signature-button"
-                type="button"
-              >
-                Clear Signature
-              </button>
-
-              <div class="code-demo" data-target="input[type='signature']"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Passkey Input</h5>
-            </div>
-
-            <div class="card-body">
-              <input
-                class="btn btn-outline-secondary"
-                data-identifier="j@ne.com"
-                data-user="Jane"
-                name="Passkey"
-                type="passkey"
-              />
-
-              <div class="code-demo" data-target="input[type='passkey']"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Calendar</h5>
-            </div>
-
-            <div class="card-body">
-              <table class="table tw-calendar">
-                <tr class="calendar-header">
-                  <th>Sunday</th>
-                  <th>Monday</th>
-                  <th>Tuesday</th>
-                  <th>Wednesday</th>
-                  <th>Thursday</th>
-                  <th>Friday</th>
-                  <th>Saturday</th>
-                </tr>
-
-                <tr class="tw-calendar-month" data-tw-year="2021" data-tw-month="7">
-                  <td class="tw-calendar-day" data-tw-day="1">
-                    <div class="small text-secondary">First</div>
-                  </td>
-                  <td class="tw-calendar-day" data-tw-day="31">
-                    <div class="small text-secondary">Second</div>
-                  </td>
-                  <td class="tw-calendar-day" data-tw-day="5">
-                    <div class="small text-secondary">Third</div>
-                  </td>
-                </tr>
-              </table>
-
-              <div class="code-demo" data-target="table.tw-calendar"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Form Array</h5>
-            </div>
-
-            <div class="card-body">
-              <div class="border border-primary p-2" data-tw-array="Array">
-                <input name="First" value="1st" />
-                <input name="Second" value="2nd" />
-                <input name="Third" value="3rd" />
-              </div>
-
-              <div class="code-demo" data-target="[data-tw-array]"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Form Group</h5>
-            </div>
-
-            <div class="card-body">
-              <div class="gap-3 vstack border border-success p-2" data-tw-group="Children">
-                <input name="First" value="1st" />
-                <input name="Second" value="2nd" />
-              </div>
-
-              <div class="code-demo" data-target="[data-tw-group='Children']"></div>
-            </div>
-          </div>
-
-          <!---------------------------------------------------------------------->
-
-          <div class="card mb-4">
-            <div class="card-header">
-              <h5 class="card-title">Complex Form Objects</h5>
-            </div>
-
-            <div class="card-body">
               <div
-                class="border p-3 ms-3 gap-3 vstack border border-success p-2"
-                data-tw-group="ComplexObject"
+                class="code-demo"
+                data-target="select.tw-select-group[name='MultiSelect']"
+                data-language="html"
+              ></div>
+            </div>
+          </div>
+
+          <!---------------------------------------------------------------------->
+
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Grouped Select Component</h5>
+            </div>
+
+            <div class="card-body">
+              <select
+                class="form-control tw-select-group"
+                multiple
+                name="GroupedSelect"
+                data-placeholder="Choose items from groups..."
               >
-                <input name="First" value="1st" />
+                <option class="tw-option" value="apple" data-group="Fruits">Apple</option>
+                <option class="tw-option" value="banana" data-group="Fruits">Banana</option>
+                <option class="tw-option" value="orange" data-group="Fruits">Orange</option>
+                <option class="tw-option" value="strawberry" data-group="Fruits">Strawberry</option>
 
-                <div class="gap-3 vstack border border-primary p-2" data-tw-array="Child">
-                  <div class="p-3 ms-3 gap-3 vstack border border-primary p-2" data-tw-array="One">
-                    <input name="Second" value="2nd" />
-                    <input name="Third" value="3rd" />
-                  </div>
+                <option class="tw-option" value="carrot" data-group="Vegetables" selected>
+                  Carrot
+                </option>
+                <option class="tw-option" value="broccoli" data-group="Vegetables">Broccoli</option>
+                <option class="tw-option" value="spinach" data-group="Vegetables">Spinach</option>
+                <option class="tw-option" value="tomato" data-group="Vegetables">Tomato</option>
 
-                  <div class="p-3 ms-3 gap-3 vstack border border-success p-2" data-tw-group="Two">
-                    <input name="Fourth" value="4th" />
-                    <input name="Fifth" value="5th" />
-                  </div>
-                </div>
-              </div>
+                <option class="tw-option" value="chicken" data-group="Proteins">Chicken</option>
+                <option class="tw-option" value="beef" data-group="Proteins" selected>Beef</option>
+                <option class="tw-option" value="salmon" data-group="Proteins">Salmon</option>
+                <option class="tw-option" value="tofu" data-group="Proteins" selected>Tofu</option>
+              </select>
 
-              <div class="code-demo" data-target="[data-tw-group='ComplexObject']"></div>
+              <div
+                class="code-demo"
+                data-target="select.tw-select-group"
+                data-language="html"
+              ></div>
             </div>
           </div>
 
           <!---------------------------------------------------------------------->
 
           <footer class="text-center mt-5">
-            <button class="btn btn-primary">Test TW Components</button>
+            <button class="btn btn-primary" type="submit">Test TW Components</button>
           </footer>
         </form>
       </div>

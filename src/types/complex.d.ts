@@ -48,11 +48,12 @@ interface INativeInputElement {
 
 type NativeInputElement = INativeInputElement & HTMLElement;
 
-interface ISelectInputProps extends React.ComponentProps<'select'> {
+interface IBaseSelectProps extends React.ComponentProps<'select'> {
   'data-placeholder'?: string;
 }
 
-type SelectInputProps = ISelectInputProps;
+type BaseSelectProps = IBaseSelectProps;
+type SelectInputProps = BaseSelectProps; // Backward compatibility
 
 // Passkey Types
 interface IPasskey {

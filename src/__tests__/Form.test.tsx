@@ -122,4 +122,70 @@ describe('Form Component', () => {
     expect(requestInit?.method).toBe('POST');
     expect(receivedPayload).toEqual(expectedPayload);
   });
+
+  test('should handle GroupedInput form submission', async () => {
+    // Arrange: Set up the DOM with a GroupedInput
+    const html = /* html */ `
+      <form action="/submit-data" method="POST">
+        <select name="preferences" multiple>
+          <option value="option1" data-group="group1" selected>Option 1</option>
+          <option value="option2" data-group="group1">Option 2</option>
+          <option value="option3" data-group="group2" selected>Option 3</option>
+          <option value="option4" selected>Ungrouped Option</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+
+    document.body.innerHTML = html;
+    const target = document.body.querySelector('form')!;
+
+    // Act: Render and submit the form
+    await act(async () => render(<Form target={target} />));
+    await act(async () => fireEvent.submit(target));
+
+    // Assert: Check the fetch call and payload
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [url, requestInit] = vi.mocked(global.fetch).mock.calls[0];
+    const receivedPayload = JSON.parse(requestInit?.body as string);
+
+    expect(url).toBe('http://localhost:3000/submit-data');
+    expect(requestInit?.method).toBe('POST');
+    expect(receivedPayload).toEqual({
+      preferences: ['option1', 'option3', 'option4'],
+    });
+  });
+
+  test('should handle GroupedInput single select form submission', async () => {
+    // Arrange: Set up the DOM with a single-select GroupedInput
+    const html = /* html */ `
+      <form action="/submit-data" method="POST">
+        <select name="preference">
+          <option value="option1" data-group="group1" selected>Option 1</option>
+          <option value="option2" data-group="group1">Option 2</option>
+          <option value="option3" data-group="group2">Option 3</option>
+          <option value="option4">Ungrouped Option</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+
+    document.body.innerHTML = html;
+    const target = document.body.querySelector('form')!;
+
+    // Act: Render and submit the form
+    await act(async () => render(<Form target={target} />));
+    await act(async () => fireEvent.submit(target));
+
+    // Assert: Check the fetch call and payload
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [url, requestInit] = vi.mocked(global.fetch).mock.calls[0];
+    const receivedPayload = JSON.parse(requestInit?.body as string);
+
+    expect(url).toBe('http://localhost:3000/submit-data');
+    expect(requestInit?.method).toBe('POST');
+    expect(receivedPayload).toEqual({
+      preference: 'option1',
+    });
+  });
 });

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { ComponentProps, ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import ReactDOM, { Root } from 'react-dom/client';
 
 import App from '@/App';
@@ -7,10 +7,11 @@ import '@/styles/main.scss';
 
 import InputWrapper from '@/views/inline/InputWrapper';
 
+import SelectInput, { GroupedOption } from '@components/SelectInput';
 import ListInput from '@components/ListInput';
 import PasskeyInput from '@components/PasskeyInput';
 import PinInput from '@components/PinInput';
-import SelectInput, { SelectOption } from '@components/SelectInput';
+import { SelectOption } from '@/views/shared/Options';
 import Signature from '@components/Signature';
 import SimpleInput from '@components/SimpleInput';
 
@@ -38,9 +39,37 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
       break;
     case 'tw-option':
       if (element instanceof HTMLOptionElement) {
-        const { className, disabled, textContent, style, value } = element;
-        const props: ComponentProps<'option'> = { className, value, disabled };
-        return <SelectOption children={textContent} css={style.cssText} {...props} key={key} />;
+        const { className, disabled, textContent, value } = element;
+        const optionValue = typeof value === 'string' ? value : String(value);
+        const group = element.getAttribute('data-group') || undefined;
+
+        // Check if the parent select has tw-select-group class
+        const parentSelect = element.closest('select');
+        const isGroupedSelect = parentSelect?.classList.contains('tw-select-group');
+
+        // Use GroupedOption if parent is grouped select, otherwise use SelectOption
+        if (isGroupedSelect) {
+          return (
+            <GroupedOption
+              children={textContent}
+              group={group}
+              value={optionValue}
+              disabled={disabled}
+              className={className}
+              key={key}
+            />
+          );
+        } else {
+          return (
+            <SelectOption
+              children={textContent}
+              value={optionValue}
+              disabled={disabled}
+              className={className}
+              key={key}
+            />
+          );
+        }
       }
       break;
     case 'tw-calendar-month':
@@ -144,3 +173,20 @@ export default function init(element: HTMLElement = document.body): void {
 if (typeof window !== 'undefined') {
   window.addEventListener('load', (): void => init(document.body));
 }
+
+// Export all components for external usage
+export {
+  SelectInput,
+  GroupedOption,
+  ListInput,
+  PasskeyInput,
+  PinInput,
+  SelectOption,
+  Signature,
+  SimpleInput,
+  Calendar,
+  FilterGroup,
+  TextFilter,
+  Form,
+  Multiline,
+};
