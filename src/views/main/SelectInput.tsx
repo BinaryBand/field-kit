@@ -7,6 +7,7 @@ import { GroupedInputContainer } from '@/views/styled/GroupedInput';
 import Dropdown from '@/views/styled/Dropdown';
 
 import CaretDownIcon from '@/assets/native/CaretDownIcon';
+import CheckIcon from '@/assets/native/CheckIcon';
 import XIcon from '@/assets/native/XIcon';
 
 import AppContext from '@providers/AppContext';
@@ -61,7 +62,7 @@ function OptionButton({
       data-active={isSelected}
       onMouseDown={(event) => onSelect(value, event)}
     >
-      <i className="bi bi-check" style={{ opacity: isSelected ? 1 : 0 }}></i>
+      <CheckIcon style={{ opacity: isSelected ? 1 : 0 }} />
       <small>{label}</small>
     </InputToken>
   );
@@ -315,7 +316,11 @@ function SelectInput(
           hidden={!focused}
           onMouseDown={handleMouseDown}
           ref={dropdownRef}
-          style={{ ...style, display: 'flex', flexDirection: 'column' }}
+          style={{ 
+            ...style, 
+            display: focused ? 'flex' : 'none', 
+            flexDirection: 'column' 
+          }}
         >
           {(() => {
             const searchValue = debouncedInputValue.toLowerCase();
