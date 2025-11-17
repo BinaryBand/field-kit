@@ -316,7 +316,11 @@ function SelectInput(
           hidden={!focused}
           onMouseDown={handleMouseDown}
           ref={dropdownRef}
-          style={{ ...style, display: 'flex', flexDirection: 'column' }}
+          style={{ 
+            ...style, 
+            display: focused ? 'flex' : 'none', 
+            flexDirection: 'column' 
+          }}
         >
           {(() => {
             const searchValue = debouncedInputValue.toLowerCase();
