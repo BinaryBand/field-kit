@@ -59,6 +59,7 @@ function OptionButton({
       data-option-value={value}
       data-multiple={multiple}
       data-active={isSelected}
+      style={{ border: 'none' }}
       onMouseDown={(event) => onSelect(value, event)}
     >
       <i className="bi bi-check" style={{ opacity: isSelected ? 1 : 0 }}></i>
@@ -254,15 +255,11 @@ function SelectInput(
       .forEach((el) => el.setAttribute('data-blurred', 'false'));
 
     if (!multiple) {
-      if (focused && debouncedList.length > 0) {
-        // When opening dropdown with existing selection, clear input for search
-        setInternalValue('');
-      } else if (!focused && debouncedList.length > 0) {
+      if (!focused && debouncedList.length > 0) {
         // When not focused and has selection, show the selected value
         const selectedLabel = Object.values(options[debouncedList[0]] || {})[0] ?? debouncedList[0];
         setInternalValue(String(selectedLabel));
       } else if (!focused && debouncedList.length === 0) {
-        // When not focused and no selection, clear input
         setInternalValue('');
       }
     } else {

@@ -26,13 +26,21 @@ export const StyledListInput: StyledComponent<ComponentProps<'input'>> = styled.
 
 export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
   align-items: center;
-  border: 1px solid;
-  border-radius: 12px;
+  border-radius: 16px;
   display: flex;
   gap: 0.3em;
-  padding: 0.1em 0.5em;
+  padding: 0.4em 0.75em;
   position: relative;
   z-index: 3;
+
+  &:not(.option-toggle) {
+    border: 1px solid;
+    padding: 0.1em 0.5em;
+  }
+
+  &[data-active='true'] {
+    background-color: var(--bs-primary-bg, var(--hover-bg-medium));
+  }
 
   // Token hover effects for removal indication
   > svg:last-child {
