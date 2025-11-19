@@ -24,6 +24,11 @@ export const SignatureInput: StyledComponent<ComponentProps<'input'>> = styled.i
   width: 100%;
   height: 100%;
   text-align: center;
+
+  font-size: 0;
+  ::placeholder {
+    font-size: initial;
+  }
 `;
 
 export const SignatureSvgOverlay: StyledComponent<ComponentProps<'div'>> = styled.div`

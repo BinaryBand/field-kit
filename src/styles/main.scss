@@ -52,3 +52,11 @@
   height: 100%;
   pointer-events: none;
 }
+
+button.tw_link {
+  all: unset;
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}

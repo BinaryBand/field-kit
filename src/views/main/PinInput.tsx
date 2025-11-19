@@ -126,7 +126,7 @@ function PinInput(
       pinValue[activeIndex] = digit;
 
       if (internalRef.current && onChange) {
-        const value: string = pinValue.map((d) => d ?? '_').join('');
+        const value: string = pinValue.map((d) => d ?? ' ').join('');
         onChange?.(createChangeEvent(internalRef.current, value));
       } else {
         setPinValue([...pinValue]);

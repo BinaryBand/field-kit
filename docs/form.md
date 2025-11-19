@@ -91,7 +91,3 @@ Complex form values can be nested.
 ```
 
 </FormDemo>
-
-<script setup lang='ts'>
-  import FormDemo from './vue/FormDemo.vue';
-</script>

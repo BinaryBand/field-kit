@@ -1,17 +1,11 @@
 <template>
   <div>
-    <form class="tw-form" @submit.prevent="handleSubmit" style="--tw-dropdown-bg: #0d6efd">
+    <form class="tw-form" @submit.prevent="handleSubmit">
       <!-- Select Input - Single -->
       <div>
         <h5>{{ selectComponent.name }} (Single)</h5>
         <p class="component-description">{{ selectComponent.description }}</p>
-        <select
-          class="tw-select-group"
-          name="SingleSelect"
-          data-placeholder="Choose a city..."
-          data-type="number"
-          @change="handleFieldChange"
-        >
+        <select class="tw-select-group" name="SingleSelect" data-type="number" @change="onChange">
           <option class="tw-option" value="1">Albuquerque</option>
           <option class="tw-option" value="2" selected>Boston</option>
           <option class="tw-option" value="3">Chicago</option>
@@ -19,20 +13,14 @@
           <option class="tw-option" value="5">El Paso</option>
         </select>
         <pre class="value-display">{{ values.SingleSelect ?? '(empty)' }}</pre>
-        <hr class="component-divider" />
+        <hr />
       </div>
 
       <!-- Select Input - Multiple -->
       <div>
         <h5>{{ selectComponent.name }} (Multiple)</h5>
         <p class="component-description">{{ selectComponent.description }}</p>
-        <select
-          class="tw-select-group"
-          multiple
-          name="MultiSelect"
-          data-placeholder="Choose multiple cities..."
-          @change="handleFieldChange"
-        >
+        <select class="tw-select-group" multiple name="MultiSelect" @change="onChange">
           <option class="tw-option" value="alb">Albuquerque</option>
           <option class="tw-option" value="bos" selected>Boston</option>
           <option class="tw-option" value="chi">Chicago</option>
@@ -40,20 +28,14 @@
           <option class="tw-option" value="elp">El Paso</option>
         </select>
         <pre class="value-display">{{ values.MultiSelect ?? '(empty)' }}</pre>
-        <hr class="component-divider" />
+        <hr />
       </div>
 
       <!-- Select Input - Grouped -->
       <div>
         <h5>{{ selectComponent.name }} (Grouped)</h5>
         <p class="component-description">{{ selectComponent.description }}</p>
-        <select
-          class="tw-select-group"
-          multiple
-          name="GroupedSelect"
-          data-placeholder="Choose items from groups..."
-          @change="handleFieldChange"
-        >
+        <select class="tw-select-group" multiple name="GroupedSelect" @change="onChange">
           <option class="tw-option" value="apple" data-group="Fruits">Apple</option>
           <option class="tw-option" value="banana" data-group="Fruits">Banana</option>
           <option class="tw-option" value="orange" data-group="Fruits">Orange</option>
@@ -68,80 +50,47 @@
           <option class="tw-option" value="tofu" data-group="Proteins" selected>Tofu</option>
         </select>
         <pre class="value-display">{{ values.GroupedSelect ?? '(empty)' }}</pre>
-        <hr class="component-divider" />
+        <hr />
       </div>
 
       <!-- List Input Component -->
       <div>
         <h5>{{ listComponent.name }}</h5>
         <p class="component-description">{{ listComponent.description }}</p>
-        <input
-          name="ListInput"
-          type="list"
-          :placeholder="
-            listComponent.attributes.find((a) => a.name === 'placeholder')?.default ||
-            'Add items...'
-          "
-          value='["One","Two","Three"]'
-          @change="handleFieldChange"
-          @input="handleFieldChange"
-        />
+        <input name="ListInput" type="list" value='["One","Two","Three"]' @change="onChange" />
         <pre class="value-display">{{ values.ListInput ?? '(empty)' }}</pre>
-        <hr class="component-divider" />
+        <hr />
       </div>
 
       <!-- PIN Input Component -->
       <div>
         <h5>{{ pinComponent.name }}</h5>
         <p class="component-description">{{ pinComponent.description }}</p>
-        <input
-          type="pin"
-          name="PinInput"
-          :data-size="pinComponent.attributes.find((a) => a.name === 'data-size')?.default || 6"
-          placeholder="000000"
-          @change="handleFieldChange"
-          @input="handleFieldChange"
-        />
+        <input type="pin" name="PinInput" data-size="6" @change="onChange" @input="onChange" />
         <pre class="value-display">{{ values.PinInput ?? '(empty)' }}</pre>
-        <hr class="component-divider" />
+        <hr />
       </div>
 
       <!-- Auto-Resize Textarea -->
       <div>
         <h5>{{ autoResizeComponent.name }}</h5>
         <p class="component-description">{{ autoResizeComponent.description }}</p>
-        <textarea
-          class="tw-auto-resize"
-          name="Multiline"
-          :placeholder="
-            autoResizeComponent.attributes.find((a) => a.name === 'placeholder')?.default ||
-            'Enter your message...'
-          "
-          @input="handleFieldChange"
-        >
+        <textarea class="tw-auto-resize" name="Multiline" @input="onChange">
 First Line
-Second Line
-Third Line</textarea
+Second Line</textarea
         >
         <pre class="value-display">{{ values.Multiline ?? '(empty)' }}</pre>
-        <hr class="component-divider" />
+        <hr />
       </div>
 
       <!-- Signature Input Component -->
       <div>
         <h5>{{ signatureComponent.name }}</h5>
         <p class="component-description">{{ signatureComponent.description }}</p>
-        <input
-          type="signature"
-          name="Signature"
-          :placeholder="
-            signatureComponent.attributes.find((a) => a.name === 'placeholder')?.default ||
-            'Sign Here'
-          "
-          @change="handleFieldChange"
-        />
+        <input type="signature" name="Signature" placeholder="Sign here" @change="onChange" />
+        <button type="button" @click="clearSignature">Clear Signature</button>
         <pre class="value-display">{{ values.Signature ?? '(empty)' }}</pre>
-        <hr class="component-divider" />
+        <hr />
       </div>
     </form>
 
@@ -167,24 +116,6 @@ textarea {
   width: 100%;
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: rgba(128, 128, 128, 0.6);
-  opacity: 1;
-}
-
-.component-description {
-  color: rgba(128, 128, 128, 0.8);
-  font-size: 0.9rem;
-  margin: 0.5rem 0 1rem 0;
-}
-
-.component-divider {
-  border: none;
-  border-top: 1px solid rgba(128, 128, 128, 0.2);
-  margin: 2rem 0;
-}
-
 .value-display {
   font-size: 0.75rem;
   background: rgba(128, 128, 128, 0.08);
@@ -197,7 +128,7 @@ textarea::placeholder {
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import componentsData from '../.vitepress/data/components.json';
 
 interface ComponentAttribute {
@@ -245,7 +176,7 @@ const handleSubmit = (event: Event) => {
   formData.value = JSON.stringify(result, null, 2);
 };
 
-function handleFieldChange(event: Event): void {
+function onChange(event: Event): void {
   const target = event.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
   const name = target.name;
   if (!name) return;
@@ -257,37 +188,12 @@ function handleFieldChange(event: Event): void {
   }
 }
 
-onMounted(() => {
-  // Load TW Client CSS
-  const twClientLink = document.createElement('link');
-  twClientLink.rel = 'stylesheet';
-  twClientLink.href = '/docs/tw-client.css';
-  document.head.appendChild(twClientLink);
-
-  // Load TW Client bundle
-  const script = document.createElement('script');
-  script.src = '/docs/main.umd.js';
-  script.async = true;
-  document.head.appendChild(script);
-
-  // Initialize values with default values from the form
-  const form = document.querySelector('.tw-form') as HTMLFormElement;
-  if (form) {
-    const elements = form.querySelectorAll('input[name], select[name], textarea[name]');
-    elements.forEach((element) => {
-      const target = element as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-      const name = target.name;
-      if (!name) return;
-
-      if (target instanceof HTMLSelectElement && target.multiple) {
-        const vals = Array.from(target.selectedOptions).map((o) => o.value);
-        if (vals.length > 0) {
-          values.value[name] = JSON.stringify(vals);
-        }
-      } else if (target.value) {
-        values.value[name] = target.value;
-      }
-    });
+function clearSignature(): void {
+  const clearButton = document.querySelector(
+    'button[data-testid="clear-signature-button"]'
+  ) as HTMLButtonElement;
+  if (clearButton) {
+    clearButton.click();
   }
-});
+}
 </script>

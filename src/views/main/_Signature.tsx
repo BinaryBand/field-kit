@@ -1,4 +1,11 @@
-import React, { ComponentProps, ForwardedRef, Fragment, MutableRefObject, ReactNode } from 'react';
+import React, {
+  ComponentProps,
+  ForwardedRef,
+  Fragment,
+  KeyboardEvent,
+  MutableRefObject,
+  ReactNode,
+} from 'react';
 import {
   SignatureContainer,
   SignatureCanvas,
@@ -11,7 +18,6 @@ import { useMergedRef } from '@tools/ref';
 
 const CANVAS_WIDTH: number = 750;
 const CANVAS_HEIGHT: number = 375;
-const PARSER = new DOMParser();
 
 type Point = [number, number];
 
@@ -28,55 +34,7 @@ function filterClosePoints(stroke: Point[], minDistance: number = 3): Point[] {
       filtered.push(stroke[i]);
     }
   }
-
   return filtered;
-}
-
-function buildPath(points: Point[]): string {
-  if (points.length === 0) return '';
-  const filtered = filterClosePoints(points, 5);
-  if (filtered.length === 0) return '';
-  const [firstX, firstY] = filtered[0];
-  const segments: string[] = [`M${fmt(firstX)} ${fmt(firstY)}`];
-  for (let i = 1; i < filtered.length; i++) {
-    const [x, y] = filtered[i];
-    segments.push(`L${fmt(x)} ${fmt(y)}`);
-  }
-  return `<path d="${segments.join(' ')}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
-}
-
-function fmt(n: number): string {
-  return n.toFixed(0);
-}
-
-function normalizeSvg(svg: string): string {
-  const isSvg = /<svg[\s\S]*?<\/svg>/i.test(svg);
-  if (!isSvg) {
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 375" stroke="currentColor"></svg>';
-  }
-
-  // Parse and ensure required attributes exist
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(svg, 'image/svg+xml');
-  const svgEl = doc.documentElement;
-
-  // Check for parse errors
-  if (svgEl.querySelector('parsererror')) {
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 375" stroke="currentColor"></svg>';
-  }
-
-  // Ensure required attributes
-  if (!svgEl.hasAttribute('xmlns')) {
-    svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-  }
-  if (!svgEl.hasAttribute('viewBox')) {
-    svgEl.setAttribute('viewBox', '0 0 750 375');
-  }
-  if (!svgEl.hasAttribute('stroke')) {
-    svgEl.setAttribute('stroke', 'currentColor');
-  }
-
-  return svgEl.outerHTML;
 }
 
 function Signature(
@@ -87,39 +45,58 @@ function Signature(
   const internalRef: MutableRefObject<HTMLInputElement | null> = React.useRef(null);
   const isDrawing: MutableRefObject<boolean> = React.useRef(false);
   const currentStroke: MutableRefObject<Point[]> = React.useRef([]);
+  const ctrlPressed: MutableRefObject<boolean> = React.useRef(false);
 
-  const [internalVal, setInternalVal] = React.useState(() => normalizeSvg(String(defaultValue)));
-  const [isEmpty, setIsEmpty] = React.useState<boolean>(!internalVal || internalVal === '');
+  const [signaturePoints, setSignaturePoints] = React.useState<Point[][]>([]);
 
-  // Parse current SVG string to DOM
-  const svg: HTMLElement = React.useMemo((): HTMLElement => {
-    const doc = PARSER.parseFromString(internalVal, 'image/svg+xml');
-    setIsEmpty(doc.documentElement.children.length === 0 || internalVal === '');
-    return doc.documentElement;
-  }, [internalVal]);
+  const svg: string = React.useMemo((): string => {
+    const fmt = (n: number): string => n.toFixed(0);
+    const lines: string[] = [];
+    for (const stroke of signaturePoints) {
+      const filteredStroke = filterClosePoints(stroke, 5);
+      for (let i = 1; i < filteredStroke.length; i++) {
+        const [x1, y1] = filteredStroke[i - 1];
+        const [x2, y2] = filteredStroke[i];
+        lines.push(`<line x1="${fmt(x1)}" y1="${fmt(y1)}" x2="${fmt(x2)}" y2="${fmt(y2)}"/>`);
+      }
+    }
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}" stroke="currentColor">${lines.join('')}</svg>`;
+  }, [signaturePoints]);
 
   function clearSignature(): void {
-    if (!internalRef.current) return;
-
-    const emptySvg = normalizeSvg('');
-    setInternalVal(emptySvg);
-    onChange?.(createChangeEvent(internalRef.current, emptySvg));
-
-    const context = canvasRef.current?.getContext('2d');
-    context?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    setSignaturePoints([]);
   }
 
-  const updateSignature = React.useCallback((): void => {
-    if (!internalRef.current || currentStroke.current.length === 0) return;
-
-    const pathMarkup = buildPath(currentStroke.current);
-    currentStroke.current = [];
-    if (pathMarkup) {
-      svg.insertAdjacentHTML('beforeend', pathMarkup);
-      setInternalVal(svg.outerHTML);
-      onChange?.(createChangeEvent(internalRef.current, svg.outerHTML));
+  function handleKeyDown(evt: KeyboardEvent<HTMLInputElement>): void {
+    switch (evt.key) {
+      case 'Control':
+        ctrlPressed.current = true;
+        break;
+      case 'z':
+        ctrlPressed.current && setSignaturePoints((prev) => prev.slice(0, -1));
+        break;
     }
-  }, [svg, onChange]);
+  }
+
+  function handleKeyUp(evt: KeyboardEvent<HTMLInputElement>): void {
+    if (evt.key === 'Control') {
+      ctrlPressed.current = false;
+    }
+  }
+
+  const clearCanvas = React.useCallback((): void => {
+    const context = canvasRef.current?.getContext('2d');
+    if (context) {
+      context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    }
+  }, []);
+
+  const updateSignature = React.useCallback((): void => {
+    if (currentStroke.current.length > 0) {
+      setSignaturePoints((prev) => [...prev, [...currentStroke.current]]);
+      currentStroke.current = [];
+    }
+  }, []);
 
   const drawCallback = React.useCallback((evt: MouseEvent): void => {
     if (!isDrawing.current) return;
@@ -152,9 +129,18 @@ function Signature(
     if (isDrawing.current) {
       updateSignature();
       isDrawing.current = false;
+      clearCanvas();
     }
-  }, [updateSignature]);
+  }, [updateSignature, clearCanvas]);
 
+  // Trigger onChange when signature points change
+  React.useEffect((): void => {
+    if (internalRef.current) {
+      onChange?.(createChangeEvent(internalRef.current, svg));
+    }
+  }, [signaturePoints, onChange, svg]);
+
+  // Initialize canvas once
   React.useEffect((): void => {
     const canvas: HTMLCanvasElement | null = canvasRef.current;
     if (canvas !== null) {
@@ -163,12 +149,7 @@ function Signature(
     }
   }, []);
 
-  React.useEffect(() => {
-    if (internalVal) {
-      setInternalVal(normalizeSvg(String(value)));
-    }
-  }, [internalVal, value]);
-
+  // Setup canvas event handlers
   React.useEffect((): (() => void) => {
     const canvas = canvasRef.current;
     if (!canvas) return () => {};
@@ -195,19 +176,24 @@ function Signature(
       <SignatureContainer data-readonly={readOnly || undefined}>
         <SignatureInput
           {...props}
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
           readOnly
           ref={useMergedRef(ref, internalRef)}
-          value={isEmpty ? '' : internalVal}
         />
         <div style={{ position: 'relative', width: '100%' }}>
-          <SignatureCanvas ref={canvasRef}>
+          <SignatureCanvas ref={canvasRef} tabIndex={disabled || readOnly ? -1 : 0}>
             Your browser does not support the HTML5 canvas tag.
           </SignatureCanvas>
-          <SignatureSvgOverlay dangerouslySetInnerHTML={{ __html: svg.outerHTML }} />
+          {signaturePoints.length > 0 && (
+            <SignatureSvgOverlay dangerouslySetInnerHTML={{ __html: svg }} />
+          )}
         </div>
       </SignatureContainer>
 
-      <button hidden type="button" onClick={clearSignature} data-testid="clear-signature-button" />
+      <a type="button" onClick={clearSignature} style={{ cursor: 'pointer' }}>
+        Clear
+      </a>
     </Fragment>
   );
 }
