@@ -18,6 +18,7 @@ function Overlay(
   { style, target, ...props }: OverlayProps,
   ref: ForwardedRef<HTMLDivElement>
 ): ReactElement {
+  const frameRef = React.useRef<number | null>(null);
   const { updateTrigger, scrollHeight, scrollWidth, pageWidth, pageHeight } =
     React.useContext(AppContext);
 
@@ -26,28 +27,56 @@ function Overlay(
   const [width, setWidth] = React.useState<number>(0);
   const [height, setHeight] = React.useState<number>(0);
 
-  function handleResize(): void {
-    if (target.current !== null) {
-      const { left, top, width, height } = target.current.getBoundingClientRect();
-      setLeft(left + scrollWidth);
-      setTop(top + scrollHeight);
-      setWidth(width);
-      setHeight(height);
+  const leftMemo = React.useMemo(() => left + scrollWidth, [left, scrollWidth]);
+  const topMemo = React.useMemo(() => top + scrollHeight, [top, scrollHeight]);
+
+  function measure(): void {
+    if (target.current) {
+      const rect = target.current.getBoundingClientRect();
+      setLeft(rect.left);
+      setTop(rect.top);
+      setWidth(rect.width);
+      setHeight(rect.height);
     }
   }
 
-  React.useEffect(handleResize, [
-    target,
-    updateTrigger,
-    scrollHeight,
-    scrollWidth,
-    pageWidth,
-    pageHeight,
-  ]);
+  React.useEffect(measure, [target, updateTrigger, pageWidth, pageHeight]);
+
+  React.useEffect(() => {
+    if (target.current && 'ResizeObserver' in window) {
+      const observer = new ResizeObserver(() => measure());
+      observer.observe(target.current);
+      return () => observer.disconnect();
+    }
+  }, [target]);
+
+  React.useEffect(() => {
+    if (target.current && 'MutationObserver' in window) {
+      const observer = new MutationObserver(() => measure());
+      observer.observe(target.current, { attributes: true, childList: true, subtree: true });
+      return () => observer.disconnect();
+    }
+  }, [target]);
+
+  React.useEffect(() => {
+    const loop = () => {
+      measure();
+      frameRef.current = requestAnimationFrame(loop);
+    };
+
+    frameRef.current = requestAnimationFrame(loop);
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, [target]);
 
   return (
     <Portal container={document.body}>
-      <StyledOverlay {...props} ref={ref} style={{ ...style, left, top, height, width }} />
+      <StyledOverlay
+        {...props}
+        ref={ref}
+        style={{ ...style, left: leftMemo, top: topMemo, height, width }}
+      />
     </Portal>
   );
 }

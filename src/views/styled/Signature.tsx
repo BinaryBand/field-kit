@@ -5,11 +5,6 @@ export const SignatureContainer: StyledComponent<ComponentProps<'div'>> = styled
   margin: 0;
   padding: 0;
   position: relative;
-
-  &._tw-signed input,
-  &[data-readonly] > input {
-    color: transparent;
-  }
 `;
 
 export const SignatureCanvas: StyledComponent<ComponentProps<'canvas'>> = styled.canvas`
@@ -29,4 +24,13 @@ export const SignatureInput: StyledComponent<ComponentProps<'input'>> = styled.i
   width: 100%;
   height: 100%;
   text-align: center;
+`;
+
+export const SignatureSvgOverlay: StyledComponent<ComponentProps<'div'>> = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 `;

@@ -109,7 +109,7 @@ function GroupContainer({
 function SelectInput(
   {
     className,
-    'data-placeholder': placeholder,
+    'data-placeholder': placeholder = '',
     defaultValue,
     multiple,
     onChange,
@@ -138,10 +138,6 @@ function SelectInput(
   const [options, setOptions] = React.useState<Record<string, Record<string, ReactNode>>>({});
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
   const [paddingTop, setPaddingTop] = React.useState<number>(0);
-
-  const _placeholder: string | undefined = React.useMemo(() => {
-    return list.length === 0 ? placeholder : undefined;
-  }, [placeholder, list]);
 
   const groups: string[] = React.useMemo(() => {
     const groupSet = new Set<string>();
@@ -285,7 +281,6 @@ function SelectInput(
             </InputToken>
           );
         })}
-
         <HiddenInput readOnly ref={placeholderRef} value="" />
 
         <StyledListInput
@@ -293,7 +288,7 @@ function SelectInput(
           onBlur={handleBlur}
           onChange={handleChange}
           onFocus={handleFocus}
-          placeholder={_placeholder}
+          placeholder={placeholder}
           ref={inputRef}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}
@@ -303,7 +298,7 @@ function SelectInput(
       <StyledOverlay target={containerRef}>
         <CaretDownIcon aria-expanded={focused || undefined} />
         {multiple && (
-          <div className="icon-button" onClick={clearAll} role="button">
+          <div className="_tw-icon-button" onClick={clearAll} role="button">
             <XIcon />
           </div>
         )}
@@ -313,10 +308,10 @@ function SelectInput(
           hidden={!focused}
           onMouseDown={handleMouseDown}
           ref={dropdownRef}
-          style={{ 
-            ...style, 
-            display: focused ? 'flex' : 'none', 
-            flexDirection: 'column' 
+          style={{
+            ...style,
+            display: focused ? 'flex' : 'none',
+            flexDirection: 'column',
           }}
         >
           {(() => {

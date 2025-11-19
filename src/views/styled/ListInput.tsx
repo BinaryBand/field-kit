@@ -3,6 +3,8 @@ import styled, { StyledComponent } from '@emotion/styled';
 import Overlay from '@/views/inline/Overlay';
 
 export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
+  padding: 0.2em 0.3em;
+
   background: none;
   border: transparent;
   position: relative;
@@ -29,17 +31,20 @@ export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
   border-radius: 16px;
   display: flex;
   gap: 0.3em;
-  padding: 0.4em 0.75em;
+  padding: 0.1em 0.4em;
   position: relative;
   z-index: 3;
 
   &:not(.option-toggle) {
     border: 1px solid;
-    padding: 0.1em 0.5em;
   }
 
   &[data-active='true'] {
     background-color: var(--bs-primary-bg, var(--hover-bg-medium));
+  }
+
+  &:hover > svg:last-child {
+    background-color: var(--hover-bg-light);
   }
 
   // Token hover effects for removal indication
@@ -49,10 +54,6 @@ export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
     box-sizing: content-box;
     padding: 0.15em;
     margin: -0.15em;
-  }
-
-  &:hover > svg:last-child {
-    background-color: var(--hover-bg-light);
   }
 
   &._tw-placeholder-token {
@@ -72,4 +73,12 @@ export const StyledOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
   justify-content: end;
   gap: 0.5em;
   padding-right: 0.5em;
+
+  // Pass parents' background and color to children while hidden
+  background-color: inherit;
+  color: currentColor;
+  visibility: hidden;
+  > * {
+    visibility: visible;
+  }
 `;

@@ -30,7 +30,7 @@ function ListInput(
     defaultValue,
     onChange,
     onKeyDown,
-    placeholder,
+    placeholder = '',
     style,
     value,
     ...props
@@ -59,10 +59,6 @@ function ListInput(
 
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
   const [paddingTop, setPaddingTop] = React.useState<number>(0);
-
-  const _placeholder: string | undefined = React.useMemo(() => {
-    return list.length === 0 ? placeholder : undefined;
-  }, [placeholder, list]);
 
   function clearAll(): void {
     if (onChange !== undefined && internalRef.current !== null) {
@@ -160,7 +156,7 @@ function ListInput(
         {list.map((item: string, i: number) => (
           <InputToken className="token" data-value={item} key={i}>
             <small>{item}</small>
-            <div className="icon-button" onClick={() => handleRemove(i)} role="button">
+            <div className="_tw-icon-button" onClick={() => handleRemove(i)} role="button">
               <XIcon />
             </div>
           </InputToken>
@@ -173,14 +169,13 @@ function ListInput(
           className={className}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          placeholder={_placeholder}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}
         />
       </ListInputContainer>
 
       <StyledOverlay target={containerRef}>
-        <div className="icon-button" onClick={clearAll} role="button">
+        <div className="_tw-icon-button" onClick={clearAll} role="button">
           <XIcon />
         </div>
       </StyledOverlay>

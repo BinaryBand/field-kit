@@ -46,6 +46,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Components', link: '/components/' },
+      { text: 'Live Demo', link: '/demo' },
     ],
 
     // Auto-generated sidebar

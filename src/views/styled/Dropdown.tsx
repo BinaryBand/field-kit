@@ -2,18 +2,13 @@ import { ComponentProps } from 'react';
 import styled, { StyledComponent } from '@emotion/styled';
 
 const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
-  /* Define CSS variables with Bootstrap's variables as fallbacks */
-  --tw-dropdown-bg: var(--bs-body-bg, #fff);
-  --tw-dropdown-border-color: var(--bs-border-color-translucent, #ced4da);
-  --tw-dropdown-text-color: var(--bs-body-color, #212529);
-  --tw-dropdown-hover-bg: var(--bs-secondary-bg, #e9ecef);
-  --tw-dropdown-disabled-color: var(--bs-secondary-color, #6c757d);
-
-  background-color: var(--tw-dropdown-bg);
-  border: 1px solid var(--tw-dropdown-border-color);
+  border: 1px solid var(--hover-bg-light);
   border-top: none;
   border-radius: 0 0 0.375rem 0.375rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+
+  background-color: inherit;
+  color: currentColor;
 
   overflow-x: hidden;
   overflow-y: scroll;
@@ -26,18 +21,17 @@ const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
 
   option {
     background-color: inherit;
-    color: var(--tw-dropdown-text-color);
     padding: 8px 16px;
     cursor: pointer;
 
     &:checked,
     &:hover:not(:disabled) {
-      background-color: var(--tw-dropdown-hover-bg);
+      background-color: var(--hover-bg-medium);
       color: var(--tw-dropdown-text-color);
     }
 
     &:disabled {
-      color: var(--tw-dropdown-disabled-color);
+      color: var(--hover-bg-light);
       cursor: not-allowed;
     }
 
@@ -52,7 +46,7 @@ const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
   &:not(:has(option[data-blurred='false'])) {
     & > option._tw-no-options {
       display: block;
-      color: var(--tw-dropdown-disabled-color);
+      color: var(--hover-bg-light);
       text-align: center;
       cursor: default;
       font-style: italic;
