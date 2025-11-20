@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  ComponentProps,
-  ForwardedRef,
-  MutableRefObject,
-  ReactElement,
-} from 'react';
+import React, { ChangeEvent, ComponentProps, ForwardedRef, ReactElement } from 'react';
 
 import { createChangeEvent } from '@tools/events';
 import { useMergedRef } from '@tools/ref';
@@ -13,8 +7,7 @@ function SimpleInput(
   { defaultValue = '', onChange, value, ...props }: ComponentProps<'input'>,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactElement {
-  const internalRef: MutableRefObject<HTMLInputElement | null> =
-    React.createRef<HTMLInputElement | null>();
+  const internalRef = React.createRef<HTMLInputElement | null>();
 
   const [internalValue, setInternalValue] = React.useState<
     string | number | readonly string[] | undefined

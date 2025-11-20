@@ -9,7 +9,7 @@ import React, {
   ReactElement,
   RefObject,
 } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
 import { createChangeEvent } from '@tools/events';
 import { useMergedRef } from '@tools/ref';
 
@@ -18,7 +18,7 @@ export interface PinInputProps extends ComponentProps<'input'> {
   autoFocus?: boolean;
 }
 
-const PinInputContainer: StyledComponent<ComponentProps<'span'>> = styled.span`
+const PinInputContainer = styled.span`
   display: flex;
   gap: 8px;
   justify-content: space-between;
@@ -75,8 +75,8 @@ function PinInput(
   }: PinInputProps,
   ref: ForwardedRef<HTMLInputElement>
 ): ReactElement {
-  const containerRef: RefObject<HTMLSpanElement> = React.useRef<HTMLSpanElement | null>(null);
-  const internalRef: RefObject<HTMLInputElement> = React.useRef<HTMLInputElement | null>(null);
+  const containerRef: RefObject<HTMLSpanElement | null> = React.useRef<HTMLSpanElement>(null);
+  const internalRef: RefObject<HTMLInputElement | null> = React.useRef<HTMLInputElement>(null);
 
   const [activeIndex, _setActiveIndex] = React.useState<number>(0);
   const [hasInteracted, setHasInteracted] = React.useState<boolean>(false);
@@ -84,14 +84,14 @@ function PinInput(
     valueToDigits(defaultValue, size)
   );
 
-  const refs: RefObject<HTMLInputElement>[] = React.useRef(
+  const refs: RefObject<HTMLInputElement | null>[] = React.useRef(
     Array.from({ length: size }, () => React.createRef<HTMLInputElement>())
   ).current;
 
   const placeholder: string = props.placeholder ?? '0'.repeat(size);
 
   function focusOn(index: number): void {
-    const targetRef: RefObject<HTMLInputElement> = refs[index];
+    const targetRef: RefObject<HTMLInputElement | null> = refs[index];
     if (targetRef?.current) {
       targetRef.current.focus();
     }

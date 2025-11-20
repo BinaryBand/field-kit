@@ -396,9 +396,7 @@ function SelectInput(
         {/* Hidden original options for form submission */}
         {React.Children.map(props.children, (child) => {
           if (React.isValidElement(child) && child.type === GroupedOption) {
-            return React.cloneElement(child, {
-              'aria-disabled': Boolean(child.props.disabled),
-            });
+            return React.cloneElement(child);
           }
           return child;
         })}
