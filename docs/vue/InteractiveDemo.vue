@@ -128,7 +128,7 @@ textarea {
 </style>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import componentsData from '../.vitepress/data/components.json';
 
 interface ComponentAttribute {
@@ -156,6 +156,14 @@ const listComponent = components.find((c) => c.id === 'list')!;
 const pinComponent = components.find((c) => c.id === 'pin')!;
 const autoResizeComponent = components.find((c) => c.id === 'auto-resize')!;
 const signatureComponent = components.find((c) => c.id === 'signature')!;
+
+onMounted(() => {
+  // Manually trigger change events to populate initial values
+  document.querySelectorAll('form.tw-form select, form.tw-form input, form.tw-form textarea').forEach((el) => {
+    const event = new Event('change', { bubbles: true });
+    el.dispatchEvent(event);
+  });
+});
 
 const handleSubmit = (event: Event) => {
   const form = event.target as HTMLFormElement;
@@ -186,6 +194,8 @@ function onChange(event: Event): void {
   } else {
     values.value[name] = target.value;
   }
+  // Force reactivity update
+  values.value = { ...values.value };
 }
 
 function clearSignature(): void {

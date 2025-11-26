@@ -11,7 +11,6 @@ import { useMergedRef } from '@tools/ref';
 
 const CANVAS_WIDTH: number = 750;
 const CANVAS_HEIGHT: number = 375;
-const PARSER = new DOMParser();
 
 type Point = [number, number];
 
@@ -93,6 +92,11 @@ function Signature(
 
   // Parse current SVG string to DOM
   const svg: HTMLElement = React.useMemo((): HTMLElement => {
+    if (typeof window === 'undefined') {
+      // Return a dummy element for SSR
+      return (new (require('jsdom').JSDOM)('').window.document.createElement('svg'));
+    }
+    const PARSER = new DOMParser();
     const doc = PARSER.parseFromString(internalVal, 'image/svg+xml');
     setIsEmpty(doc.documentElement.children.length === 0 || internalVal === '');
     return doc.documentElement;
