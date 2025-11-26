@@ -254,7 +254,7 @@ describe('SelectInput Component', () => {
 
       await waitFor(
         () => {
-          const dropdown = document.querySelector('.css-4qetco');
+          const dropdown = screen.getByTestId('select-dropdown');
           expect(dropdown).toHaveAttribute('hidden');
         },
         { timeout: 2000 }

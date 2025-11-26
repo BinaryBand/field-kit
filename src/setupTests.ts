@@ -16,13 +16,15 @@ Object.defineProperty(window, 'location', {
 });
 
 // Create a mock class for MutationObserver
-const mockMutationObserver = vi.fn(() => ({
-  observe: vi.fn(),
-  disconnect: vi.fn(),
-  takeRecords: vi.fn(),
-}));
+const mockMutationObserver = vi.fn(function () {
+  return {
+    observe: vi.fn(),
+    disconnect: vi.fn(),
+    takeRecords: vi.fn(() => []),
+  };
+});
 
-vi.spyOn(window, 'MutationObserver').mockImplementation(mockMutationObserver);
+vi.stubGlobal('MutationObserver', mockMutationObserver);
 
 const mockFetch = vi.fn(() =>
   Promise.resolve({

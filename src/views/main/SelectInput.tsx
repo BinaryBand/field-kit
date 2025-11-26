@@ -305,6 +305,7 @@ function SelectInput(
 
         <Dropdown
           className={className}
+          data-testid="select-dropdown"
           hidden={!focused}
           onMouseDown={handleMouseDown}
           ref={dropdownRef}

@@ -121,35 +121,13 @@ function generateUseCasesList(useCases) {
  * Generate demo section based on component type
  */
 function generateDemoSection(component) {
-  const { demo } = component;
-
-  if (!demo) return '';
-
-  if (demo.component) {
-    return `<FormDemo>
-<${demo.component} />
-</FormDemo>`;
-  }
-
-  if (demo.single || demo.multiple || demo.grouped) {
-    // Multiple demos (for select)
-    let output = '### Single Select\n\n';
-    output += `<FormDemo>\n  ${demo.single}\n</FormDemo>\n\n`;
-    output += '### Multiple Select\n\n';
-    output += `<FormDemo>\n  ${demo.multiple}\n</FormDemo>\n\n`;
-    output += '### Grouped Select\n\n';
-    output += `<FormDemo>\n  ${demo.grouped}\n</FormDemo>`;
-    return output;
-  }
-
-  if (demo.query) {
-    return `<FormDemo query="${demo.query}">
-${demo.html}
-</FormDemo>`;
-  }
-
+  // Live demo with real-time value display
+  const inputHtml = component.demo?.html || component.basicUsage || '';
   return `<FormDemo>
-${demo.html}
+  ${inputHtml}
+  <template #value="{ value }">
+    <div style='margin-top:1em;'><strong>Current Value:</strong> <code>{{ value }}</code></div>
+  </template>
 </FormDemo>`;
 }
 
@@ -157,326 +135,38 @@ ${demo.html}
  * Generate complete component documentation
  */
 function generateComponentDoc(component) {
+  // Uniform template: all sections always present
   const parts = [];
+  parts.push(`---\ntitle: ${component.name}\ndescription: ${component.description}\n---\n\n# ${component.name}\n\n${component.description}${component.notes ? `\n\n**Note:** ${component.notes}` : ''}\n`);
 
-  // Frontmatter
-  parts.push(`---
-title: ${component.name}
-description: ${component.description}
----
+  parts.push(`## Demo\n\n${generateDemoSection(component) || '_No demo available._'}\n`);
 
-# ${component.name}
+  parts.push(`## Basic Usage\n\n\`\`\`html\n${component.basicUsage || '_No usage example available._'}\n\`\`\`\n`);
 
-${component.description}${component.id === 'passkey' ? '\n\n**Important**: The passkey value will NOT appear at `event.formData[name]` during a submit event. Instead, the public key will be broadcasted in `event.currentTarget.value` during `change` events.' : ''}
+  parts.push(`## Properties\n`);
 
-## Demo
+  parts.push(`### CSS Classes\n\n${component.cssClasses && component.cssClasses.length > 0 ? generateTable(['Class', 'Description'], component.cssClasses.map((c) => ({ class: `\`${c.class}\``, description: c.description }))) : '_None_'}\n`);
 
-${generateDemoSection(component)}
+  parts.push(`### HTML Attributes${component.element === 'textarea' ? '\n\nAll standard `textarea` attributes are supported:' : ''}\n\n${generateAttributesTable(component.attributes) || '_None_'}\n`);
 
-## Basic Usage
+  parts.push(`### Option Attributes\n\n${component.optionAttributes ? generateAttributesTable(component.optionAttributes) : '_None_'}\n`);
 
-\`\`\`html
-${component.basicUsage}
-\`\`\`
+  parts.push(`### Canvas Properties\n\n${component.canvasProperties ? `Default canvas dimensions (customizable via styling):\n- Width: ${component.canvasProperties.width}\n- Height: ${component.canvasProperties.height}\n- Line width: ${component.canvasProperties.lineWidth}\n- Line color: ${component.canvasProperties.lineColor}` : '_None_'}\n`);
 
-## Properties`);
+  parts.push(`## Examples\n\n(Examples section - see original documentation)\n`);
 
-  // CSS Classes (if any)
-  if (component.cssClasses && component.cssClasses.length > 0) {
-    parts.push(
-      `\n### CSS Classes\n\n${generateTable(
-        ['Class', 'Description'],
-        component.cssClasses.map((c) => ({ class: `\`${c.class}\``, description: c.description }))
-      )}`
-    );
-  }
+  parts.push(`## Behavior\n\n${component.id === 'list' ? `### Adding Items\n\n- Type text and press \`Enter\` to add an item\n- Items are displayed as removable tokens\n- Duplicate items are allowed by default\n\n### Removing Items\n\n- Click the X button on any token to remove it\n- Press \`Backspace\` on empty input to remove last item\n\n### Value Format\n\nThe component stores values as a JSON array string:\n\`\`\`javascript\n// Stored value format\n'["Item 1","Item 2","Item 3"]'\n\n// Accessing in JavaScript\nconst listInput = document.querySelector('input[type="list"]');\nconst items = JSON.parse(listInput.value);\n\`\`\`` : component.id === 'pin' ? `### Input Handling\n\n- Accepts only numeric digits (0-9)\n- Auto-advances to next box after digit entry\n- Auto-focuses previous box on backspace\n- Paste support for full PIN codes\n- Individual box selection with mouse click\n\n### Keyboard Shortcuts\n\n- Type digit: Fills current box and moves to next\n- Backspace: Clears current box and moves to previous\n- Arrow keys: Navigate between boxes\n- Paste: Fills all boxes from clipboard\n- Tab: Moves focus out of component\n\n### Value Management\n\nThe component stores the complete PIN as a string:\n\`\`\`javascript\n// Accessing PIN value\nconst pinInput = document.querySelector('input[type="pin"]');\nconsole.log(pinInput.value); // "123456"\n\`\`\`` : component.id === 'signature' ? `### Drawing\n\n- **Mouse**: Click and drag to draw\n- **Touch**: Touch and drag with finger or stylus\n- **Smooth lines**: Automatic line smoothing for better appearance\n- **Real-time preview**: See signature as you draw\n\n### Value Storage\n\nThe component stores the signature as a base64-encoded PNG:\n\n\`\`\`javascript\nconst signatureInput = document.querySelector('input[type="signature"]');\n\n// After drawing\nconsole.log(signatureInput.value);\n// Output: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."\n\n// To display the signature\nconst img = document.createElement('img');\nimg.src = signatureInput.value;\ndocument.body.appendChild(img);\n\`\`\`\n\n### Clearing\n\nTo programmatically clear the signature:\n\n\`\`\`javascript\nconst signatureInput = document.querySelector('input[type="signature"]');\nsignatureInput.value = '';\nsignatureInput.dispatchEvent(new Event('change'));\n\`\`\`` : component.id === 'passkey' ? `### Registration Flow\n\n1. User clicks the passkey input button\n2. Browser prompts for biometric/security key authentication\n3. Passkey is created and stored securely by the browser\n4. Public key is emitted via \`change\` event\n5. Button text changes to indicate registered state\n\n### Verification Flow\n\n1. User clicks registered passkey button\n2. Browser prompts for authentication\n3. User verifies with biometric/security key\n4. Passkey is validated against stored credential\n\n### Removal Flow\n\n1. Click registered passkey button\n2. Verify with biometric/security key\n3. Passkey is removed from storage\n4. Empty \`change\` event is emitted` : component.id === 'select' ? `### Search Functionality\n\n- Type to filter options in real-time\n- Case-insensitive search\n- Highlights matching text\n- Works with grouped options\n\n### Multi-Select\n\n- Select multiple options\n- Visual tags for selected items\n- Remove individual selections\n- Clear all button\n\n### Option Grouping\n\n- Organize options into logical groups\n- Group headers in dropdown\n- Improved navigation for large option sets\n\n### Value Types\n\n- String values (default)\n- Numeric values with \`data-type="number"\`\n- Boolean values with \`data-type="boolean"\`` : '_No specific behavior documented._'}\n`);
 
-  // HTML Attributes
-  parts.push(
-    `\n### HTML Attributes${component.element === 'textarea' ? '\n\nAll standard `textarea` attributes are supported:' : ''}\n\n${generateAttributesTable(component.attributes)}`
-  );
+  parts.push(`## Events\n\n### Standard HTML Events\n\n${generateEventsTable(component.events) || '_None_'}\n\n### Example Event Handling\n\n(See original documentation for examples)\n`);
 
-  // Option Attributes (for select)
-  if (component.optionAttributes) {
-    parts.push(`\n### Option Attributes\n\n${generateAttributesTable(component.optionAttributes)}`);
-  }
+  parts.push(`## Accessibility\n\nThis component follows WAI-ARIA best practices:\n\n- Supports standard \`aria-label\`, \`aria-describedby\`, and \`aria-required\` attributes\n- Compatible with screen readers\n- Full keyboard navigation support\n- Proper focus management\n- ${component.element === 'textarea' ? 'Inherits all standard textarea accessibility features' : component.element === 'select' ? 'Inherits all standard select accessibility features' : 'Behaves like a native HTML input element'}\n`);
 
-  // Canvas Properties (for signature)
-  if (component.canvasProperties) {
-    const props = component.canvasProperties;
-    parts.push(
-      `\n### Canvas Properties\n\nDefault canvas dimensions (customizable via styling):\n- Width: ${props.width}\n- Height: ${props.height}\n- Line width: ${props.lineWidth}\n- Line color: ${props.lineColor}`
-    );
-  }
+  parts.push(`## Security Considerations\n\n${component.id === 'passkey' ? `- **Private key never exposed**: Private keys remain in secure hardware\n- **Phishing resistant**: Passkeys are bound to specific domains\n- **Device-bound**: Credentials stored securely on user's device\n- **Biometric optional**: Can use PIN or other authentication methods\n- **No password transmission**: More secure than traditional passwords` : component.id === 'pin' ? `- **Input masking**: Consider using \`inputmode="numeric"\` for mobile keyboards\n- **Auto-clear on error**: Clear PIN after failed attempts\n- **Rate limiting**: Implement server-side rate limiting\n- **Secure transmission**: Always use HTTPS\n- **No client-side validation**: Verify PINs server-side only\n\n\`\`\`html\n<!-- With numeric keyboard on mobile -->\n<input \n  type="pin" \n  name="pin" \n  data-size="6" \n  inputmode="numeric"\n/>\n\`\`\`` : '_No special security considerations for this component._'}\n`);
 
-  // Examples section would go here (keeping original markdown for now)
-  parts.push(`\n## Examples
+  parts.push(`## Server-Side Handling\n\n${component.id === 'signature' ? `### Saving Signatures\n\n\`\`\`javascript\n// Frontend\nasync function saveSignature(base64Image) {\n  const response = await fetch('/api/signatures', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ signature: base64Image })\n  });\n  return response.json();\n}\n\n// Backend (Node.js example)\napp.post('/api/signatures', (req, res) => {\n  const { signature } = req.body;\n  \n  // Remove data:image/png;base64, prefix\n  const base64Data = signature.replace(/^data:image\/png;base64,/, '');\n  \n  // Convert to buffer\n  const buffer = Buffer.from(base64Data, 'base64');\n  \n  // Save to file\n  fs.writeFileSync('signature.png', buffer);\n  \n  res.json({ success: true });\n});\n\`\`\`\n\n### Converting to Image\n\n\`\`\`javascript\n// Convert base64 to Blob\nfunction base64ToBlob(base64, mimeType = 'image/png') {\n  const byteString = atob(base64.split(',')[1]);\n  const arrayBuffer = new ArrayBuffer(byteString.length);\n  const uint8Array = new Uint8Array(arrayBuffer);\n  \n  for (let i = 0; i < byteString.length; i++) {\n    uint8Array[i] = byteString.charCodeAt(i);\n  }\n  \n  return new Blob([arrayBuffer], { type: mimeType });\n}\n\n// Upload as file\nconst blob = base64ToBlob(signatureInput.value);\nconst formData = new FormData();\nformData.append('signature', blob, 'signature.png');\n\`\`\`` : '_No server-side handling required for this component._'}\n`);
 
-(Examples section - see original documentation)`);
-
-  // Behavior section (component-specific)
-  if (component.id === 'list') {
-    parts.push(`\n## Behavior
-
-### Adding Items
-
-- Type text and press \`Enter\` to add an item
-- Items are displayed as removable tokens
-- Duplicate items are allowed by default
-
-### Removing Items
-
-- Click the X button on any token to remove it
-- Press \`Backspace\` on empty input to remove last item
-
-### Value Format
-
-The component stores values as a JSON array string:
-\`\`\`javascript
-// Stored value format
-'["Item 1","Item 2","Item 3"]'
-
-// Accessing in JavaScript
-const listInput = document.querySelector('input[type="list"]');
-const items = JSON.parse(listInput.value);
-\`\`\``);
-  } else if (component.id === 'pin') {
-    parts.push(`\n## Behavior
-
-### Input Handling
-
-- Accepts only numeric digits (0-9)
-- Auto-advances to next box after digit entry
-- Auto-focuses previous box on backspace
-- Paste support for full PIN codes
-- Individual box selection with mouse click
-
-### Keyboard Shortcuts
-
-- Type digit: Fills current box and moves to next
-- Backspace: Clears current box and moves to previous
-- Arrow keys: Navigate between boxes
-- Paste: Fills all boxes from clipboard
-- Tab: Moves focus out of component
-
-### Value Management
-
-The component stores the complete PIN as a string:
-\`\`\`javascript
-// Accessing PIN value
-const pinInput = document.querySelector('input[type="pin"]');
-console.log(pinInput.value); // "123456"
-\`\`\``);
-  } else if (component.id === 'signature') {
-    parts.push(`\n## Behavior
-
-### Drawing
-
-- **Mouse**: Click and drag to draw
-- **Touch**: Touch and drag with finger or stylus
-- **Smooth lines**: Automatic line smoothing for better appearance
-- **Real-time preview**: See signature as you draw
-
-### Value Storage
-
-The component stores the signature as a base64-encoded PNG:
-
-\`\`\`javascript
-const signatureInput = document.querySelector('input[type="signature"]');
-
-// After drawing
-console.log(signatureInput.value);
-// Output: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-
-// To display the signature
-const img = document.createElement('img');
-img.src = signatureInput.value;
-document.body.appendChild(img);
-\`\`\`
-
-### Clearing
-
-To programmatically clear the signature:
-
-\`\`\`javascript
-const signatureInput = document.querySelector('input[type="signature"]');
-signatureInput.value = '';
-signatureInput.dispatchEvent(new Event('change'));
-\`\`\``);
-  } else if (component.id === 'passkey') {
-    parts.push(`\n## Behavior
-
-### Registration Flow
-
-1. User clicks the passkey input button
-2. Browser prompts for biometric/security key authentication
-3. Passkey is created and stored securely by the browser
-4. Public key is emitted via \`change\` event
-5. Button text changes to indicate registered state
-
-### Verification Flow
-
-1. User clicks registered passkey button
-2. Browser prompts for authentication
-3. User verifies with biometric/security key
-4. Passkey is validated against stored credential
-
-### Removal Flow
-
-1. Click registered passkey button
-2. Verify with biometric/security key
-3. Passkey is removed from storage
-4. Empty \`change\` event is emitted`);
-  } else if (component.id === 'select') {
-    parts.push(`\n## Features
-
-### Search Functionality
-
-- Type to filter options in real-time
-- Case-insensitive search
-- Highlights matching text
-- Works with grouped options
-
-### Multi-Select
-
-- Select multiple options
-- Visual tags for selected items
-- Remove individual selections
-- Clear all button
-
-### Option Grouping
-
-- Organize options into logical groups
-- Group headers in dropdown
-- Improved navigation for large option sets
-
-### Value Types
-
-- String values (default)
-- Numeric values with \`data-type="number"\`
-- Boolean values with \`data-type="boolean"\``);
-  }
-
-  // Events
-  parts.push(`\n## Events
-
-### Standard HTML Events
-
-${generateEventsTable(component.events)}
-
-### Example Event Handling
-
-(See original documentation for examples)`);
-
-  // Accessibility
-  parts.push(`\n## Accessibility
-
-This component follows WAI-ARIA best practices:
-
-- Supports standard \`aria-label\`, \`aria-describedby\`, and \`aria-required\` attributes
-- Compatible with screen readers
-- Full keyboard navigation support
-- Proper focus management
-- ${component.element === 'textarea' ? 'Inherits all standard textarea accessibility features' : component.element === 'select' ? 'Inherits all standard select accessibility features' : 'Behaves like a native HTML input element'}
-`);
-
-  // Security (for passkey and pin)
-  if (component.id === 'passkey') {
-    parts.push(`\n## Security Considerations
-
-- **Private key never exposed**: Private keys remain in secure hardware
-- **Phishing resistant**: Passkeys are bound to specific domains
-- **Device-bound**: Credentials stored securely on user's device
-- **Biometric optional**: Can use PIN or other authentication methods
-- **No password transmission**: More secure than traditional passwords`);
-  } else if (component.id === 'pin') {
-    parts.push(`\n## Security Considerations
-
-- **Input masking**: Consider using \`inputmode="numeric"\` for mobile keyboards
-- **Auto-clear on error**: Clear PIN after failed attempts
-- **Rate limiting**: Implement server-side rate limiting
-- **Secure transmission**: Always use HTTPS
-- **No client-side validation**: Verify PINs server-side only
-
-\`\`\`html
-<!-- With numeric keyboard on mobile -->
-<input 
-  type="pin" 
-  name="pin" 
-  data-size="6" 
-  inputmode="numeric"
-/>
-\`\`\``);
-  }
-
-  // Server-side handling (for signature)
-  if (component.id === 'signature') {
-    parts.push(`\n## Server-Side Handling
-
-### Saving Signatures
-
-\`\`\`javascript
-// Frontend
-async function saveSignature(base64Image) {
-  const response = await fetch('/api/signatures', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ signature: base64Image })
-  });
-  return response.json();
-}
-
-// Backend (Node.js example)
-app.post('/api/signatures', (req, res) => {
-  const { signature } = req.body;
-  
-  // Remove data:image/png;base64, prefix
-  const base64Data = signature.replace(/^data:image\\/png;base64,/, '');
-  
-  // Convert to buffer
-  const buffer = Buffer.from(base64Data, 'base64');
-  
-  // Save to file
-  fs.writeFileSync('signature.png', buffer);
-  
-  res.json({ success: true });
-});
-\`\`\`
-
-### Converting to Image
-
-\`\`\`javascript
-// Convert base64 to Blob
-function base64ToBlob(base64, mimeType = 'image/png') {
-  const byteString = atob(base64.split(',')[1]);
-  const arrayBuffer = new ArrayBuffer(byteString.length);
-  const uint8Array = new Uint8Array(arrayBuffer);
-  
-  for (let i = 0; i < byteString.length; i++) {
-    uint8Array[i] = byteString.charCodeAt(i);
-  }
-  
-  return new Blob([arrayBuffer], { type: mimeType });
-}
-
-// Upload as file
-const blob = base64ToBlob(signatureInput.value);
-const formData = new FormData();
-formData.append('signature', blob, 'signature.png');
-\`\`\``);
-  }
-
-  // Vue script tag
-  if (component.demo?.component === 'SignatureDemo') {
-    parts.push(`\n<script setup lang='ts'>
-  import FormDemo from './../../vue/FormDemo.vue';
-  import SignatureDemo from './../../vue/SignatureDemo.vue'
-</script>`);
-  } else {
-    parts.push(`\n<script setup lang='ts'>
-  import FormDemo from './../../vue/FormDemo.vue';
-</script>`);
-  }
+  // Only import FormDemo for all pages
+  parts.push(`## Vue Integration\n\n<script setup lang='ts'>\n  import FormDemo from './../../vue/FormDemo.vue';\n</script>\n`);
 
   return parts.join('\n');
 }

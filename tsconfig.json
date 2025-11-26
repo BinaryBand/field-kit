@@ -23,13 +23,12 @@
     "typeRoots": ["./node_modules/@types"],
 
     /* Base URL and paths */
-    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/views/main/*"],
-      "@controllers/*": ["src/controllers/components/*"],
-      "@providers/*": ["src/controllers/providers/*"],
-      "@tools/*": ["src/controllers/tools/*"]
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/views/main/*"],
+      "@controllers/*": ["./src/controllers/components/*"],
+      "@providers/*": ["./src/controllers/providers/*"],
+      "@tools/*": ["./src/controllers/tools/*"]
     }
   },
 

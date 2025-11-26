@@ -10,7 +10,7 @@
     "docs:dev": "npm run docs:generate && vitepress dev docs",
     "docs:build": "npm run docs:generate && vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "docs:generate": "node docs/.vitepress/scripts/generate-component-docs.js",
+    "docs:generate": "node docs/.vitepress/scripts/generate-component-docs.js && node docs/.vitepress/scripts/generate-guide-components-list.cjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest"

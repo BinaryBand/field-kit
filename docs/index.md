@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /guide/getting-started
+      link: /guide
     - theme: alt
       text: View Components
       link: /components/
@@ -21,8 +21,6 @@ features:
     details: Auto-resizing textareas, PIN inputs, signature capture, passkey authentication, and smart select dropdowns.
   - title: 🛠️ Developer Friendly
     details: Simple HTML integration, comprehensive TypeScript support, and extensive documentation with live examples.
-  - title: ♿ Accessible by Default
-    details: Built with ARIA support, keyboard navigation, screen reader compatibility, and WCAG 2.1 compliance.
   - title: 🎨 Highly Customizable
     details: CSS custom properties, flexible styling options, and seamless integration with existing design systems.
   - title: 🚀 Production Ready

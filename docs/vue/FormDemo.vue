@@ -1,37 +1,19 @@
 <template>
-  <form class="tw-form" @submit.prevent="handleSubmit">
+  <div class="tw-form">
     <slot />
-
-    <hr />
-
-    <div class="center-container">
-      <button class="btn" ref="submitButton" type="submit">Submit & Show Values</button>
+    <div v-if="Object.keys(liveValues).length === 0" class="no-values">
+      <p>No value yet. Interact with the input above.</p>
     </div>
-
-    <!-- Form values display -->
-    <div v-if="showResults" class="form-results">
-      <h4>📋 Form Values</h4>
-      <div v-if="formValues.length === 0" class="no-values">
-        <p>No form data found. Make sure your inputs have <code>name</code> attributes.</p>
-      </div>
-      <div v-else class="values-list">
-        <div v-for="field in formValues" :key="field.name" class="value-item">
-          <div class="field-name">{{ field.name }}</div>
-          <div class="field-value" :class="field.type">
-            <span v-if="field.type === 'array'" class="array-badge"
-              >Array ({{ field.value.length }})</span
-            >
-            <span v-if="field.type === 'empty'" class="empty-badge">Empty</span>
-            <code>{{ field.displayValue }}</code>
-          </div>
-        </div>
-      </div>
-      <div class="results-actions">
-        <button type="button" @click="copyToClipboard" class="copy-btn">📋 Copy JSON</button>
-        <button type="button" @click="showResults = false" class="close-btn">✕ Close</button>
+    <div v-else>
+      <div v-for="(value, name) in liveValues" :key="name">
+        <LiveValue :value="value">
+          <template #label>
+            {{ name }} Value
+          </template>
+        </LiveValue>
       </div>
     </div>
-  </form>
+  </div>
 </template>
 
 <style scoped>
@@ -187,86 +169,23 @@
 </style>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
-import { reduceFormData } from '../../src/controllers/components/Form';
+import { ref, onMounted } from 'vue';
+import LiveValue from './LiveValue.vue';
 
-interface FormField {
-  name: string;
-  value: any;
-  displayValue: string;
-  type: 'string' | 'array' | 'object' | 'empty';
+const liveValues = ref<Record<string, any>>({});
+
+function updateLiveValue(e: Event) {
+  const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+  if (!target.name) return;
+  liveValues.value[target.name] = target.value;
 }
 
-const submitButton: Ref<HTMLButtonElement | null> = ref(null);
-const showResults = ref(false);
-const formValues = ref<FormField[]>([]);
-const rawFormData = ref<any>({});
-
-function formatValue(value: any): { displayValue: string; type: FormField['type'] } {
-  if (value === null || value === undefined || value === '') {
-    return { displayValue: '(empty)', type: 'empty' };
+onMounted(() => {
+  // Listen for input/change events on all child inputs
+  const container = document.querySelector('.tw-form');
+  if (container) {
+    container.addEventListener('input', updateLiveValue, true);
+    container.addEventListener('change', updateLiveValue, true);
   }
-
-  if (Array.isArray(value)) {
-    if (value.length === 0) {
-      return { displayValue: '[]', type: 'empty' };
-    }
-    return { displayValue: JSON.stringify(value, null, 2), type: 'array' };
-  }
-
-  if (typeof value === 'object') {
-    return { displayValue: JSON.stringify(value, null, 2), type: 'object' };
-  }
-
-  return { displayValue: String(value), type: 'string' };
-}
-
-function handleSubmit(event: Event) {
-  event.preventDefault();
-
-  const { currentTarget } = event;
-
-  if (currentTarget instanceof HTMLFormElement) {
-    const formData: Record<string, any> = {};
-    reduceFormData(formData, currentTarget);
-
-    rawFormData.value = formData;
-
-    // Convert to display format
-    const fields: FormField[] = [];
-    Object.entries(formData).forEach(([key, value]) => {
-      const formatted = formatValue(value);
-      fields.push({
-        name: key,
-        value: value,
-        displayValue: formatted.displayValue,
-        type: formatted.type,
-      });
-    });
-
-    formValues.value = fields;
-    showResults.value = true;
-  }
-}
-
-async function copyToClipboard() {
-  try {
-    const jsonString = JSON.stringify(rawFormData.value, null, 2);
-    await navigator.clipboard.writeText(jsonString);
-
-    // Visual feedback
-    const copyBtn = document.querySelector('.copy-btn') as HTMLButtonElement;
-    if (copyBtn) {
-      const originalText = copyBtn.textContent;
-      copyBtn.textContent = '✓ Copied!';
-      copyBtn.style.background = '#20c997';
-      setTimeout(() => {
-        copyBtn.textContent = originalText;
-        copyBtn.style.background = '#28a745';
-      }, 1500);
-    }
-  } catch (err) {
-    console.error('Failed to copy to clipboard:', err);
-  }
-}
+});
 </script>
