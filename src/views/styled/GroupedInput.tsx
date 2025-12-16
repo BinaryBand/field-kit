@@ -1,7 +1,6 @@
-import { ComponentProps } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
 
-export const GroupedInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
+export const GroupedInputContainer = styled.div`
   .group-container {
     position: relative;
   }

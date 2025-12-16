@@ -1,13 +1,12 @@
-import { ComponentProps } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
 
-export const SignatureContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
+export const SignatureContainer = styled.div`
   margin: 0;
   padding: 0;
   position: relative;
 `;
 
-export const SignatureCanvas: StyledComponent<ComponentProps<'canvas'>> = styled.canvas`
+export const SignatureCanvas = styled.canvas`
   aspect-ratio: 2 / 1;
   width: 100%;
   height: 100%;
@@ -15,7 +14,7 @@ export const SignatureCanvas: StyledComponent<ComponentProps<'canvas'>> = styled
   padding: 0;
 `;
 
-export const SignatureInput: StyledComponent<ComponentProps<'input'>> = styled.input`
+export const SignatureInput = styled.input`
   background-color: transparent;
   pointer-events: none;
   position: absolute;
@@ -31,7 +30,7 @@ export const SignatureInput: StyledComponent<ComponentProps<'input'>> = styled.i
   }
 `;
 
-export const SignatureSvgOverlay: StyledComponent<ComponentProps<'div'>> = styled.div`
+export const SignatureSvgOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;

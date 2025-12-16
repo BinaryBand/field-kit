@@ -10,13 +10,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
-const props = defineProps<{ value: any }>();
-const formattedValue = computed(() => {
-  if (props.value === null || props.value === undefined || props.value === '') return '(empty)';
-  if (Array.isArray(props.value)) return JSON.stringify(props.value);
-  if (typeof props.value === 'object') return JSON.stringify(props.value);
-  return String(props.value);
+import { computed, type ComputedRef } from 'vue';
+
+const props = defineProps<{ value?: unknown }>();
+
+const formattedValue: ComputedRef<string> = computed(() => {
+  const v = props.value;
+  if (v === null || v === undefined || v === '') return '(empty)';
+  if (Array.isArray(v)) return JSON.stringify(v);
+  if (typeof v === 'object') return JSON.stringify(v as Record<string, unknown>);
+  if (typeof v === 'string') {
+    // Visualize spaces so PIN placeholders aren't invisible
+    return v.replace(/ /g, '·');
+  }
+  return String(v);
 });
 </script>
 
@@ -24,8 +31,8 @@ const formattedValue = computed(() => {
 .live-value-box {
   margin-top: 1.5em;
   padding: 1em 1.5em;
-  background: #f6f8fa;
-  border: 1px solid #e3e7ed;
+  background: inherit;
+  border: 1px solid currentColor;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   display: flex;
@@ -34,17 +41,22 @@ const formattedValue = computed(() => {
 }
 .live-value-label {
   font-weight: 600;
-  color: #1976d2;
+  color: inherit;
   margin-bottom: 0.5em;
   font-size: 14px;
 }
 .live-value-content {
   font-family: 'Courier New', monospace;
   font-size: 15px;
-  color: #333;
-  background: #fff;
+  color: inherit;
+  background: inherit;
   padding: 0.5em 1em;
   border-radius: 5px;
-  border: 1px solid #e3e7ed;
+  border: 1px solid currentColor;
+}
+
+.live-value-content code {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>

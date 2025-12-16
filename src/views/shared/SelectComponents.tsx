@@ -1,10 +1,7 @@
-import { ComponentProps } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
 import Overlay from '@/views/inline/Overlay';
 
-type OverlayProps = ComponentProps<typeof Overlay>;
-
-export const SelectInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
+export const SelectInputContainer = styled.div`
   border: transparent;
 
   align-items: center;
@@ -19,7 +16,7 @@ export const SelectInputContainer: StyledComponent<ComponentProps<'div'>> = styl
   }
 `;
 
-export const SelectOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
+export const SelectOverlay = styled(Overlay)`
   align-items: center;
   display: flex;
   justify-content: end;

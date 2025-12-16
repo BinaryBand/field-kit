@@ -78,12 +78,12 @@ type SignatureModel = PolyLine[];
 // Wrapper Types
 type InputTags = 'input' | 'select' | 'textarea';
 
-interface IInputWrapperProps<T extends InputTags, P extends JSX.IntrinsicAttributes> {
+interface IInputWrapperProps<T extends InputTags, P extends React.JSX.IntrinsicAttributes> {
   component: T | React.ComponentType<P>;
   container: HTMLElementTagNameMap[T];
 }
 
-type InputWrapperProps<T extends InputTags, P extends JSX.IntrinsicAttributes> = IInputWrapperProps<
+type InputWrapperProps<T extends InputTags, P extends React.JSX.IntrinsicAttributes> = IInputWrapperProps<
   T,
   P
 > &

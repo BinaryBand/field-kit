@@ -44,7 +44,6 @@ export default defineConfig({
 
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/guide/' },
       { text: 'Components', link: '/components/' },
       { text: 'Live Demo', link: '/demo' },
     ],

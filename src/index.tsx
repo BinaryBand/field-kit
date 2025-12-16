@@ -14,6 +14,7 @@ import PinInput from '@components/PinInput';
 import { SelectOption } from '@/views/shared/Options';
 import Signature from '@components/Signature';
 import SimpleInput from '@components/SimpleInput';
+import Ripple from '@/views/shared/Ripple';
 
 import Calendar from '@controllers/Calendar';
 import { FilterGroup, TextFilter } from '@controllers/Filter';
@@ -83,6 +84,18 @@ function classToComponent(children: ReactNode, className: string, element: HTMLE
       return <FilterGroup children={children} container={element} key={key} />;
     case 'tw-form':
       return <Form children={children} target={element} key={key} />;
+    case 'tw-ripple':
+      const centerRipple = element.hasAttribute('data-center-ripple');
+      const focusRipple = element.hasAttribute('data-focus-ripple');
+      return (
+        <Ripple
+          children={children}
+          centerRipple={centerRipple}
+          focusRipple={focusRipple}
+          component={element.tagName.toLowerCase() as React.ElementType}
+          key={key}
+        />
+      );
   }
 }
 
@@ -184,6 +197,7 @@ export {
   SelectOption,
   Signature,
   SimpleInput,
+  Ripple,
   Calendar,
   FilterGroup,
   TextFilter,

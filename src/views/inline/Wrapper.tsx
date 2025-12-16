@@ -1,4 +1,4 @@
-import React, { ComponentType, ElementType } from 'react';
+import React, { ComponentType, ElementType, JSX } from 'react';
 import styled from '@emotion/styled';
 import Portal from '@/views/inline/Portal';
 

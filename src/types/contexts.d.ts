@@ -18,3 +18,8 @@ interface ISelectInputContext {
   options: Record<string, React.ReactNode>;
   addOption: (key: string, value: React.ReactNode) => void;
 }
+
+interface IGroupedInputContext {
+  options: Record<string, Record<string, React.ReactNode>>;
+  addOption: (key: string, value: React.ReactNode, group?: string) => void;
+}

@@ -1,7 +1,6 @@
-import { ComponentProps } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
 
-const Dropdown: StyledComponent<ComponentProps<'div'>> = styled.div`
+const Dropdown = styled.div`
   border: 1px solid var(--hover-bg-light);
   border-top: none;
   border-radius: 0 0 0.375rem 0.375rem;

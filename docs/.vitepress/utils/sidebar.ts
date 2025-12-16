@@ -7,26 +7,6 @@ import { DefaultTheme } from 'vitepress';
  */
 export function generateSidebar(): DefaultTheme.Sidebar {
   return {
-    '/guide/': [
-      {
-        text: 'Introduction',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/guide/getting-started' },
-          { text: 'Installation', link: '/guide/installation' },
-          { text: 'Quick Start', link: '/guide/quick-start' },
-        ],
-      },
-      {
-        text: 'Advanced Topics',
-        collapsed: false,
-        items: [
-          { text: 'Form Integration', link: '/guide/form-integration' },
-          { text: 'Event Handling', link: '/guide/event-handling' },
-        ],
-      },
-    ],
-
     '/components/': [
       {
         text: 'Components Overview',
@@ -50,6 +30,13 @@ export function generateSidebar(): DefaultTheme.Sidebar {
         items: [
           { text: 'Calendar', link: '/components/views/calendar' },
           { text: 'Filter', link: '/components/views/filter' },
+        ],
+      },
+      {
+        text: 'Utilities',
+        collapsed: false,
+        items: [
+          { text: 'Ripple Effect', link: '/components/utilities/ripple' },
         ],
       },
     ],

@@ -169,6 +169,7 @@ function ListInput(
           className={className}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          placeholder={debouncedList.length > 0 ? '' : placeholder}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}
         />

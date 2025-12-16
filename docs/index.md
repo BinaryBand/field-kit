@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /guide
+      link: /components/#getting-started
     - theme: alt
       text: View Components
       link: /components/

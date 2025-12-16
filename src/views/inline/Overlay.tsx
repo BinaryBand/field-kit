@@ -1,10 +1,10 @@
-import React, { ComponentProps, ForwardedRef, ReactElement } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import React, { ForwardedRef, ReactElement } from 'react';
+import styled from '@emotion/styled';
 
 import AppContext from '@providers/AppContext';
 import Portal from '@/views/inline/Portal';
 
-const StyledOverlay: StyledComponent<ComponentProps<'div'>> = styled.div`
+const StyledOverlay = styled.div`
   background: none;
   position: absolute;
   pointer-events: none;

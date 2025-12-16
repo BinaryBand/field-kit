@@ -1,8 +1,7 @@
-import { ComponentProps } from 'react';
-import styled, { StyledComponent } from '@emotion/styled';
+import styled from '@emotion/styled';
 import Overlay from '@/views/inline/Overlay';
 
-export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled.div`
+export const ListInputContainer = styled.div`
   padding: 0.2em 0.3em;
 
   background: none;
@@ -15,7 +14,7 @@ export const ListInputContainer: StyledComponent<ComponentProps<'div'>> = styled
   gap: 0.5em;
 `;
 
-export const StyledListInput: StyledComponent<ComponentProps<'input'>> = styled.input`
+export const StyledListInput = styled.input`
   position: absolute;
   left: 0;
   top: 0;
@@ -26,7 +25,7 @@ export const StyledListInput: StyledComponent<ComponentProps<'input'>> = styled.
   margin: 0 !important;
 `;
 
-export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
+export const InputToken = styled.div`
   align-items: center;
   border-radius: 16px;
   display: flex;
@@ -62,12 +61,12 @@ export const InputToken: StyledComponent<ComponentProps<'div'>> = styled.div`
   }
 `;
 
-export const HiddenInput: StyledComponent<ComponentProps<'input'>> = styled.input`
+export const HiddenInput = styled.input`
   pointer-events: none;
   visibility: hidden;
 `;
 
-export const StyledOverlay: StyledComponent<OverlayProps> = styled(Overlay)`
+export const StyledOverlay = styled(Overlay)`
   align-items: center;
   display: flex;
   justify-content: end;
