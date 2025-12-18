@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // Ensure the custom components load.
 import '@/index';
 </script>
@@ -78,5 +78,29 @@ import '@/index';
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   padding: 20px;
+}
+
+/* Global input styling for better visibility */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  border: 1px solid var(--vp-c-divider) !important;
+  border-radius: 4px !important;
+  padding: 0.5rem !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  border-color: var(--vp-c-brand-1) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(var(--vp-c-brand-1-rgb), 0.1) !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

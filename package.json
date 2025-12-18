@@ -13,7 +13,18 @@
     "docs:generate": "node docs/.vitepress/scripts/generate-component-docs.js",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:unit:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:all": "npm run test:unit && echo. && echo Starting E2E tests... && echo Note: Ensure dev server is running on port 5175 && npm run test:e2e",
+    "test:all:ci": "npm run test:unit && npm run test:e2e",
+    "playwright:install": "playwright install chromium"
   },
   "dependencies": {
     "@emotion/css": "^11.13.5",
@@ -28,6 +39,7 @@
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",
+    "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^24.10.1",
@@ -43,6 +55,7 @@
     "globals": "^16.5.0",
     "jiti": "^2.6.1",
     "jsdom": "^27.2.0",
+    "playwright": "^1.57.0",
     "prettier": "^3.6.2",
     "sass": "^1.94.1",
     "typescript": "~5.9.3",

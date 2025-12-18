@@ -139,6 +139,11 @@ function SelectInput(
   const [paddingLeft, setPaddingLeft] = React.useState<number>(0);
   const [paddingTop, setPaddingTop] = React.useState<number>(0);
 
+  const getOptionLabel = React.useCallback(
+    (value: string): ReactNode => Object.values(options[value] || {})[0] ?? value,
+    [options]
+  );
+
   const groups: string[] = React.useMemo(() => {
     const groupSet = new Set<string>();
     Object.values(options).forEach((groupRecord) => {
@@ -165,6 +170,11 @@ function SelectInput(
     }));
   }
 
+  const closeDropdown = React.useCallback(() => {
+    setFocused(false);
+    inputRef.current?.blur();
+  }, []);
+
   const clearAll = () => triggerUpdate([]);
   const handleFocus = () => setFocused(true);
   const handleBlur = () => setFocused(false);
@@ -179,23 +189,18 @@ function SelectInput(
       let updatedList: string[];
       if (!multiple) {
         updatedList = [value];
-        setFocused(false); // Close dropdown for single select
-        // Immediately show selected value when option is chosen
         const selectedLabel = Object.values(options[value] || {})[0] ?? value;
         setInternalValue(String(selectedLabel));
-        // Blur the input to complete the selection interaction
-        if (inputRef.current) {
-          inputRef.current.blur();
-        }
-      } else if (!debouncedList.includes(value)) {
-        updatedList = [...debouncedList, value];
       } else {
-        updatedList = debouncedList.filter((item: string) => item !== value);
+        updatedList = debouncedList.includes(value)
+          ? debouncedList.filter((item) => item !== value)
+          : [...debouncedList, value];
       }
 
       triggerUpdate(updatedList);
+      closeDropdown();
     },
-    [multiple, debouncedList, triggerUpdate, options]
+    [multiple, debouncedList, triggerUpdate, options, closeDropdown]
   );
 
   function handleMouseDown(event: React.MouseEvent): void {
@@ -219,22 +224,22 @@ function SelectInput(
       const { left: containerLeft, top: containerTop } =
         containerRef.current.getBoundingClientRect();
       const { left: inputLeft, top: inputTop } = placeholderRef.current.getBoundingClientRect();
-      setPaddingLeft(inputLeft - containerLeft);
-      setPaddingTop(inputTop - containerTop);
+      const calculatedPaddingLeft = inputLeft - containerLeft;
+      const calculatedPaddingTop = inputTop - containerTop;
+      
+      // Ensure minimum padding and proper positioning
+      setPaddingLeft(Math.max(calculatedPaddingLeft, 8));
+      setPaddingTop(Math.max(calculatedPaddingTop, 0));
     }
   }
 
-  React.useEffect(resize, [debouncedList, pageWidth, pageHeight, debouncedInputValue]);
+  // Use requestAnimationFrame to ensure DOM is updated before measuring
+  React.useEffect(() => {
+    requestAnimationFrame(resize);
+  }, [debouncedList, pageWidth, pageHeight, debouncedInputValue]);
   React.useEffect(() => setList(normalizeValue(value)), [value]);
 
-  // Handle initial display value for single select mode
-  React.useEffect(() => {
-    if (!multiple && !focused && debouncedList.length > 0) {
-      const selectedLabel = Object.values(options[debouncedList[0]] || {})[0] ?? debouncedList[0];
-      setInternalValue(String(selectedLabel));
-    }
-  }, [options, debouncedList, multiple, focused]);
-
+  // Handle search filtering
   React.useEffect(() => {
     const searchValue = debouncedInputValue.toLowerCase();
     dropdownRef.current?.querySelectorAll<HTMLElement>('[data-option-value]').forEach((el) => {
@@ -246,22 +251,19 @@ function SelectInput(
     });
   }, [debouncedInputValue]);
 
+  // Handle display value based on focus and selection
   React.useEffect(() => {
     dropdownRef.current
       ?.querySelectorAll('[data-option-value]')
       .forEach((el) => el.setAttribute('data-blurred', 'false'));
 
-    if (!multiple) {
-      if (!focused && debouncedList.length > 0) {
-        // When not focused and has selection, show the selected value
-        const selectedLabel = Object.values(options[debouncedList[0]] || {})[0] ?? debouncedList[0];
-        setInternalValue(String(selectedLabel));
-      } else if (!focused && debouncedList.length === 0) {
-        setInternalValue('');
-      }
-    } else {
-      // Multiple mode always keeps input clear
+    if (multiple) {
       setInternalValue('');
+    } else if (!focused) {
+      const selectedLabel = debouncedList.length > 0
+        ? Object.values(options[debouncedList[0]] || {})[0] ?? debouncedList[0]
+        : '';
+      setInternalValue(String(selectedLabel));
     }
   }, [focused, debouncedList, multiple, options]);
   return (
@@ -272,15 +274,12 @@ function SelectInput(
         ref={containerRef}
         style={style}
       >
-        {list.map((item, i) => {
-          const label = Object.values(options[item] || {})[0] ?? item;
-          return (
-            <InputToken className="token" key={i} onClick={() => handleRemove(i)} role="button">
-              <small>{label}</small>
-              <XIcon />
-            </InputToken>
-          );
-        })}
+        {list.map((item, i) => (
+          <InputToken className="token" key={i} onClick={() => handleRemove(i)} role="button">
+            <small>{getOptionLabel(item)}</small>
+            <XIcon />
+          </InputToken>
+        ))}
         <HiddenInput readOnly ref={placeholderRef} value="" />
 
         <StyledListInput
@@ -288,7 +287,7 @@ function SelectInput(
           onBlur={handleBlur}
           onChange={handleChange}
           onFocus={handleFocus}
-          placeholder={placeholder}
+          placeholder={list.length === 0 ? placeholder : ''}
           ref={inputRef}
           style={{ ...style, paddingLeft, paddingTop }}
           value={internalValue}

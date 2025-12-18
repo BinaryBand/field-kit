@@ -5,7 +5,7 @@
       <div>
         <h5>{{ selectComponent.name }} (Single)</h5>
         <p class="component-description">{{ selectComponent.description }}</p>
-        <select class="tw-select-group" name="SingleSelect" data-type="number" @change="onChange">
+        <select class="tw-select-group" name="SingleSelect" data-type="number">
           <option class="tw-option" value="1">Albuquerque</option>
           <option class="tw-option" value="2" selected>Boston</option>
           <option class="tw-option" value="3">Chicago</option>
@@ -20,7 +20,7 @@
       <div>
         <h5>{{ selectComponent.name }} (Multiple)</h5>
         <p class="component-description">{{ selectComponent.description }}</p>
-        <select class="tw-select-group" multiple name="MultiSelect" @change="onChange">
+        <select class="tw-select-group" multiple name="MultiSelect">
           <option class="tw-option" value="alb">Albuquerque</option>
           <option class="tw-option" value="bos" selected>Boston</option>
           <option class="tw-option" value="chi">Chicago</option>
@@ -35,7 +35,7 @@
       <div>
         <h5>{{ selectComponent.name }} (Grouped)</h5>
         <p class="component-description">{{ selectComponent.description }}</p>
-        <select class="tw-select-group" multiple name="GroupedSelect" @change="onChange">
+        <select class="tw-select-group" multiple name="GroupedSelect">
           <option class="tw-option" value="apple" data-group="Fruits">Apple</option>
           <option class="tw-option" value="banana" data-group="Fruits">Banana</option>
           <option class="tw-option" value="orange" data-group="Fruits">Orange</option>
@@ -57,7 +57,7 @@
       <div>
         <h5>{{ listComponent.name }}</h5>
         <p class="component-description">{{ listComponent.description }}</p>
-        <input name="ListInput" type="list" value='["One","Two","Three"]' @change="onChange" />
+        <input name="ListInput" type="list" value='["One","Two","Three"]' />
         <pre class="value-display">{{ values.ListInput ?? '(empty)' }}</pre>
         <hr />
       </div>
@@ -66,7 +66,7 @@
       <div>
         <h5>{{ pinComponent.name }}</h5>
         <p class="component-description">{{ pinComponent.description }}</p>
-        <input type="pin" name="PinInput" data-size="6" @change="onChange" @input="onChange" />
+        <input type="pin" name="PinInput" data-size="6" />
         <pre class="value-display">{{ values.PinInput ?? '(empty)' }}</pre>
         <hr />
       </div>
@@ -75,7 +75,7 @@
       <div>
         <h5>{{ autoResizeComponent.name }}</h5>
         <p class="component-description">{{ autoResizeComponent.description }}</p>
-        <textarea class="tw-auto-resize" name="Multiline" @input="onChange">
+        <textarea class="tw-auto-resize" name="Multiline">
 First Line
 Second Line</textarea
         >
@@ -87,7 +87,7 @@ Second Line</textarea
       <div>
         <h5>{{ signatureComponent.name }}</h5>
         <p class="component-description">{{ signatureComponent.description }}</p>
-        <input type="signature" name="Signature" placeholder="Sign here" @change="onChange" />
+        <input type="signature" name="Signature" placeholder="Sign here" />
         <button type="button" @click="clearSignature">Clear Signature</button>
         <pre class="value-display">{{ values.Signature ?? '(empty)' }}</pre>
         <hr />
@@ -102,7 +102,7 @@ Second Line</textarea
   </div>
 </template>
 
-<style>
+<style scoped>
 input,
 select,
 textarea {
@@ -128,7 +128,8 @@ textarea {
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+import { useFormTracking } from './composables/useFormTracking';
 import componentsData from '../.vitepress/data/components.json';
 
 interface ComponentAttribute {
@@ -147,7 +148,10 @@ interface Component {
 }
 
 const formData = ref<string | null>(null);
-const values = ref<Record<string, string>>({});
+
+// Use the composable for form tracking
+const { values, initializeTracking } = useFormTracking();
+initializeTracking();
 
 // Extract components from the JSON data
 const components = componentsData.components as Component[];
@@ -156,14 +160,6 @@ const listComponent = components.find((c) => c.id === 'list')!;
 const pinComponent = components.find((c) => c.id === 'pin')!;
 const autoResizeComponent = components.find((c) => c.id === 'auto-resize')!;
 const signatureComponent = components.find((c) => c.id === 'signature')!;
-
-onMounted(() => {
-  // Manually trigger change events to populate initial values
-  document.querySelectorAll('form.tw-form select, form.tw-form input, form.tw-form textarea').forEach((el) => {
-    const event = new Event('change', { bubbles: true });
-    el.dispatchEvent(event);
-  });
-});
 
 const handleSubmit = (event: Event) => {
   const form = event.target as HTMLFormElement;
@@ -183,20 +179,6 @@ const handleSubmit = (event: Event) => {
 
   formData.value = JSON.stringify(result, null, 2);
 };
-
-function onChange(event: Event): void {
-  const target = event.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-  const name = target.name;
-  if (!name) return;
-  if (target instanceof HTMLSelectElement && target.multiple) {
-    const vals = Array.from(target.selectedOptions).map((o) => o.value);
-    values.value[name] = JSON.stringify(vals);
-  } else {
-    values.value[name] = target.value;
-  }
-  // Force reactivity update
-  values.value = { ...values.value };
-}
 
 function clearSignature(): void {
   const clearButton = document.querySelector(

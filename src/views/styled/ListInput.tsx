@@ -20,9 +20,10 @@ export const StyledListInput = styled.input`
   top: 0;
   right: 0;
   bottom: 0;
-  padding-left: ${(props) => props.style?.paddingLeft ?? 0}px !important;
-  padding-top: ${(props) => props.style?.paddingTop ?? 0}px !important;
   margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
 `;
 
 export const InputToken = styled.div`
