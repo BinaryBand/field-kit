@@ -152,7 +152,8 @@ describe('SelectInput Component', () => {
       const onChange = vi.fn();
       render(<TestSelectInput {...defaultProps} value={['option1']} onChange={onChange} />);
 
-      const input = document.querySelector('.css-13d28j4') as HTMLInputElement;
+      // Use a more stable selector - find input by type and role
+      const input = document.querySelector('input[type="text"]') as HTMLInputElement;
       fireEvent.focus(input);
 
       await waitFor(() => {
@@ -170,7 +171,8 @@ describe('SelectInput Component', () => {
       const onChange = vi.fn();
       render(<TestSelectInput {...defaultProps} multiple={false} onChange={onChange} />);
 
-      const input = document.querySelector('.css-13d28j4') as HTMLInputElement;
+      // Use a more stable selector - find input by type
+      const input = document.querySelector('input[type="text"]') as HTMLInputElement;
       fireEvent.focus(input);
 
       await waitFor(() => {

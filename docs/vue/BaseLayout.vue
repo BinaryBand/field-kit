@@ -86,7 +86,6 @@ select,
 textarea {
   border: 1px solid var(--vp-c-divider) !important;
   border-radius: 4px !important;
-  padding: 0.5rem !important;
 }
 
 input:not([type="checkbox"]):not([type="radio"]):focus,

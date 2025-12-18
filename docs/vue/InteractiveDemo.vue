@@ -67,7 +67,7 @@
         <h5>{{ pinComponent.name }}</h5>
         <p class="component-description">{{ pinComponent.description }}</p>
         <input type="pin" name="PinInput" data-size="6" />
-        <pre class="value-display">{{ values.PinInput ?? '(empty)' }}</pre>
+        <pre class="value-display">{{ values.PinInput || '(empty)' }}</pre>
         <hr />
       </div>
 
@@ -89,7 +89,7 @@ Second Line</textarea
         <p class="component-description">{{ signatureComponent.description }}</p>
         <input type="signature" name="Signature" placeholder="Sign here" />
         <button type="button" @click="clearSignature">Clear Signature</button>
-        <pre class="value-display">{{ values.Signature ?? '(empty)' }}</pre>
+        <pre class="value-display">{{ values.Signature || '(empty)' }}</pre>
         <hr />
       </div>
     </form>

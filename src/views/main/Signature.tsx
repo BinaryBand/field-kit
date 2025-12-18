@@ -1,4 +1,5 @@
 import React, { ComponentProps, ForwardedRef, Fragment, MutableRefObject, ReactNode } from 'react';
+import DOMPurify from 'dompurify';
 import {
   SignatureContainer,
   SignatureCanvas,
@@ -207,7 +208,15 @@ function Signature(
           <SignatureCanvas ref={canvasRef}>
             Your browser does not support the HTML5 canvas tag.
           </SignatureCanvas>
-          <SignatureSvgOverlay dangerouslySetInnerHTML={{ __html: svg.outerHTML }} />
+          <SignatureSvgOverlay 
+            dangerouslySetInnerHTML={{ 
+              __html: DOMPurify.sanitize(svg.outerHTML, { 
+                USE_PROFILES: { svg: true, svgFilters: true },
+                ADD_TAGS: ['path'],
+                ADD_ATTR: ['viewBox', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'd', 'fill']
+              }) 
+            }} 
+          />
         </div>
       </SignatureContainer>
 

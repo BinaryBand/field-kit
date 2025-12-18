@@ -25,6 +25,18 @@ export default defineConfig({
       },
     ],
     ['meta', { property: 'og:type', content: 'website' }],
+    // Content Security Policy for XSS protection
+    [
+      'meta',
+      {
+        'http-equiv': 'Content-Security-Policy',
+        content: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' ws: wss:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+      }
+    ],
+    // Additional security headers
+    ['meta', { 'http-equiv': 'X-Content-Type-Options', content: 'nosniff' }],
+    ['meta', { 'http-equiv': 'X-Frame-Options', content: 'DENY' }],
+    ['meta', { 'http-equiv': 'X-XSS-Protection', content: '1; mode=block' }],
   ],
 
   // Better clean URLs
@@ -98,6 +110,10 @@ export default defineConfig({
   },
 
   vite: {
+    server: {
+      port: 5173,
+      strictPort: false, // Allow fallback to next available port
+    },
     resolve: {
       alias: {
         '@': reactSrc,

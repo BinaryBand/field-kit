@@ -15,6 +15,11 @@ dist-ssr
 /docs/.vitepress/cache
 /docs/components/inputs
 
+# Test results and reports
+/tests/.results
+/playwright-report
+/test-results
+
 package-lock.json
 
 # Editor directories and files

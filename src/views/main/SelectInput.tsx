@@ -283,6 +283,7 @@ function SelectInput(
         <HiddenInput readOnly ref={placeholderRef} value="" />
 
         <StyledListInput
+          type="text"
           className={className}
           onBlur={handleBlur}
           onChange={handleChange}
