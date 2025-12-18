@@ -126,5 +126,5 @@ input[type='pin'] {
 ## Next Steps
 
 1. **Explore Components**: Browse individual component documentation for detailed usage instructions
-2. **Read Guides**: Learn about [Form Integration](/guide/form-integration) and [Event Handling](/guide/event-handling)
+2. **Try the Demo**: Visit the [Live Demo](/demo) page to see all components in action
 3. **Get Help**: Visit the [GitHub repository](https://github.com/BinaryBand/bulwark-client-app) for support

@@ -6,25 +6,17 @@
   "scripts": {
     "start": "npm run docs:dev",
     "build": "vite build",
-    "build:external": "vite build && powershell -NoLogo -NoProfile -Command \"$dst='C:\\Users\\ShaneD\\source\\repos\\TWMainSolutionCore\\ReportsWeb\\wwwroot\\lib\\tw-client'; if(-not (Test-Path $dst)){ New-Item -ItemType Directory -Path $dst -Force | Out-Null }; Copy-Item -Recurse -Force -Path ./dist/* -Destination $dst\"",
     "docs:dev": "npm run docs:generate && vitepress dev docs",
     "docs:build": "npm run docs:generate && vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "docs:generate": "node docs/.vitepress/scripts/generate-component-docs.js",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest run",
+    "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:unit:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:debug": "playwright test --debug",
-    "test:e2e:report": "playwright show-report tests/.results/playwright-report",
-    "test:all": "npm run test:unit && echo. && echo Starting E2E tests... && echo Note: Playwright will start dev server automatically if not running && npm run test:e2e",
-    "test:all:ci": "npm run test:unit && npm run test:e2e",
-    "playwright:install": "playwright install chromium"
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@emotion/css": "^11.13.5",

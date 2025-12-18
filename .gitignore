@@ -34,3 +34,6 @@ package-lock.json
 *.sw?
 
 *.cshtml
+
+# Runbooks - ignore environment config but keep scripts
+/runbooks/.env

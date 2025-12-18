@@ -130,5 +130,17 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ['vitepress'],
     },
+    // SSR configuration
+    ssr: {
+      noExternal: [
+        // Include MUI packages for SSR
+        '@mui/material',
+        '@mui/system',
+        '@mui/private-theming',
+        '@emotion/react',
+        '@emotion/styled',
+        '@emotion/css',
+      ],
+    },
   },
 });
