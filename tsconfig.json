@@ -37,6 +37,7 @@
     "src",
     "static",
     "docs/vue",
+    "tests",
     "index.d.ts",
     "src/types/global.d.ts",
     "src/vitest.d.ts",

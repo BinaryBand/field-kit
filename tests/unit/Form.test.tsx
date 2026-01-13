@@ -72,6 +72,35 @@ describe('Form Component', () => {
       },
     },
     {
+      name: 'Complex Nested Data',
+      html: html`
+        <form action="/submit-data" method="POST">
+          <div data-tw-group="personalInfo">
+            <input name="firstName" type="text" value="Jane" />
+            <input name="lastName" type="text" value="Doe" />
+            <div data-tw-group="contact">
+              <input name="email" type="email" value="jane.doe@example.com" />
+            </div>
+          </div>
+          <input name="favoriteColors" type="list" value='["Red","Green","Blue"]' />
+          <div data-tw-array="skills">
+            <input name="firstName" value="JavaScript" />
+            <input name="lastName" value="React" />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      `,
+      expectedPayload: {
+        personalInfo: {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          contact: { email: 'jane.doe@example.com' },
+        },
+        favoriteColors: ['Red', 'Green', 'Blue'],
+        skills: ['JavaScript', 'React'],
+      },
+    },
+    {
       name: 'Custom Input Components',
       html: html`
         <form action="/submit-data" method="POST">

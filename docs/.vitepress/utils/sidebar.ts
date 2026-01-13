@@ -36,6 +36,7 @@ export function generateSidebar(): DefaultTheme.Sidebar {
         text: 'Utilities',
         collapsed: false,
         items: [
+          { text: 'Form Submission', link: '/components/utilities/form' },
           { text: 'Ripple Effect', link: '/components/utilities/ripple' },
         ],
       },

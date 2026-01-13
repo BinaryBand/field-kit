@@ -79,13 +79,38 @@ export function reduceFormData(acc: Record<string, TWFormData>, element: Element
 
   if (element.hasAttribute('data-tw-array')) {
     const listName: string = element.getAttribute('data-tw-array') ?? 'list';
-    const formData: IFormData = {};
+    const arrayItems: TWFormData[] = [];
 
     const children: Element[] = getChildren(element);
     for (const child of children) {
-      reduceFormData(formData, child);
+      // Check if child is a container (has children or has data-tw-* attributes)
+      const childHasChildren = getChildren(child).length > 0;
+      const isContainer = childHasChildren || 
+                         child.hasAttribute('data-tw-group') || 
+                         child.hasAttribute('data-tw-array');
+      
+      if (isContainer || !child.hasAttribute('name')) {
+        // Process as a container - create object for its children
+        const itemData: IFormData = {};
+        reduceFormData(itemData, child);
+        
+        // Only add if there's data
+        const values = Object.values(itemData);
+        if (values.length === 1) {
+          arrayItems.push(values[0]);
+        } else if (values.length > 1) {
+          arrayItems.push(itemData);
+        }
+      } else {
+        // Direct input element - add its value directly
+        const value = normalizeValue(child);
+        if (value !== null) {
+          arrayItems.push(value);
+        }
+      }
     }
-    acc[listName] = Array.from(Object.values(formData));
+    
+    acc[listName] = arrayItems as TWFormData;
     return; // Exit here to prevent processing children again
   }
 
