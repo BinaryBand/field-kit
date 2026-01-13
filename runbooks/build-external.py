@@ -59,8 +59,8 @@ def load_gitignore():
     if gitignore.exists():
         for line in gitignore.read_text().splitlines():
             # Strip whitespace and leading slashes, skip empty lines and comments
-            line = re.sub(r'^\s*/*\s*|\s*$', '', line)
-            if line and not line.startswith(('#', '!')):
+            line = re.sub(r"^\s*/*\s*|\s*$", "", line)
+            if line and not line.startswith(("#", "!")):
                 patterns.add(line)
 
     return patterns
