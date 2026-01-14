@@ -2,8 +2,6 @@ import styled from '@emotion/styled';
 import Overlay from '@/views/inline/Overlay';
 
 export const SelectInputContainer = styled.div`
-  border: transparent;
-
   align-items: center;
   display: flex;
   flex-wrap: wrap;

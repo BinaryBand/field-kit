@@ -88,8 +88,11 @@ export function reduceFormData(acc: Record<string, TWFormData>, element: Element
       const isContainer = childHasChildren || 
                          child.hasAttribute('data-tw-group') || 
                          child.hasAttribute('data-tw-array');
+      const childName = (child.getAttribute('name') ?? '').trim();
       
-      if (isContainer || !child.hasAttribute('name')) {
+      // Treat unnamed (or empty-name) children as containers so they don't create "" keys
+      // and don't contribute direct primitive array values.
+      if (isContainer || !child.hasAttribute('name') || childName.length === 0) {
         // Process as a container - create object for its children
         const itemData: IFormData = {};
         reduceFormData(itemData, child);
@@ -115,8 +118,9 @@ export function reduceFormData(acc: Record<string, TWFormData>, element: Element
   }
 
   // 2. Process individual element only if it has a name
-  const name: string | null = element.getAttribute('name');
-  if (name !== null) {
+  const nameAttr: string | null = element.getAttribute('name');
+  const name: string = (nameAttr ?? '').trim();
+  if (name.length > 0) {
     const value: TWFormData | null = normalizeValue(element);
 
     // Special handling for unchecked radio buttons.

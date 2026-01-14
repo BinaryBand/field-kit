@@ -217,4 +217,129 @@ describe('Form Component', () => {
       preference: 'option1',
     });
   });
+
+  test('should handle array items with same field names as parent fields', async () => {
+    // Edge case: array items should not override parent fields with same names
+    // This simulates a product form where "Name" exists at both parent and array levels
+    const html = /* html */ `
+      <form action="/submit-data" method="POST">
+        <input name="Name" type="text" value="ProductName123" />
+        <input name="Category" type="text" value="Filters" />
+        <div data-tw-array="Locations">
+          <div>
+            <input name="Name" type="text" value="Kitchen" />
+            <input name="Active" type="checkbox" checked />
+          </div>
+          <div>
+            <input name="Name" type="text" value="Bathroom" />
+            <input name="Active" type="checkbox" />
+          </div>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+
+    document.body.innerHTML = html;
+    const target = document.body.querySelector('form')!;
+
+    // Act: Render and submit the form
+    await act(async () => render(<Form target={target} />));
+    await act(async () => fireEvent.submit(target));
+
+    // Assert: Check the fetch call and payload
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [url, requestInit] = vi.mocked(global.fetch).mock.calls[0];
+    const receivedPayload = JSON.parse(requestInit?.body as string);
+
+    expect(url).toBe('http://localhost:3000/submit-data');
+    expect(requestInit?.method).toBe('POST');
+    
+    // The parent "Name" should be preserved and not overridden by array item names
+    expect(receivedPayload).toEqual({
+      Name: 'ProductName123',
+      Category: 'Filters',
+      Locations: [
+        { Name: 'Kitchen', Active: true },
+        { Name: 'Bathroom', Active: false },
+      ],
+    });
+  });
+
+  test('should handle array with grouped items having same field names as parent', async () => {
+    // Edge case: array items wrapped in data-tw-group should not override parent fields
+    // This matches the temp.html structure more closely
+    const html = /* html */ `
+      <form action="/submit-data" method="POST">
+        <input name="Name" type="text" value="ProductName123" />
+        <input name="Category" type="text" value="Filters" />
+        <div data-tw-array="ChemicalLocations">
+          <div data-tw-group="">
+            <input name="Name" type="text" value="Kitchen" />
+            <input name="Active" type="checkbox" checked />
+          </div>
+          <div data-tw-group="">
+            <input name="Name" type="text" value="Bathroom" />
+            <input name="Active" type="checkbox" />
+          </div>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+
+    document.body.innerHTML = html;
+    const target = document.body.querySelector('form')!;
+
+    // Act: Render and submit the form
+    await act(async () => render(<Form target={target} />));
+    await act(async () => fireEvent.submit(target));
+
+    // Assert: Check the fetch call and payload
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [url, requestInit] = vi.mocked(global.fetch).mock.calls[0];
+    const receivedPayload = JSON.parse(requestInit?.body as string);
+
+    expect(url).toBe('http://localhost:3000/submit-data');
+    expect(requestInit?.method).toBe('POST');
+    
+    // The parent "Name" should be preserved and not overridden by array item names
+    expect(receivedPayload).toEqual({
+      Name: 'ProductName123',
+      Category: 'Filters',
+      ChemicalLocations: [
+        { Name: 'Kitchen', Active: true },
+        { Name: 'Bathroom', Active: false },
+      ],
+    });
+  });
+
+  test('should ignore empty name attributes (no "" key in payload)', async () => {
+    document.body.innerHTML = html`
+      <form action="/submit-data" method="POST">
+        <input name="" type="text" value="should-be-ignored" />
+        <input name="valid" type="text" value="ok" />
+        <div data-tw-array="items">
+          <div>
+            <input name="" type="text" value="ignored-too" />
+            <input name="Name" type="text" value="Item1" />
+          </div>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+
+    const target = document.body.querySelector('form')!;
+
+    await act(async () => render(<Form target={target} />));
+    await act(async () => fireEvent.submit(target));
+
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [, requestInit] = vi.mocked(global.fetch).mock.calls[0];
+    const receivedPayload = JSON.parse(requestInit?.body as string);
+
+    expect(receivedPayload).toEqual({
+      valid: 'ok',
+      items: ['Item1'],
+    });
+    expect(Object.prototype.hasOwnProperty.call(receivedPayload, '')).toBe(false);
+  });
 });

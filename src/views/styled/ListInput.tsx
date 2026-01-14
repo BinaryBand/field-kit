@@ -3,9 +3,6 @@ import Overlay from '@/views/inline/Overlay';
 
 export const ListInputContainer = styled.div`
   padding: 0.2em 0.3em;
-
-  background: none;
-  border: transparent;
   position: relative;
   display: flex;
   flex-wrap: wrap;
