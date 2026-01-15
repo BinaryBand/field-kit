@@ -39,7 +39,7 @@ Then open your browser to the URL shown in the terminal (typically `http://local
 
 ## What's in the Demo
 
-The demo app (`index.html`) showcases:
+The demo page (`docs/demo.md`) showcases:
 
 ### Select Components
 
@@ -56,10 +56,10 @@ The demo app (`index.html`) showcases:
 
 ## Demo Source Code
 
-The demo is located in the project root:
+The demo is implemented in the docs and Vue components:
 
-- **HTML**: `index.html` - Main demo page structure
-- **Scripts**: `scripts.js` - Helper utilities and code rendering
+- **Markdown**: `docs/demo.md`
+- **Vue**: `docs/vue/InteractiveDemo.vue`
 - **Components**: `src/index.tsx` - React component initialization
 
 ### Key Code Snippets
@@ -161,4 +161,4 @@ Open DevTools console to see:
 
 ### Customization
 
-Edit `index.html` to add more component examples or modify styling. The demo app is separate from the documentation build, so you can experiment freely.
+Edit `docs/demo.md` and `docs/vue/InteractiveDemo.vue` to add more component examples or modify styling.

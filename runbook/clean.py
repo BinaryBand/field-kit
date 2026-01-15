@@ -4,6 +4,8 @@ import re
 
 
 ROOT = Path(__file__).parent.parent
+IGNORE_FILES = {".env"}
+IGNORE_DIRS = {".vscode"}
 
 
 def get_patterns():
@@ -22,8 +24,13 @@ def get_patterns():
 
 def matches(path, patterns):
     """Check if path matches any pattern."""
-    # Protect .env files
-    if path.name == ".env":
+    # Protect .env files and anything under .vscode
+    if path.name in IGNORE_FILES:
+        return False
+
+    # If any ancestor folder is protected, skip the entire subtree.
+    # This prevents deleting files inside .vscode even if .gitignore matches it.
+    if any(part in IGNORE_DIRS for part in path.parts):
         return False
 
     rel_path = str(path.relative_to(ROOT)).replace("\\", "/")

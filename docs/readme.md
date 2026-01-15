@@ -11,9 +11,10 @@ docs/
 │   ├── utils/
 │   │   └── sidebar.ts         # Automated sidebar generation
 │   ├── templates/
-│   │   └── component-template.md  # Template for new components
+│   │   └── component-template.template.md  # Markdown template used by the page generator
 │   └── scripts/
-│       └── create-component-docs.js  # Automation script
+│       ├── generate-component-docs.js   # Validates components.json
+│       └── generate-component-pages.js  # Generates docs/components/* pages
 ├── guide/                     # Getting started guides
 │   ├── getting-started.md
 │   ├── installation.md
@@ -41,41 +42,26 @@ npm run docs:build
 npm run docs:preview
 ```
 
-### Adding New Component Documentation
+### Adding / Updating Component Documentation
 
-#### Option 1: Using the Automation Script (Recommended)
+Component docs are generated from JSON.
+
+1. Edit `docs/.vitepress/data/components.json`
+2. Regenerate pages:
 
 ```bash
-# Navigate to the docs directory
-cd docs/.vitepress/scripts
-
-# Run the component documentation generator
-node create-component-docs.js
+npm run docs:pages
 ```
 
-The script will prompt you for:
+To validate the JSON shape before generating pages:
 
-- Component name (e.g., "range-input", "color-picker")
-- Category (inputs/views)
-- Brief description
-- HTML type/selector
-
-This will automatically:
-
-1. Create a new documentation file from the template
-2. Update the sidebar configuration
-3. Provide next steps for customization
-
-#### Option 2: Manual Creation
-
-1. Copy `docs/.vitepress/templates/component-template.md`
-2. Rename and place in appropriate category folder
-3. Update the content with your component details
-4. Manually add to sidebar in `docs/.vitepress/utils/sidebar.ts`
+```bash
+npm run docs:validate
+```
 
 ### Documentation Template
 
-The component template includes:
+The component page template includes:
 
 - **Frontmatter**: Title and description for SEO
 - **Demo Section**: Live interactive examples
@@ -111,6 +97,8 @@ The sidebar is automatically generated from `sidebar.ts`, making it easy to:
 - Maintain consistent navigation structure
 - Group components by category
 - Provide clear hierarchical organization
+
+> Note: Component docs are generated from JSON; no interactive generator script is used by `docs:build`.
 
 ### Responsive Design
 

@@ -1,41 +1,11 @@
-# Components Overview
+---
+title: Components
+description: Browse all TW Components
+---
 
-TW Components provides a comprehensive collection of custom HTML components designed to enhance user interface interactions while maintaining native HTML behavior and accessibility standards.
+# Components
 
-## Component Categories
-
-### Input Components
-
-Enhanced input elements that extend standard HTML form controls with additional functionality:
-
-| Component                                              | Description                                                 | Use Cases                                 |
-| ------------------------------------------------------ | ----------------------------------------------------------- | ----------------------------------------- |
-| [Auto-Resize Textarea](/components/inputs/auto-resize) | Textarea that automatically adjusts height based on content | Comments, messages, descriptions          |
-| [List Input](/components/inputs/list)                  | Manage arrays of string values with an intuitive interface  | Tags, keywords, multi-value fields        |
-| [Passkey Input](/components/inputs/passkey)            | WebAuthn passkey authentication component                   | Secure login, passwordless authentication |
-| [PIN Input](/components/inputs/pin)                    | Secure PIN entry with customizable digit length             | Security codes, verification              |
-| [Select Input](/components/inputs/select)              | Enhanced select dropdown with search and multi-select       | Option selection, filtering               |
-| [Signature Input](/components/inputs/signature)        | Canvas-based signature capture                              | Digital signatures, drawings              |
-
-### View Components
-
-Interactive components for displaying and organizing content:
-
-| Component                              | Description                              | Use Cases                                 |
-| -------------------------------------- | ---------------------------------------- | ----------------------------------------- |
-| [Calendar](/components/views/calendar) | Interactive calendar with date selection | Date pickers, scheduling, event planning  |
-| [Filter](/components/views/filter)     | Real-time filtering interface for lists  | Search, data filtering, content discovery |
-
-## Design Principles
-
-### Native HTML Behavior
-
-All TW Components are built to behave like standard HTML elements:
-
-- **Form Integration**: Work seamlessly with HTML forms and `FormData`
-- **Event Handling**: Emit standard HTML events (`input`, `change`, `focus`, etc.)
-- **Accessibility**: Follow ARIA guidelines and keyboard navigation standards
-- **Styling**: Accept standard CSS styling and custom properties
+<ComponentsCatalog />
 
 ## Getting Started
 
@@ -49,8 +19,6 @@ Browse the component documentation to find the right components for your project
 - **Styling Guide**: CSS customization options
 
 ### 2. Basic Usage Pattern
-
-All TW Components follow a consistent usage pattern:
 
 ```html
 <!-- Include TW Components assets -->

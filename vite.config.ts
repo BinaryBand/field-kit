@@ -6,7 +6,7 @@ const root: string = path.resolve(__dirname, 'src');
 
 export default defineConfig(({ command }) => ({
   root: __dirname,
-  publicDir: command === 'serve' ? 'static' : false, // Use static for dev, false for build
+  publicDir: false,
   plugins: [react()],
   define: {
     'process.env': {},

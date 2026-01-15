@@ -1,11 +1,14 @@
 import { DefaultTheme } from 'vitepress';
+import { getInputComponents } from './components';
 
-/**
- * Generate sidebar configuration for VitePress
- * This function creates a dynamic sidebar structure that can be easily extended
- * when new components are added to the project.
- */
+
+// Generate sidebar configuration for VitePress
 export function generateSidebar(): DefaultTheme.Sidebar {
+  const inputItems = getInputComponents()
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((c) => ({ text: c.name, link: `/components/inputs/${c.id}` }));
+
   return {
     '/components/': [
       {
@@ -15,14 +18,7 @@ export function generateSidebar(): DefaultTheme.Sidebar {
       {
         text: 'Input Components',
         collapsed: false,
-        items: [
-          { text: 'Auto-Resize Textarea', link: '/components/inputs/auto-resize' },
-          { text: 'List Input', link: '/components/inputs/list' },
-          { text: 'Passkey Input', link: '/components/inputs/passkey' },
-          { text: 'PIN Input', link: '/components/inputs/pin' },
-          { text: 'Select Input', link: '/components/inputs/select' },
-          { text: 'Signature Input', link: '/components/inputs/signature' },
-        ],
+        items: inputItems,
       },
       {
         text: 'View Components',

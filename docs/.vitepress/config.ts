@@ -45,11 +45,6 @@ export default defineConfig({
   // Last updated timestamp
   lastUpdated: true,
 
-  // Sitemap generation
-  sitemap: {
-    hostname: 'https://binaryband.github.io/bulwark-client-app',
-  },
-
   themeConfig: {
     siteTitle: 'TW Components',
     logo: '/logo.svg',
@@ -114,6 +109,17 @@ export default defineConfig({
       port: 5173,
       strictPort: false, // Allow fallback to next available port
     },
+    build: {
+      sourcemap: false,
+      cssCodeSplit: false,
+      assetsInlineLimit: 100_000_000,
+      chunkSizeWarningLimit: 2_000,
+      rollupOptions: {
+        output: {
+          manualChunks: () => 'app',
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': reactSrc,
@@ -137,6 +143,8 @@ export default defineConfig({
         '@emotion/react',
         '@emotion/styled',
         '@emotion/css',
+        // VitePress local search highlighting dependency; needs bundling for SSR
+        'mark.js',
       ],
     },
   },

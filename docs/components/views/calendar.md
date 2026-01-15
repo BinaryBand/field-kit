@@ -59,28 +59,28 @@ Interactive calendar component with automatic date generation and customizable m
 
 ### CSS Classes
 
-| Class | Element | Description |
-| ----- | ------- | ----------- |
-| `tw-calendar` | `<table>` | Activates calendar component |
-| `tw-calendar-month` | `<tr>` | Designates the row for calendar days |
-| `tw-calendar-day` | `<td>` | Marks specific days with content |
+| Class               | Element   | Description                          |
+| ------------------- | --------- | ------------------------------------ |
+| `tw-calendar`       | `<table>` | Activates calendar component         |
+| `tw-calendar-month` | `<tr>`    | Designates the row for calendar days |
+| `tw-calendar-day`   | `<td>`    | Marks specific days with content     |
 
 ### HTML Attributes
 
-| Attribute | Element | Type | Default | Description |
-| --------- | ------- | ---- | ------- | ----------- |
-| `data-tw-year` | `<tr class="tw-calendar-month">` | `number` | Current year | Year to display (e.g., 2025) |
-| `data-tw-month` | `<tr class="tw-calendar-month">` | `number` | Current month | Month to display (1-12) |
-| `data-tw-day` | `<td class="tw-calendar-day">` | `number` | - | Day of month for this cell (1-31) |
+| Attribute       | Element                          | Type     | Default       | Description                       |
+| --------------- | -------------------------------- | -------- | ------------- | --------------------------------- |
+| `data-tw-year`  | `<tr class="tw-calendar-month">` | `number` | Current year  | Year to display (e.g., 2025)      |
+| `data-tw-month` | `<tr class="tw-calendar-month">` | `number` | Current month | Month to display (1-12)           |
+| `data-tw-day`   | `<td class="tw-calendar-day">`   | `number` | -             | Day of month for this cell (1-31) |
 
 ### Generated Attributes
 
 The component automatically sets these attributes on the `tw-calendar-month` row:
 
-| Attribute | Type | Description |
-| --------- | ---- | ----------- |
+| Attribute            | Type     | Description                            |
+| -------------------- | -------- | -------------------------------------- |
 | `data-tw-blank-days` | `number` | Number of blank days at start of month |
-| `data-tw-total-days` | `number` | Total days in the month |
+| `data-tw-total-days` | `number` | Total days in the month                |
 
 ## Examples
 
@@ -90,7 +90,13 @@ The component automatically sets these attributes on the `tw-calendar-month` row
 <table class="tw-calendar">
   <thead>
     <tr>
-      <th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th>
+      <th>S</th>
+      <th>M</th>
+      <th>T</th>
+      <th>W</th>
+      <th>T</th>
+      <th>F</th>
+      <th>S</th>
     </tr>
   </thead>
   <tbody>
@@ -124,7 +130,13 @@ The component automatically sets these attributes on the `tw-calendar-month` row
 <table class="tw-calendar">
   <thead>
     <tr>
-      <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+      <th>Sun</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+      <th>Sat</th>
     </tr>
   </thead>
   <tbody>
@@ -146,34 +158,34 @@ The component automatically sets these attributes on the `tw-calendar-month` row
 </table>
 
 <style>
-.tw-calendar {
-  width: 100%;
-  border-collapse: collapse;
-}
+  .tw-calendar {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-.tw-calendar th {
-  background: #f8f9fa;
-  padding: 0.5rem;
-  border: 1px solid #dee2e6;
-}
+  .tw-calendar th {
+    background: #f8f9fa;
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+  }
 
-.tw-calendar-day {
-  padding: 0.5rem;
-  border: 1px solid #dee2e6;
-  vertical-align: top;
-  min-height: 80px;
-}
+  .tw-calendar-day {
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    vertical-align: top;
+    min-height: 80px;
+  }
 
-.day-number {
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-}
+  .day-number {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
 
-.event {
-  font-size: 0.75rem;
-  color: #007bff;
-  margin-top: 0.25rem;
-}
+  .event {
+    font-size: 0.75rem;
+    color: #007bff;
+    margin-top: 0.25rem;
+  }
 </style>
 ```
 
@@ -189,7 +201,13 @@ The component automatically sets these attributes on the `tw-calendar-month` row
 <table class="tw-calendar" id="calendar">
   <thead>
     <tr>
-      <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+      <th>Sun</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+      <th>Sat</th>
     </tr>
   </thead>
   <tbody>
@@ -200,40 +218,52 @@ The component automatically sets these attributes on the `tw-calendar-month` row
 </table>
 
 <script>
-let currentYear = 2025;
-let currentMonth = 1;
+  let currentYear = 2025;
+  let currentMonth = 1;
 
-function updateCalendar() {
-  const row = document.getElementById('calendarMonth');
-  row.setAttribute('data-tw-year', currentYear);
-  row.setAttribute('data-tw-month', currentMonth);
-  
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                      'July', 'August', 'September', 'October', 'November', 'December'];
-  document.getElementById('currentMonth').textContent = 
-    `${monthNames[currentMonth - 1]} ${currentYear}`;
-  
-  // Trigger component update
-  document.body.dispatchEvent(new Event('update'));
-}
+  function updateCalendar() {
+    const row = document.getElementById('calendarMonth');
+    row.setAttribute('data-tw-year', currentYear);
+    row.setAttribute('data-tw-month', currentMonth);
 
-function nextMonth() {
-  currentMonth++;
-  if (currentMonth > 12) {
-    currentMonth = 1;
-    currentYear++;
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    document.getElementById('currentMonth').textContent =
+      `${monthNames[currentMonth - 1]} ${currentYear}`;
+
+    // Trigger component update
+    document.body.dispatchEvent(new Event('update'));
   }
-  updateCalendar();
-}
 
-function previousMonth() {
-  currentMonth--;
-  if (currentMonth < 1) {
-    currentMonth = 12;
-    currentYear--;
+  function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 12) {
+      currentMonth = 1;
+      currentYear++;
+    }
+    updateCalendar();
   }
-  updateCalendar();
-}
+
+  function previousMonth() {
+    currentMonth--;
+    if (currentMonth < 1) {
+      currentMonth = 12;
+      currentYear--;
+    }
+    updateCalendar();
+  }
 </script>
 ```
 
@@ -242,6 +272,7 @@ function previousMonth() {
 ### Automatic Day Generation
 
 The Calendar component automatically:
+
 - Calculates the correct number of days for the specified month/year
 - Determines blank days at the start of the month (based on day of week)
 - Creates placeholder cells for all 31 possible days
@@ -257,6 +288,7 @@ The Calendar component automatically:
 ### Day Positioning
 
 The component uses the `data-tw-day` attribute to position content:
+
 - Days automatically appear in correct calendar position
 - Can specify any days without needing sequential order
 - Multiple events on same day by adding multiple elements within the cell
@@ -285,7 +317,10 @@ document.body.dispatchEvent(new Event('update'));
 .tw-calendar {
   width: 100%;
   border-collapse: collapse;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .tw-calendar th {
@@ -319,7 +354,7 @@ document.body.dispatchEvent(new Event('update'));
 ### Event Highlighting
 
 ```css
-.tw-calendar-day[data-tw-day="15"] {
+.tw-calendar-day[data-tw-day='15'] {
   background: #e3f2fd;
 }
 
@@ -373,6 +408,7 @@ Show available/unavailable dates for bookings.
 ## Browser Support
 
 The Calendar component works in all modern browsers:
+
 - Chrome/Edge (last 2 versions)
 - Firefox (last 2 versions)
 - Safari (last 2 versions)
