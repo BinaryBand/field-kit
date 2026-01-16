@@ -298,6 +298,6 @@ filterGroup.addEventListener('tw:filter:applied', function (e) {
 
 ## Related Components
 
-- [List Input](/components/inputs/list) - For managing arrays of selected items
-- [Select Input](/components/inputs/select) - For choosing from predefined options
-- [Auto-Resize Textarea](/components/inputs/auto-resize) - For multi-line search inputs
+- [List Input](/inputs/list) - For managing arrays of selected items
+- [Select Input](/inputs/select) - For choosing from predefined options
+- [Auto-Resize Textarea](/inputs/auto-resize) - For multi-line search inputs

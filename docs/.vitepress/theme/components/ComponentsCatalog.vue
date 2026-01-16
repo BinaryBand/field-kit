@@ -133,8 +133,8 @@ const grouped = computed<Group[]>(() => {
   const views = filtered.value.filter((c) => c.category === 'views');
 
   const groups: Group[] = [];
-  if (inputs.length) groups.push({ key: 'inputs', title: 'Input Components', components: inputs });
   if (views.length) groups.push({ key: 'views', title: 'View Components', components: views });
+  if (inputs.length) groups.push({ key: 'inputs', title: 'Input Components', components: inputs });
   return groups;
 });
 

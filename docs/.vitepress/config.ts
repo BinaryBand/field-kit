@@ -50,9 +50,7 @@ export default defineConfig({
     logo: '/logo.svg',
 
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Components', link: '/components/' },
-      { text: 'Live Demo', link: '/demo' },
+      { text: 'Components', link: '/' },
     ],
 
     // Auto-generated sidebar
@@ -107,7 +105,7 @@ export default defineConfig({
   vite: {
     server: {
       port: 5173,
-      strictPort: false, // Allow fallback to next available port
+      strictPort: true,
     },
     build: {
       sourcemap: false,

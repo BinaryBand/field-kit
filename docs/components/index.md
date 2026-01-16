@@ -13,7 +13,7 @@ description: Browse all TW Components
 
 Browse the component documentation to find the right components for your project. Each component page includes:
 
-- **Live Demo**: Interactive examples you can test
+- **Inline Demo**: Interactive examples you can test
 - **API Reference**: All available attributes and options
 - **Code Examples**: Copy-paste ready HTML code
 - **Styling Guide**: CSS customization options
@@ -94,5 +94,4 @@ input[type='pin'] {
 ## Next Steps
 
 1. **Explore Components**: Browse individual component documentation for detailed usage instructions
-2. **Try the Demo**: Visit the [Live Demo](/demo) page to see all components in action
-3. **Get Help**: Visit the [GitHub repository](https://github.com/BinaryBand/bulwark-client-app) for support
+2. **Get Help**: Visit the [GitHub repository](https://github.com/BinaryBand/bulwark-client-app) for support

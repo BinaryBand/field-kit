@@ -5,7 +5,7 @@
  *
  * Default behavior:
  * - Generates pages for INPUT components only
- * - Writes to: docs/components/inputs/<id>.md
+ * - Writes to: docs/inputs/<id>.md
  * - Overwrites previously-generated files
  *
  * Usage:
@@ -160,7 +160,7 @@ function main() {
   if (args.help) {
     console.log(`Usage: node docs/.vitepress/scripts/generate-component-pages.js [--category inputs|views] [--clean]
 
-Generates markdown pages under docs/components/<category>/<id>.md from docs/.vitepress/data/components.json.
+Generates markdown pages under docs/<category>/<id>.md from docs/.vitepress/data/components.json.
 
 Examples:
   node docs/.vitepress/scripts/generate-component-pages.js
@@ -187,7 +187,7 @@ Examples:
     return;
   }
 
-  const outputDir = path.join(REPO_DOCS_ROOT, 'components', args.category);
+  const outputDir = path.join(REPO_DOCS_ROOT, args.category);
 
   const ids = new Set(selected.map((c) => c.id));
   if (args.clean) {

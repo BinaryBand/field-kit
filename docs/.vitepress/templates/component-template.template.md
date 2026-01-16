@@ -40,5 +40,5 @@ description: { { description } }
 {{{eventsTable}}}
 
 <script setup lang="ts">
-import FormDemo from '../../vue/FormDemo.vue';
+import FormDemo from '../vue/FormDemo.vue';
 </script>

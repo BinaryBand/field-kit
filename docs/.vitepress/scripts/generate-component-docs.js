@@ -27,7 +27,7 @@ function isNonEmptyString(v) {
  * Main function
  */
 function main() {
-  console.log('ℹ️  Component docs are now rendered from JSON at /components/.');
+  console.log('ℹ️  Component docs are now rendered from JSON at /.');
   console.log('🔎 Validating components.json...');
 
   const data = safeReadJson(dataPath);

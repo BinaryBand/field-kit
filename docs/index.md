@@ -1,28 +1,60 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
-layout: home
-
-hero:
-  name: 'TW Components'
-  text: 'Modern HTML Components'
-  tagline: Custom HTML components for Bulwark Exterminating LLC projects that enhance user interfaces while maintaining native HTML behavior.
-  actions:
-    - theme: brand
-      text: Get Started
-      link: /components/#getting-started
-    - theme: alt
-      text: View Components
-      link: /components/
-
-features:
-  - title: 🎯 Native HTML Behavior
-    details: Components work like standard HTML elements with forms, events, and styling. No framework lock-in required.
-  - title: ⚡ Enhanced Functionality
-    details: Auto-resizing textareas, PIN inputs, signature capture, passkey authentication, and smart select dropdowns.
-  - title: 🛠️ Developer Friendly
-    details: Simple HTML integration, comprehensive TypeScript support, and extensive documentation with live examples.
-  - title: 🎨 Highly Customizable
-    details: CSS custom properties, flexible styling options, and seamless integration with existing design systems.
-  - title: 🚀 Production Ready
-    details: Optimized for performance, tested across modern browsers, and designed for enterprise applications.
+title: TW Components
+description: Getting started with TW Components
 ---
+
+# TW Components
+
+Custom HTML components with native form behavior.
+
+## Getting Started
+
+### 1) Install
+
+```bash
+npm install
+```
+
+### 2) Build the library
+
+```bash
+npm run build
+```
+
+### 3) Include the assets
+
+```html
+<link rel="stylesheet" href="/dist/tw-client.css" />
+<script src="/dist/main.umd.js" defer></script>
+```
+
+### 4) Use components in HTML
+
+```html
+<form class="tw-form" onsubmit="handleSubmit(event)">
+  <input type="pin" data-size="6" name="securityCode" />
+  <textarea class="tw-auto-resize" name="message"></textarea>
+  <button type="submit">Submit</button>
+</form>
+```
+
+### 5) Read values on submit
+
+```js
+function handleSubmit(event) {
+  // TW Components enhances the native submit event with a `formData` property
+  // containing normalized values (including nested group/array structures).
+  event.preventDefault();
+
+  const data = event.formData;
+  console.log(data);
+  console.log(data?.securityCode);
+  console.log(data?.message);
+}
+```
+
+## Docs
+
+- Inputs live under `/inputs/*`.
+- Views live under `/views/*`.
+- Utilities live under `/utilities/*`.

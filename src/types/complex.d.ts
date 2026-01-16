@@ -29,13 +29,17 @@ type DocumentComponents = Record<string, EditorComponent<keyof EditorComponents>
 // Form Types
 type FormType = string | string[] | number | number[] | boolean;
 
-interface TwSubmitEvent extends SubmitEvent {
-  formData?: Record<string, FormType>;
+type TWFormData = FormType | IFormData | TWFormDataArray;
+
+interface IFormData {
+  [key: string]: TWFormData;
 }
 
-type IFormData = Record<string, FormType> | FormType[];
+interface TWFormDataArray extends Array<TWFormData> {}
 
-type TWFormData = FormType | IFormData;
+interface TwSubmitEvent extends SubmitEvent {
+  formData?: IFormData;
+}
 
 // Input Types
 interface INativeInputElement {

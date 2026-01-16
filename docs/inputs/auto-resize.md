@@ -1,7 +1,10 @@
 ---
-title: Auto-Resize Textarea
-description: A textarea component that automatically adjusts its height based on content
+title: { { name } }
+description: { { description } }
 ---
+
+
+<!-- AUTO-GENERATED: docs/.vitepress/data/components.json -->
 
 # Auto-Resize Textarea
 

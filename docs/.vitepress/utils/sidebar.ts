@@ -7,35 +7,37 @@ export function generateSidebar(): DefaultTheme.Sidebar {
   const inputItems = getInputComponents()
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map((c) => ({ text: c.name, link: `/components/inputs/${c.id}` }));
+    .map((c) => ({ text: c.name, link: `/inputs/${c.id}` }));
 
-  return {
-    '/components/': [
+  const rootSidebar = [
       {
-        text: 'Components Overview',
-        link: '/components/',
+        text: 'Overview',
+        link: '/',
+      },
+      {
+        text: 'View Components',
+        collapsed: false,
+        items: [
+          { text: 'Calendar', link: '/views/calendar' },
+          { text: 'Filter', link: '/views/filter' },
+        ],
       },
       {
         text: 'Input Components',
         collapsed: false,
         items: inputItems,
       },
-      {
-        text: 'View Components',
-        collapsed: false,
-        items: [
-          { text: 'Calendar', link: '/components/views/calendar' },
-          { text: 'Filter', link: '/components/views/filter' },
-        ],
-      },
-      {
+            {
         text: 'Utilities',
         collapsed: false,
         items: [
-          { text: 'Form Submission', link: '/components/utilities/form' },
+          { text: 'Form Submission', link: '/utilities/form' },
         ],
       },
-    ],
+    ];
+
+  return {
+    '/': rootSidebar,
   };
 }
 

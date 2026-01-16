@@ -416,5 +416,5 @@ The Calendar component works in all modern browsers:
 
 ## Related Components
 
-- [Filter](/components/views/filter) - For filtering calendar events
-- [Select Input](/components/inputs/select) - For month/year selection
+- [Filter](/views/filter) - For filtering calendar events
+- [Select Input](/inputs/select) - For month/year selection

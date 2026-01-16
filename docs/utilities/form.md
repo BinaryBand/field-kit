@@ -22,16 +22,13 @@ Dispatched when form validation fails during submission attempt.
 
 **Example:**
 
-```tsx
-import { Form } from 'tw-client';
+```js
+const formElement = document.querySelector('form.tw-form');
 
-const formElement = document.querySelector('form');
-
-formElement.addEventListener('twinvalid', (event) => {
+formElement?.addEventListener('twinvalid', (event) => {
   const { invalidFields } = event.detail;
   console.log(`Validation failed: ${invalidFields.length} invalid fields`);
 
-  // Custom handling for invalid fields
   invalidFields.forEach((field) => {
     field.style.borderColor = 'red';
   });
@@ -44,47 +41,41 @@ The Form controller automatically enhances the standard `submit` event by adding
 
 **Enhanced Properties:**
 
-- **formData**: `Record<string, FormType>` - Structured form data with normalized values
+- **formData**: Normalized form data built from the DOM, including nested objects/arrays created via `data-tw-group` and `data-tw-array`.
 
 **Type Definition:**
 
-```typescript
+```ts
+// High-level shape (see implementation in src/controllers/components/Form.tsx)
+type FormPrimitive = string | number | boolean | string[] | number[];
+type TWFormData = FormPrimitive | { [key: string]: TWFormData } | TWFormData[];
+
 interface TwSubmitEvent extends SubmitEvent {
-  formData?: Record<string, FormType>;
+  formData?: Record<string, TWFormData>;
 }
-
-type FormType = string | string[] | number | number[] | boolean;
 ```
 
-**Example:**
+**Example (recommended):** attach an `onsubmit` handler up front so TW Components only augments the event (it will not perform the built-in fetch submit).
 
-```tsx
-import { Form } from 'tw-client';
+```html
+<form class="tw-form" action="/api/submit" method="post" onsubmit="handleSubmit(event)">
+  <input name="username" type="text" required />
+  <input name="age" type="number" required />
+  <input name="interests" data-type="list" />
+  <input name="subscribe" type="checkbox" />
+  <button type="submit">Submit</button>
+</form>
 
-<Form target={formRef.current}>
-  <form
-    onSubmit={(e) => {
-      // Access normalized form data directly
-      const data = e.formData;
-      console.log(data);
-
-      // Example output:
-      // {
-      //   username: "john_doe",
-      //   age: 25,              // Normalized to number
-      //   interests: ["coding", "gaming"], // Normalized to array
-      //   subscribe: true       // Normalized to boolean
-      // }
-    }}
-  >
-    <input name="username" type="text" required />
-    <input name="age" type="number" required />
-    <input name="interests" data-type="list" />
-    <input name="subscribe" type="checkbox" />
-    <button type="submit">Submit</button>
-  </form>
-</Form>;
+<script>
+  function handleSubmit(event) {
+    event.preventDefault();
+    const data = event.formData;
+    console.log(data);
+  }
+</script>
 ```
+
+**Default behavior:** if the form has no existing `onsubmit` handler, the Form controller intercepts submission and sends JSON to `action` using `fetch()`, then navigates based on the response.
 
 ## Data Normalization
 

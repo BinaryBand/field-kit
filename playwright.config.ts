@@ -40,7 +40,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run docs:dev',
-    url: 'http://localhost:5173',
+    url: 'http://localhost:5173/docs/',
     reuseExistingServer: !process.env.CI, // Reuse in dev, fresh in CI
     timeout: 180000, // 3 minutes for slower systems
     stderr: 'pipe',
