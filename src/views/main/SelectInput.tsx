@@ -226,7 +226,7 @@ function SelectInput(
       const { left: inputLeft, top: inputTop } = placeholderRef.current.getBoundingClientRect();
       const calculatedPaddingLeft = inputLeft - containerLeft;
       const calculatedPaddingTop = inputTop - containerTop;
-      
+
       // Ensure minimum padding and proper positioning
       setPaddingLeft(Math.max(calculatedPaddingLeft, 8));
       setPaddingTop(Math.max(calculatedPaddingTop, 0));
