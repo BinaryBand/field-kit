@@ -165,6 +165,7 @@ export default function init(element: HTMLElement = document.body): void {
     };
 
     element.addEventListener('update', callback);
+    console.log('TW Components finished initializing.');
   } catch (error) {
     console.error('Error initializing Inline:', error);
   }

@@ -1,3 +1,12 @@
+/**
+ * # Checklist
+ * ## Native React
+ * - [ ] Accept `event:formEvent` with native primitive `event.formData` values.
+ * - [ ] Support custom primitive values (e.g., float, int, etc...).
+ * - [ ] Support nested data via `data-tw-group` and `data-tw-array`. 
+ * ## Native JavaScript
+ */
+
 import { fireEvent, render } from '@testing-library/react';
 import { act } from '@testing-library/react';
 import { vi } from 'vitest';
@@ -341,5 +350,78 @@ describe('Form Component', () => {
       items: ['Item1'],
     });
     expect(Object.prototype.hasOwnProperty.call(receivedPayload, '')).toBe(false);
+  });
+
+  test('should ignore proxy wrapper controls so they cannot override real fields', async () => {
+    // This mirrors the real runtime DOM after `init()` runs:
+    // the React UI is rendered into a sibling `._tw-wrapper` while the native control stays.
+    // If the proxy carries a `name`, naive serialization will allow it to override the native value.
+    const html = /* html */ `
+      <form action="/submit-data" method="POST">
+        <input name="Name" type="text" value="TopLevel" />
+        <div class="_tw-wrapper">
+          <input data-tw-proxy="true" name="Name" type="text" value="ProxyShouldNotWin" />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+
+    document.body.innerHTML = html;
+    const target = document.body.querySelector('form')!;
+
+    await act(async () => render(<Form target={target} />));
+    await act(async () => fireEvent.submit(target));
+
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [, requestInit] = vi.mocked(global.fetch).mock.calls[0];
+    const receivedPayload = JSON.parse(requestInit?.body as string);
+
+    expect(receivedPayload).toEqual({ Name: 'TopLevel' });
+  });
+
+  test('nested location Name must not override top-level Name', async () => {
+    const html = /* html */ `
+      <form action="/submit-data" method="POST">
+        <select name="Name">
+          <option value="Albuquerque" selected>Albuquerque</option>
+          <option value="Boston">Boston</option>
+        </select>
+
+        <div hidden id="location-hidden-inputs" data-tw-array="ChemicalLocations">
+          <div data-tw-group>
+            <input name="Name" type="text" value="Deusch" />
+            <input name="Active" type="checkbox" checked />
+            <input name="ChemicalLocationDetails" type="list" value='["Eins","Zwei","Drei"]' />
+          </div>
+        </div>
+
+        <div id="location-editor">
+          <input class="form-control" name="Name" type="text" value="Deusch" />
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    `;
+
+    document.body.innerHTML = html;
+    const target = document.body.querySelector('form')!;
+
+    await act(async () => render(<Form target={target} />));
+    await act(async () => fireEvent.submit(target));
+
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [, requestInit] = vi.mocked(global.fetch).mock.calls[0];
+    const receivedPayload = JSON.parse(requestInit?.body as string);
+
+    expect(receivedPayload).toEqual({
+      Name: 'Albuquerque',
+      ChemicalLocations: [
+        {
+          Name: 'Deusch',
+          Active: true,
+          ChemicalLocationDetails: ['Eins', 'Zwei', 'Drei'],
+        },
+      ],
+    });
   });
 });

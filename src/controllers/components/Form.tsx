@@ -63,6 +63,23 @@ function getChildren(element: Element): Element[] {
 }
 
 export function reduceFormData(acc: Record<string, TWFormData>, element: Element): void {
+  // Ignore UI-only proxy controls rendered by the React wrappers.
+  // The actual submitted value lives on the original native element.
+  if (element instanceof HTMLElement) {
+    if (element.hasAttribute('data-tw-ignore')) {
+      return;
+    }
+
+    const isFormControl =
+      element instanceof HTMLInputElement ||
+      element instanceof HTMLSelectElement ||
+      element instanceof HTMLTextAreaElement;
+
+    if (isFormControl && (element.hasAttribute('data-tw-proxy') || element.closest('._tw-wrapper'))) {
+      return;
+    }
+  }
+
   // 1. Process Group/Array first
   if (element.hasAttribute('data-tw-group')) {
     const groupName: string = element.getAttribute('data-tw-group') ?? 'group';
@@ -133,7 +150,12 @@ export function reduceFormData(acc: Record<string, TWFormData>, element: Element
     }
 
     if (value !== null) {
-      acc[name] = value;
+      // If the same name appears multiple times in the same scope,
+      // do not let later values overwrite earlier ones.
+      // This protects against UI/editor fields (or proxy controls) stomping real fields.
+      if (acc[name] === undefined) {
+        acc[name] = value;
+      }
     }
   }
 

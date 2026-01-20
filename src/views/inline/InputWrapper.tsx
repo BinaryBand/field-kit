@@ -70,7 +70,7 @@ function InputWrapper<T extends InputTags, P extends JSX.IntrinsicAttributes>(
 
   const baseProps = {
     id: container.id,
-    name: container.name,
+    'data-tw-proxy': 'true',
     className: container.className,
     disabled: container.disabled,
     required: container.required,
