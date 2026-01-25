@@ -154,13 +154,13 @@ function SelectInput(
 
   const triggerUpdate = React.useCallback(
     (value: string[]): void => {
+      setList(value);
+
       if (onChange && internalRef.current !== null) {
         onChange(createChangeEvent(internalRef.current, value));
-      } else {
-        setList(value);
       }
     },
-    [onChange, internalRef]
+    [onChange]
   );
 
   function addOption(key: string, value: ReactNode, group?: string): void {
@@ -192,15 +192,15 @@ function SelectInput(
         const selectedLabel = Object.values(options[value] || {})[0] ?? value;
         setInternalValue(String(selectedLabel));
       } else {
-        updatedList = debouncedList.includes(value)
-          ? debouncedList.filter((item) => item !== value)
-          : [...debouncedList, value];
+        updatedList = list.includes(value)
+          ? list.filter((item) => item !== value)
+          : [...list, value];
       }
 
       triggerUpdate(updatedList);
       closeDropdown();
     },
-    [multiple, debouncedList, triggerUpdate, options, closeDropdown]
+    [multiple, list, triggerUpdate, options, closeDropdown]
   );
 
   function handleMouseDown(event: React.MouseEvent): void {
@@ -215,7 +215,7 @@ function SelectInput(
   }
 
   function handleRemove(index: number): void {
-    const updatedList: string[] = debouncedList.filter((_, i: number) => i !== index);
+    const updatedList: string[] = list.filter((_, i: number) => i !== index);
     triggerUpdate(updatedList);
   }
 
@@ -373,7 +373,7 @@ function SelectInput(
                     key={value}
                     value={value}
                     label={label}
-                    isSelected={debouncedList.includes(value)}
+                    isSelected={list.includes(value)}
                     multiple={multiple}
                     onSelect={handleOptionSelect}
                   />
