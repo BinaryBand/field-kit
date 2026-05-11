@@ -11,11 +11,11 @@ A real-time filtering interface that allows users to search and filter through l
 
 <div class="demo-container">
   <div class="tw-filter-group" id="filterDemo">
-    <input 
-      class="form-control" 
-      placeholder="Filter items..." 
-      type="filter" 
-      id="filterInput" 
+    <input
+      class="form-control"
+      placeholder="Filter items..."
+      type="filter"
+      id="filterInput"
     />
     <ul id="filterList">
       <li class="tw-filter-item">Apple</li>
