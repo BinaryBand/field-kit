@@ -7,8 +7,8 @@ import { generateSidebar } from './utils/sidebar';
 const reactSrc: string = path.resolve(__dirname, '../../src');
 
 export default defineConfig({
-  title: 'TW Components',
-  description: 'Custom HTML components for use in Bulwark Exterminating LLC projects.',
+  title: 'Fieldkit',
+  description: 'Custom HTML component library with native form behavior.',,
   base: '/docs/',
 
   // SEO and meta configuration
@@ -16,12 +16,12 @@ export default defineConfig({
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
     ['meta', { name: 'theme-color', content: '#3c4043' }],
     ['link', { rel: 'icon', href: '/favicon.ico' }],
-    ['meta', { property: 'og:title', content: 'TW Components Documentation' }],
+    ['meta', { property: 'og:title', content: 'Fieldkit Documentation' }],
     [
       'meta',
       {
         property: 'og:description',
-        content: 'Custom HTML components for Bulwark Exterminating LLC projects',
+        content: 'Custom HTML component library with native form behavior.',
       },
     ],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -46,7 +46,7 @@ export default defineConfig({
   lastUpdated: true,
 
   themeConfig: {
-    siteTitle: 'TW Components',
+    siteTitle: 'Fieldkit',
     logo: '/logo.svg',
 
     nav: [
@@ -57,7 +57,7 @@ export default defineConfig({
     sidebar: generateSidebar(),
 
     // Social links
-    socialLinks: [{ icon: 'github', link: 'https://github.com/BinaryBand/bulwark-client-app' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/BinaryBand/field-kit' }],
 
     // Search configuration
     search: {
@@ -78,12 +78,12 @@ export default defineConfig({
 
     // Footer
     footer: {
-      copyright: 'Copyright © 2025 Bulwark Exterminating LLC',
+      copyright: 'Copyright © 2025 BinaryBand',
     },
 
     // Edit link
     editLink: {
-      pattern: 'https://github.com/BinaryBand/bulwark-client-app/edit/main/docs/:path',
+      pattern: 'https://github.com/BinaryBand/field-kit/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
 

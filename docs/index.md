@@ -1,9 +1,9 @@
 ---
-title: TW Components
-description: Getting started with TW Components
+title: Fieldkit
+description: Getting started with Fieldkit
 ---
 
-# TW Components
+# Fieldkit
 
 Custom HTML components with native form behavior.
 
@@ -24,7 +24,7 @@ npm run build
 ### 3) Include the assets
 
 ```html
-<link rel="stylesheet" href="/dist/tw-client.css" />
+<link rel="stylesheet" href="/dist/fieldkit.css" />
 <script src="/dist/main.umd.js" defer></script>
 ```
 
@@ -42,7 +42,7 @@ npm run build
 
 ```js
 function handleSubmit(event) {
-  // TW Components enhances the native submit event with a `formData` property
+  // Fieldkit enhances the native submit event with a `formData` property
   // containing normalized values (including nested group/array structures).
   event.preventDefault();
 

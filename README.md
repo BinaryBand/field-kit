@@ -1,6 +1,6 @@
 # Getting Started
 
-Custom HTML components for use in Bulwark Exterminating LLC projects. This document provides instructions on how to integrate the TW Components library into your Bulwark Exterminating LLC projects. This library offers a set of custom HTML components designed to enhance the user interface.
+Fieldkit is a custom HTML component library that extends native `input`, `textarea`, and `select` elements with enhanced behaviors and styling. This document provides instructions on how to integrate Fieldkit into your projects.
 
 ## Installation
 
@@ -19,10 +19,10 @@ Follow these steps to download and build the component library:
 
 ```bash
 # Clone project from GitHub
-git clone https://github.com/BinaryBand/bulwark-client-app.git
+git clone https://github.com/BinaryBand/field-kit.git
 
 # Navigate to the project directory
-cd bulwark-client-app
+cd field-kit
 
 # Install all dependencies
 npm install
@@ -41,7 +41,7 @@ To use the custom Components in your HTML file, include the following tags withi
 
 ```html
 <head>
-  <link rel="stylesheet" href="/dist/tw-client.css" type="text/css" />
+  <link rel="stylesheet" href="/dist/fieldkit.css" type="text/css" />
 </head>
 <body>
   <!-- content -->
@@ -49,7 +49,7 @@ To use the custom Components in your HTML file, include the following tags withi
 </body>
 ```
 
-**Note**: The paths `/dist/tw-client.css` and `/dist/main.umd.js` are relative to the root of your web project. Adjust these paths if your dist directory is located elsewhere.
+**Note**: The paths `/dist/fieldkit.css` and `/dist/main.umd.js` are relative to the root of your web project. Adjust these paths if your dist directory is located elsewhere.
 
 ## Usage
 

@@ -206,7 +206,7 @@ The first invalid field automatically receives focus.
 
 ```tsx
 import React, { useRef } from 'react';
-import { Form } from 'tw-client';
+import { Form } from 'fieldkit';
 
 function MyForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -262,7 +262,7 @@ function MyForm() {
 ## TypeScript Support
 
 ```typescript
-import type { TwSubmitEvent, IFormData, TWFormData, FormType } from 'tw-client';
+import type { TwSubmitEvent, IFormData, TWFormData, FormType } from 'fieldkit';
 
 // Use enhanced submit event type
 function handleSubmit(event: TwSubmitEvent) {

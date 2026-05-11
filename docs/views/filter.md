@@ -60,7 +60,7 @@ A real-time filtering interface that allows users to search and filter through l
 </style>
 
 ::: info Note
-This demo uses simplified JavaScript for demonstration purposes. In your actual application, the filter component is powered by the TW Components library which provides more advanced features like debouncing, multiple filter inputs, and complex filtering logic.
+This demo uses simplified JavaScript for demonstration purposes. In your actual application, the filter component is powered by the Fieldkit library which provides more advanced features like debouncing, multiple filter inputs, and complex filtering logic.
 :::
 
 ## Basic Usage

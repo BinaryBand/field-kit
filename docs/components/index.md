@@ -1,6 +1,6 @@
 ---
 title: Components
-description: Browse all TW Components
+description: Browse all Fieldkit components
 ---
 
 # Components
@@ -21,8 +21,8 @@ Browse the component documentation to find the right components for your project
 ### 2. Basic Usage Pattern
 
 ```html
-<!-- Include TW Components assets -->
-<link rel="stylesheet" href="/dist/tw-client.css" />
+<!-- Include Fieldkit assets -->
+<link rel="stylesheet" href="/dist/fieldkit.css" />
 <script src="/dist/main.umd.js" defer></script>
 
 <!-- Use components in your HTML -->
@@ -94,4 +94,4 @@ input[type='pin'] {
 ## Next Steps
 
 1. **Explore Components**: Browse individual component documentation for detailed usage instructions
-2. **Get Help**: Visit the [GitHub repository](https://github.com/BinaryBand/bulwark-client-app) for support
+2. **Get Help**: Visit the [GitHub repository](https://github.com/BinaryBand/field-kit) for support

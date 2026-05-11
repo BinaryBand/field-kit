@@ -23,7 +23,7 @@ export default defineConfig(({ command }) => ({
   build: {
     lib: {
       entry: { main: path.resolve(__dirname, 'src/index.tsx') },
-      name: 'tw-client',
+      name: 'fieldkit',
       formats: ['umd'],
       fileName: (format) => `main.${format}.js`,
     },
