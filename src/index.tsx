@@ -19,6 +19,8 @@ import Calendar from '@controllers/Calendar';
 import { FilterGroup, TextFilter } from '@controllers/Filter';
 import Form from '@controllers/Form';
 import Multiline from '@controllers/Multiline';
+import MultilineElement from '@/elements/MultilineElement';
+import { registerFieldkitElements } from '@/elements/register';
 
 import { createRandomKey } from '@tools/misc';
 
@@ -144,6 +146,8 @@ export function renderComponents(parent: HTMLElement): ReactNode {
 
 export default function init(element: HTMLElement = document.body): void {
   try {
+    registerFieldkitElements();
+
     const root: HTMLElement = document.createElement('div');
     const appRoot: Root = ReactDOM.createRoot(root);
 
@@ -172,7 +176,10 @@ export default function init(element: HTMLElement = document.body): void {
 }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('load', (): void => init(document.body));
+  window.addEventListener('load', (): void => {
+    registerFieldkitElements();
+    init(document.body);
+  });
 }
 
 // Export all components for external usage
@@ -190,4 +197,6 @@ export {
   TextFilter,
   Form,
   Multiline,
+  MultilineElement,
+  registerFieldkitElements,
 };
