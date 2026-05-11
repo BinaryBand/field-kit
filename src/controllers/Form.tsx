@@ -138,24 +138,14 @@ export function reduceFormData(acc: Record<string, TWFormData>, element: Element
   const nameAttr: string | null = element.getAttribute('name');
   const name: string = (nameAttr ?? '').trim();
   if (name.length > 0) {
-    const value: TWFormData | null = normalizeValue(element);
-
-    // Special handling for unchecked radio buttons.
-    // This logic ensures that only the checked radio button is considered.
-    // If the name already exists, and the current element is an unchecked radio, skip it.
+    // Skip unchecked radio buttons — only the checked one should contribute a value.
     if (element instanceof HTMLInputElement && element.type === 'radio' && !element.checked) {
-      if (acc[name] !== undefined) {
-        return;
-      }
+      return;
     }
 
-    if (value !== null) {
-      // If the same name appears multiple times in the same scope,
-      // do not let later values overwrite earlier ones.
-      // This protects against UI/editor fields (or proxy controls) stomping real fields.
-      if (acc[name] === undefined) {
-        acc[name] = value;
-      }
+    const value: TWFormData | null = normalizeValue(element);
+    if (value !== null && acc[name] === undefined) {
+      acc[name] = value;
     }
   }
 

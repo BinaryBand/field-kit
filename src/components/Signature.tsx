@@ -5,7 +5,7 @@ import {
   SignatureCanvas,
   SignatureInput,
   SignatureSvgOverlay,
-} from '@/views/styled/Signature';
+} from '@/ui/Signature';
 
 import { createChangeEvent } from '@tools/events';
 import { useMergedRef } from '@tools/ref';

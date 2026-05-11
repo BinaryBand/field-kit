@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import ListInput from '@/views/main/ListInput';
+import ListInput from '@/components/ListInput';
 import AppContext from '@providers/AppContext';
 
 // Mock the debounce hook to avoid timing issues in tests

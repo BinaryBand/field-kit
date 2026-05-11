@@ -14,10 +14,10 @@ export default defineConfig(({ command }) => ({
   resolve: {
     alias: {
       '@': root,
-      '@components': path.resolve(root, 'views/main'),
-      '@controllers': path.resolve(root, 'controllers/components'),
-      '@providers': path.resolve(root, 'controllers/providers'),
-      '@tools': path.resolve(root, 'controllers/tools'),
+      '@components': path.resolve(root, 'components'),
+      '@controllers': path.resolve(root, 'controllers'),
+      '@providers': path.resolve(root, 'context'),
+      '@tools': path.resolve(root, 'utils'),
     },
   },
   build: {

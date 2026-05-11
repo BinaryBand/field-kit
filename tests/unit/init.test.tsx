@@ -4,7 +4,6 @@ import { vi } from 'vitest';
 
 import App from '@/App';
 import init from '@/index';
-import { html } from '@tools/misc';
 
 // Global cleanup for tests
 let cleanupRender: (() => void) | undefined;
@@ -31,7 +30,7 @@ describe('init function', () => {
   test('should render a ListInput with the correct initial value', async () => {
     // Arrange: Set up the DOM and get a reference to the native element.
     const initialValue = JSON.stringify(['item1', 'item2', 'item3']);
-    document.body.innerHTML = html`
+    document.body.innerHTML = `
       <div>
         <input id="list-input-native" name="ListInput" type="list" value=${initialValue} />
       </div>
@@ -53,7 +52,7 @@ describe('init function', () => {
   test('should render a PinInput with the correct initial value', async () => {
     // Arrange: Set up the DOM and get a reference to the native element.
     const initialValue = '123456';
-    document.body.innerHTML = html`
+    document.body.innerHTML = `
       <div>
         <input id="pin-input-native" name="Pin" type="pin" value=${initialValue} />
       </div>

@@ -5,14 +5,12 @@ import React, {
   FocusEvent,
   ForwardedRef,
   KeyboardEvent,
-  MouseEvent,
   ReactElement,
   RefObject,
 } from 'react';
 import styled from '@emotion/styled';
 import { createChangeEvent } from '@tools/events';
 import { useMergedRef } from '@tools/ref';
-
 export interface PinInputProps extends ComponentProps<'input'> {
   size?: number;
   autoFocus?: boolean;
@@ -78,8 +76,6 @@ function PinInput(
   const containerRef: RefObject<HTMLSpanElement | null> = React.useRef<HTMLSpanElement>(null);
   const internalRef: RefObject<HTMLInputElement | null> = React.useRef<HTMLInputElement>(null);
 
-  const [activeIndex, _setActiveIndex] = React.useState<number>(0);
-  const [hasInteracted, setHasInteracted] = React.useState<boolean>(false);
   const [pinValue, setPinValue] = React.useState<(number | undefined)[]>(() =>
     valueToDigits(defaultValue, size)
   );
@@ -91,145 +87,92 @@ function PinInput(
   const placeholder: string = props.placeholder ?? '0'.repeat(size);
 
   function focusOn(index: number): void {
-    const targetRef: RefObject<HTMLInputElement | null> = refs[index];
-    if (targetRef?.current) {
-      targetRef.current.focus();
+    refs[Math.max(0, Math.min(size - 1, index))]?.current?.focus();
+  }
+
+  function commitValue(next: (number | undefined)[]): void {
+    if (internalRef.current && onChange) {
+      const str = next.map((d) => d ?? ' ').join('');
+      onChange(createChangeEvent(internalRef.current, str));
+    } else {
+      setPinValue([...next]);
     }
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
     const { currentTarget } = event;
-    const { index } = currentTarget.dataset;
-
-    const newDigit: string = currentTarget.value[0];
+    const index = Number(currentTarget.dataset.index);
+    const newDigit = currentTarget.value[0];
 
     if (!newDigit) {
-      // Clear the current digit and keep the focus
-      const newValue = pinValue.map((d, i) => (i === Number(index) ? undefined : d));
-      setPinValue(newValue);
+      const next = pinValue.map((d, i) => (i === index ? undefined : d));
+      setPinValue(next);
     } else if (isValidDigit(newDigit)) {
-      const newValue = pinValue.map((d, i) => (i === Number(index) ? Number(newDigit) : d));
-      setPinValue(newValue);
-      if (Number(index) < size - 1) {
-        focusOn(Number(index) + 1);
-      }
+      const next = pinValue.map((d, i) => (i === index ? Number(newDigit) : d));
+      setPinValue(next);
+      focusOn(index + 1);
     }
-  }
-
-  function setActiveIndex(index: number): void {
-    const activeIndex: number = Math.max(0, Math.min(size - 1, index));
-    _setActiveIndex(activeIndex);
-  }
-
-  function setDigit(digit?: number): void {
-    if (activeIndex >= 0 && activeIndex < size) {
-      pinValue[activeIndex] = digit;
-
-      if (internalRef.current && onChange) {
-        const value: string = pinValue.map((d) => d ?? ' ').join('');
-        onChange?.(createChangeEvent(internalRef.current, value));
-      } else {
-        setPinValue([...pinValue]);
-      }
-    }
-  }
-
-  function handleClick(event: MouseEvent<HTMLInputElement>): void {
-    const { currentTarget } = event;
-    const datasetIndex: string | undefined = currentTarget.dataset.index;
-    const index: number = isValidInteger(datasetIndex) ? Number(datasetIndex) : 0;
-    setHasInteracted(true);
-    setActiveIndex(index);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-    const { currentTarget, key } = event;
-    const datasetIndex: string | undefined = currentTarget.dataset.index;
-    const index: number = isValidInteger(datasetIndex) ? Number(datasetIndex) : 0;
+    const index = Number(event.currentTarget.dataset.index);
 
-    switch (key) {
+    switch (event.key) {
       case 'Backspace':
         event.preventDefault();
-        setDigit();
-        setActiveIndex(index - 1);
+        pinValue[index] = undefined;
+        commitValue(pinValue);
+        focusOn(index - 1);
         return;
       case 'Delete':
         event.preventDefault();
-        setDigit();
+        pinValue[index] = undefined;
+        commitValue(pinValue);
         return;
       case 'ArrowLeft':
         event.preventDefault();
-        setActiveIndex(index - 1);
+        focusOn(index - 1);
         return;
       case 'ArrowRight':
         event.preventDefault();
-        setActiveIndex(index + 1);
+        focusOn(index + 1);
         return;
     }
 
-    if (isValidDigit(key)) {
+    if (isValidDigit(event.key)) {
       event.preventDefault();
-      const digit: number = Number(key);
-      setDigit(digit);
-      setActiveIndex(index + 1);
+      pinValue[index] = Number(event.key);
+      commitValue(pinValue);
+      focusOn(index + 1);
     }
 
     onKeyDown?.(event);
   }
 
   function handleFocus(event: FocusEvent<HTMLInputElement>): void {
-    const { currentTarget } = event;
-    const datasetIndex: string | undefined = currentTarget.dataset.index;
-    const index: number = isValidInteger(datasetIndex) ? Number(datasetIndex) : 0;
-    setHasInteracted(true);
-    setActiveIndex(index);
+    event.currentTarget.select();
   }
 
-  function handlePaste(event: ClipboardEvent): void {
+  function handlePaste(event: ClipboardEvent<HTMLInputElement>): void {
     event.preventDefault();
+    const startIndex = Number(event.currentTarget.dataset.index);
+    const dataToPaste = event.clipboardData.getData('text') ?? '';
+    const next: (number | undefined)[] = [...pinValue];
 
-    const dataToPaste: string = event.clipboardData.getData('text') ?? '';
-    const _pinValue: (number | undefined)[] = [...pinValue];
-
-    let j: number = activeIndex;
-    for (let i: number = 0; i < dataToPaste.length && j < size; i++) {
-      const digit: string = dataToPaste[i];
-      if (isValidInteger(digit)) {
-        _pinValue[j] = Number(digit);
-        j++;
+    let j = startIndex;
+    for (let i = 0; i < dataToPaste.length && j < size; i++) {
+      if (isValidInteger(dataToPaste[i])) {
+        next[j++] = Number(dataToPaste[i]);
       }
     }
 
-    setActiveIndex(j);
-
-    if (internalRef.current && onChange) {
-      const value: string = _pinValue.map((d) => d ?? '_').join('');
-      onChange?.(createChangeEvent(internalRef.current, value));
-    } else {
-      setPinValue(_pinValue);
-    }
+    commitValue(next);
+    focusOn(j);
   }
 
   React.useEffect((): void => {
-    // Only auto-focus if autoFocus is enabled or user has already interacted with the component
-    if (!autoFocus && !hasInteracted) {
-      return;
-    }
-
-    const query: string = `input[data-index="${activeIndex}"]`;
-    const nextTarget: HTMLInputElement | null =
-      containerRef.current?.querySelector<HTMLInputElement>(query) ?? null;
-
-    if (nextTarget !== null) {
-      nextTarget.focus();
-      nextTarget.select();
-    }
-  }, [activeIndex, autoFocus, hasInteracted]);
-
-  React.useEffect((): void => {
     if (value !== undefined) {
-      const digits: (number | undefined)[] = valueToDigits(value, size);
-      setPinValue(digits);
+      setPinValue(valueToDigits(value, size));
     }
   }, [value]);
 
@@ -240,11 +183,11 @@ function PinInput(
         .map((digit: string, i: number) => (
           <input
             {...props}
+            autoFocus={autoFocus && i === 0}
             data-index={i}
             key={i}
             maxLength={1}
             onChange={handleInputChange}
-            onClick={handleClick}
             onFocus={handleFocus}
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}

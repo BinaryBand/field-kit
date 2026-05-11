@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import SelectInput, { GroupedOption } from '@/views/main/SelectInput';
+import SelectInput, { GroupedOption } from '@/components/SelectInput';
 import GroupedInputContext from '@providers/GroupedInputContext';
 import AppContext from '@providers/AppContext';
 

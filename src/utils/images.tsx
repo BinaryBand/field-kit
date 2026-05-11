@@ -17,17 +17,14 @@ export function toDataUrl(url: string): Promise<string | undefined> {
 }
 
 export async function uploadImage(): Promise<string | undefined> {
-  const target: HTMLInputElement = document.createElement('input');
-
-  return new Promise((resolve) => {
-    target.onchange = (event: Event): void => {
-      const target: HTMLInputElement = event.target as HTMLInputElement;
-      const file: File | undefined = target.files?.item(0) ?? undefined;
-      resolve(file && URL.createObjectURL(file));
-    };
-
-    target.accept = 'image/png, image/jpeg, image/gif';
-    target.type = 'file';
-    target.click();
-  });
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: 'Images', accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.gif'] } }],
+      multiple: false,
+    });
+    const file = await handle.getFile();
+    return URL.createObjectURL(file);
+  } catch {
+    return undefined; // user cancelled or API unavailable
+  }
 }

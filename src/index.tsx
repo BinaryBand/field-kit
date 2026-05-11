@@ -5,13 +5,13 @@ import ReactDOM, { Root } from 'react-dom/client';
 import App from '@/App';
 import '@/styles/main.scss';
 
-import InputWrapper from '@/views/inline/InputWrapper';
+import InputWrapper from '@/bridge/InputWrapper';
 
 import SelectInput, { GroupedOption } from '@components/SelectInput';
 import ListInput from '@components/ListInput';
 import PasskeyInput from '@components/PasskeyInput';
 import PinInput from '@components/PinInput';
-import { SelectOption } from '@/views/shared/Options';
+import { SelectOption } from '@/ui/Options';
 import Signature from '@components/Signature';
 import SimpleInput from '@components/SimpleInput';
 
