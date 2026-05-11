@@ -9,9 +9,10 @@ Fieldkit is a custom HTML component library that extends native `input`, `textar
 Ensure NPM is installed and up-to-date: [NPM installation guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 - **npm (Node Package Manager):** Version 8 or higher is recommended. You can update npm using:
-  ```sh
-  npm install npm@latest -g
-  ```
+
+```sh
+npm install npm@latest -g
+```
 
 ### Download and Compile
 
