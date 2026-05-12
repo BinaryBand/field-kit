@@ -11,9 +11,6 @@ node_modules
 dist
 dist-ssr
 *.local
-/docs/.vitepress/dist
-/docs/.vitepress/cache
-/docs/components/inputs
 
 # Test results and reports
 /tests/.results

@@ -3,8 +3,7 @@
 This is a no-args runbook script. It always runs the same steps:
 1) npm install
 2) npm run build
-3) npm run docs:build
-4) Copy build output to LIBRARY_PATH and DOCS_PATH environment variables.
+3) Copy build output to LIBRARY_PATH environment variable.
 """
 
 from __future__ import annotations
@@ -51,22 +50,14 @@ def main() -> int:
 
     _run([npm, "install"], cwd=root)
     _run([npm, "run", "build"], cwd=root)
-    _run([npm, "run", "docs:build"], cwd=root)
 
     local_build = root / "dist"
     out_build = os.getenv("LIBRARY_PATH")
     assert local_build.exists(), f"Local build path does not exist: {local_build}"
     assert out_build is not None, "LIBRARY_PATH environment variable is not set."
 
-    local_docs = root / "docs" / ".vitepress" / "dist"
-    out_docs = os.getenv("DOCS_PATH")
-    assert local_docs.exists(), f"Local docs build does not exist: {local_docs}"
-    assert out_docs is not None, "DOCS_PATH environment variable is not set."
-
     shutil.rmtree(out_build, ignore_errors=True)
-    shutil.rmtree(out_docs, ignore_errors=True)
     shutil.copytree(local_build, out_build, dirs_exist_ok=True)
-    shutil.copytree(local_docs, out_docs, dirs_exist_ok=True)
 
     return 0
 

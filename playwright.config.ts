@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Playwright configuration for TW Components documentation tests
+ * Playwright configuration for TW Components smoke tests
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
@@ -39,8 +39,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run docs:dev',
-    url: 'http://localhost:5173/docs/',
+    command: 'npm start',
+    url: 'http://localhost:5173/tests/demo.html',
     reuseExistingServer: !process.env.CI, // Reuse in dev, fresh in CI
     timeout: 180000, // 3 minutes for slower systems
     stderr: 'pipe',

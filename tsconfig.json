@@ -35,7 +35,6 @@
   "exclude": ["build", "dist", "node_modules"],
   "include": [
     "src",
-    "docs/vue",
     "tests",
     "index.d.ts",
     "src/types/global.d.ts",

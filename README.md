@@ -31,10 +31,6 @@ npm install
 npm run build
 ```
 
-#### Deep Dive
-
-Run `npm run build:docs` to generate and explore more thorough documentation instructions.
-
 ### Migrate to Targeted HTML File
 
 To use the custom Components in your HTML file, include the following tags within the `head` and before the closing `body` tags:
