@@ -22,7 +22,7 @@ import Multiline from '@controllers/Multiline';
 import MultilineElement from '@/elements/MultilineElement';
 import PinInputElement from '@/elements/PinInputElement';
 import ListInputElement from '@/elements/ListInputElement';
-import { registerFieldkitElements } from '@/elements/register';
+import { LIST_TAG, PIN_TAG, registerFieldkitElements } from '@/elements/register';
 
 import { createRandomKey } from '@tools/misc';
 
@@ -97,21 +97,39 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
   switch (type?.toLowerCase()) {
     case 'filter':
       return <TextFilter target={element} key={key} />;
-    case 'list':
-      return <InputWrapper component={ListInput} container={element} key={key} />;
     case 'passkey':
       const identifier: string = element.getAttribute('data-identifier') ?? '';
       const userName: string | undefined = element.getAttribute('data-user') ?? undefined;
       const props: ISecurityProps = { identifier, userName };
       return <InputWrapper component={PasskeyInput} container={element} {...props} key={key} />;
-    case 'pin':
-      const size: number | undefined = Number(element.getAttribute('data-size')) ?? undefined;
-      return <InputWrapper component={PinInput} container={element} size={size} key={key} />;
     case 'signature':
       return <InputWrapper component={Signature} container={element} key={key} />;
     case 'simple':
       return <InputWrapper component={SimpleInput} container={element} key={key} />;
   }
+}
+
+function upgradeLegacyInputToElement(input: HTMLInputElement, tag: string): void {
+  const replacement = document.createElement(tag);
+
+  for (const { name, value } of Array.from(input.attributes)) {
+    if (name.toLowerCase() !== 'type') {
+      replacement.setAttribute(name, value);
+    }
+  }
+
+  // Preserve runtime current value, not just markup attribute value.
+  replacement.setAttribute('value', input.value ?? '');
+
+  input.replaceWith(replacement);
+}
+
+function upgradeLegacyInputs(root: HTMLElement): void {
+  const listInputs = Array.from(root.querySelectorAll<HTMLInputElement>('input[type="list"]'));
+  listInputs.forEach((input) => upgradeLegacyInputToElement(input, LIST_TAG));
+
+  const pinInputs = Array.from(root.querySelectorAll<HTMLInputElement>('input[type="pin"]'));
+  pinInputs.forEach((input) => upgradeLegacyInputToElement(input, PIN_TAG));
 }
 
 export function renderComponents(parent: HTMLElement): ReactNode {
@@ -149,6 +167,7 @@ export function renderComponents(parent: HTMLElement): ReactNode {
 export default function init(element: HTMLElement = document.body): void {
   try {
     registerFieldkitElements();
+    upgradeLegacyInputs(element);
 
     const root: HTMLElement = document.createElement('div');
     const appRoot: Root = ReactDOM.createRoot(root);
