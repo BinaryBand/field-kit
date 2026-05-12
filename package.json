@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "vite --open /tests/demo.html",
+    "start:host": "vite --host --open /tests/demo.html",
     "build": "vite build",
     "lint": "eslint .",
     "test": "npm run test:unit && npm run test:e2e",

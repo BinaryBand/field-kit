@@ -34,7 +34,13 @@ npm run build
 
 #### Deep Dive
 
-Run `npm run build:docs` to generate and explore more thorough documentation instructions.
+Run `npm start` to launch the interactive reviewer demo at `/tests/demo.html`.
+
+```bash
+npm start
+```
+
+This is the recommended way to manually review key features, including legacy input upgrades and direct custom element usage.
 
 ### Migrate to Targeted HTML File
 
