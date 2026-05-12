@@ -92,33 +92,17 @@
 
       <form id="review-form" class="tw-form">
         <section class="card">
-          <h2>Legacy Compatibility (auto-upgrade)</h2>
-          <div class="grid">
-            <div class="field">
-              <label for="legacy-list">Legacy list input</label>
-              <input id="legacy-list" name="legacyList" type="list" value='["uno","dos"]' />
-              <div class="hint">input[type=list] should upgrade to tw-list and still submit JSON.</div>
-            </div>
-            <div class="field">
-              <label for="legacy-pin">Legacy pin input</label>
-              <input id="legacy-pin" name="legacyPin" type="pin" data-size="6" value="123456" />
-              <div class="hint">input[type=pin] should upgrade to tw-pin and preserve value.</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="card">
           <h2>Direct Custom Elements</h2>
           <div class="grid">
             <div class="field">
               <label for="direct-list">tw-list</label>
               <tw-list id="direct-list" name="directList" value='["apple","banana"]'></tw-list>
-              <div class="hint">Direct custom element usage.</div>
+              <div class="hint">Direct custom element usage. This is the only supported list API.</div>
             </div>
             <div class="field">
               <label for="direct-pin">tw-pin</label>
               <tw-pin id="direct-pin" name="directPin" value="7890" data-size="4"></tw-pin>
-              <div class="hint">PIN with data-size attribute.</div>
+              <div class="hint">PIN with data-size attribute. Legacy input[type=pin] is no longer supported.</div>
             </div>
           </div>
           <div class="field" style="margin-top: 12px;">

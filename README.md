@@ -68,22 +68,20 @@ These components are designed to behave like native HTML `input`, `textarea`, an
 
 ##### Auto Resize Textarea
 
-`textarea.tw-auto-resize`
+`tw-multiline`
 
 ```html
-<textarea class="tw-auto-resize">
-    <!-- content -->
-</textarea>
+<tw-multiline name="notes" value="Initial note"></tw-multiline>
 ```
 
 ##### List Input
 
-`input[type=list]`
+`tw-list`
 
-The list input type allows users to input a list of values. The value attribute should be a JSON string representing an array of strings.
+The list input accepts a JSON string representing an array of strings.
 
 ```html
-<input type="list" value='["One","Two","Three"]' />
+<tw-list name="items" value='["One","Two","Three"]'></tw-list>
 ```
 
 ##### Passkey Input
@@ -101,10 +99,10 @@ The passkey input type is designed for WebAuthn passkey authentication.
 
 ##### PIN Input
 
-`input[type=pin]`
+`tw-pin`
 
 ```html
-<input data-size="6" type="pin" />
+<tw-pin name="code" data-size="6" value="123456"></tw-pin>
 ```
 
 - `[data-size]`: You can customize the number of required digits.

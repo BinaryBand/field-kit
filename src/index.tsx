@@ -22,7 +22,7 @@ import Multiline from '@controllers/Multiline';
 import MultilineElement from '@/elements/MultilineElement';
 import PinInputElement from '@/elements/PinInputElement';
 import ListInputElement from '@/elements/ListInputElement';
-import { LIST_TAG, PIN_TAG, registerFieldkitElements } from '@/elements/register';
+import { registerFieldkitElements } from '@/elements/register';
 
 import { createRandomKey } from '@tools/misc';
 
@@ -109,29 +109,6 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
   }
 }
 
-function upgradeLegacyInputToElement(input: HTMLInputElement, tag: string): void {
-  const replacement = document.createElement(tag);
-
-  for (const { name, value } of Array.from(input.attributes)) {
-    if (name.toLowerCase() !== 'type') {
-      replacement.setAttribute(name, value);
-    }
-  }
-
-  // Preserve runtime current value, not just markup attribute value.
-  replacement.setAttribute('value', input.value ?? '');
-
-  input.replaceWith(replacement);
-}
-
-function upgradeLegacyInputs(root: HTMLElement): void {
-  const listInputs = Array.from(root.querySelectorAll<HTMLInputElement>('input[type="list"]'));
-  listInputs.forEach((input) => upgradeLegacyInputToElement(input, LIST_TAG));
-
-  const pinInputs = Array.from(root.querySelectorAll<HTMLInputElement>('input[type="pin"]'));
-  pinInputs.forEach((input) => upgradeLegacyInputToElement(input, PIN_TAG));
-}
-
 export function renderComponents(parent: HTMLElement): ReactNode {
   let reactElement: ReactNode = null;
 
@@ -167,7 +144,6 @@ export function renderComponents(parent: HTMLElement): ReactNode {
 export default function init(element: HTMLElement = document.body): void {
   try {
     registerFieldkitElements();
-    upgradeLegacyInputs(element);
 
     const root: HTMLElement = document.createElement('div');
     const appRoot: Root = ReactDOM.createRoot(root);

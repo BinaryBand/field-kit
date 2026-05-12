@@ -60,7 +60,7 @@ describe('Form Component', () => {
               <input name="email" type="email" value="jane.doe@example.com" />
             </div>
           </div>
-          <input name="favoriteColors" type="list" value='["Red","Green","Blue"]' />
+          <tw-list name="favoriteColors" value='["Red","Green","Blue"]'></tw-list>
           <div data-tw-array="skills">
             <input name="skill1" value="JavaScript" />
             <input name="skill2" value="React" />
@@ -90,7 +90,7 @@ describe('Form Component', () => {
               <input name="email" type="email" value="jane.doe@example.com" />
             </div>
           </div>
-          <input name="favoriteColors" type="list" value='["Red","Green","Blue"]' />
+          <tw-list name="favoriteColors" value='["Red","Green","Blue"]'></tw-list>
           <div data-tw-array="skills">
             <input name="firstName" value="JavaScript" />
             <input name="lastName" value="React" />
@@ -112,8 +112,8 @@ describe('Form Component', () => {
       name: 'Custom Input Components',
       html: `
         <form action="/submit-data" method="POST">
-          <input name="ListInput" type="list" value='["item1", "item2", "item3"]' />
-          <input name="Pin" type="pin" value="123456" />
+          <tw-list name="ListInput" value='["item1", "item2", "item3"]'></tw-list>
+          <tw-pin name="Pin" value="123456" data-size="6"></tw-pin>
           <button type="submit">Submit</button>
         </form>
       `,
@@ -390,7 +390,7 @@ describe('Form Component', () => {
           <div data-tw-group>
             <input name="Name" type="text" value="Deusch" />
             <input name="Active" type="checkbox" checked />
-            <input name="ChemicalLocationDetails" type="list" value='["Eins","Zwei","Drei"]' />
+            <tw-list name="ChemicalLocationDetails" value='["Eins","Zwei","Drei"]'></tw-list>
           </div>
         </div>
 
