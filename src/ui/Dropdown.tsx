@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 
 const Dropdown = styled.div`
-  border: 1px solid var(--hover-bg-light);
+  border: 1px solid
+    color-mix(in srgb, var(--tw-border-color, currentColor) calc(var(--tw-border-opacity, 0.3) * 100%), transparent);
   border-top: none;
   border-radius: 0 0 0.375rem 0.375rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
@@ -11,7 +12,7 @@ const Dropdown = styled.div`
 
   overflow-x: hidden;
   overflow-y: scroll;
-  z-index: 4;
+  z-index: var(--tw-dropdown-z-index, 4);
   left: 0;
   top: 100%;
   position: absolute;
@@ -30,7 +31,7 @@ const Dropdown = styled.div`
     }
 
     &:disabled {
-      color: var(--hover-bg-light);
+      color: color-mix(in srgb, currentColor 35%, transparent);
       cursor: not-allowed;
     }
 
@@ -45,7 +46,7 @@ const Dropdown = styled.div`
   &:not(:has(option[data-blurred='false'])) {
     & > option._tw-no-options {
       display: block;
-      color: var(--hover-bg-light);
+      color: color-mix(in srgb, currentColor 35%, transparent);
       text-align: center;
       cursor: default;
       font-style: italic;

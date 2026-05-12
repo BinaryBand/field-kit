@@ -2,6 +2,9 @@ import styled from '@emotion/styled';
 import Overlay from '@/bridge/Overlay';
 
 export const ListInputContainer = styled.div`
+  box-sizing: border-box;
+  color: inherit;
+  font: inherit;
   padding: 0.2em 0.3em;
   position: relative;
   display: flex;
@@ -12,6 +15,7 @@ export const ListInputContainer = styled.div`
 `;
 
 export const StyledListInput = styled.input`
+  box-sizing: border-box;
   position: absolute;
   left: 0;
   top: 0;
@@ -20,7 +24,13 @@ export const StyledListInput = styled.input`
   margin: 0 !important;
   background: transparent !important;
   border: none !important;
-  outline: none !important;
+  color: inherit;
+  font: inherit;
+
+  &:focus-visible {
+    outline: var(--tw-focus-width, 2px) solid var(--tw-focus-color, currentColor) !important;
+    outline-offset: var(--tw-focus-offset, 2px);
+  }
 `;
 
 export const InputToken = styled.div`
@@ -37,7 +47,7 @@ export const InputToken = styled.div`
   }
 
   &[data-active='true'] {
-    background-color: var(--bs-primary-bg, var(--hover-bg-medium));
+    background-color: color-mix(in srgb, var(--tw-token-bg, currentColor) calc(var(--tw-token-opacity, 0.15) * 100%), transparent);
   }
 
   &:hover > svg:last-child {

@@ -4,6 +4,8 @@ const STYLE_TEXT = `
 :host {
   display: inline-block;
   width: 100%;
+  color: inherit;
+  font: inherit;
 }
 
 .wrap {
@@ -14,19 +16,27 @@ const STYLE_TEXT = `
 }
 
 .token {
-  border: 1px solid #ddd;
+  border: 1px solid color-mix(in srgb, var(--tw-border-color, currentColor) calc(var(--tw-border-opacity, 0.3) * 100%), transparent);
   border-radius: 999px;
   padding: 2px 8px;
   font-size: 0.8rem;
+  color: inherit;
+  background: color-mix(in srgb, var(--tw-token-bg, currentColor) calc(var(--tw-token-opacity, 0.15) * 100%), transparent);
 }
 
 input {
   min-width: 8rem;
   border: none;
-  outline: none;
+  box-sizing: border-box;
   font: inherit;
   color: inherit;
   background: transparent;
+  caret-color: currentColor;
+}
+
+input:focus-visible {
+  outline: var(--tw-focus-width, 2px) solid var(--tw-focus-color, currentColor);
+  outline-offset: var(--tw-focus-offset, 2px);
 }
 `;
 

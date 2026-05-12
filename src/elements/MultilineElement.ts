@@ -4,6 +4,8 @@ const STYLE_TEXT = `
 :host {
   display: inline-block;
   width: 100%;
+  color: inherit;
+  font: inherit;
 }
 
 textarea {
@@ -14,6 +16,14 @@ textarea {
   font: inherit;
   color: inherit;
   background: transparent;
+  border: 1px solid color-mix(in srgb, var(--tw-border-color, currentColor) calc(var(--tw-border-opacity, 0.3) * 100%), transparent);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+}
+
+textarea:focus-visible {
+  outline: var(--tw-focus-width, 2px) solid var(--tw-focus-color, currentColor);
+  outline-offset: var(--tw-focus-offset, 2px);
 }
 `;
 

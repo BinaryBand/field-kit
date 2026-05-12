@@ -7,6 +7,14 @@
   --hover-bg-strong: rgba(128, 128, 128, 0.35);
   --transition-fast: 0.15s ease;
   --transition-medium: 0.2s ease;
+  --tw-border-color: currentColor;
+  --tw-border-opacity: 0.3;
+  --tw-focus-color: currentColor;
+  --tw-focus-width: 2px;
+  --tw-focus-offset: 2px;
+  --tw-token-bg: currentColor;
+  --tw-token-opacity: 0.15;
+  --tw-dropdown-z-index: 4;
 }
 
 // Wrapper component styles
@@ -18,6 +26,12 @@
   & + * {
     display: none !important;
   }
+}
+
+[data-tw-proxy],
+[data-tw-proxy][hidden],
+._tw-wrapper + [data-tw-proxy] {
+  display: none !important;
 }
 
 .tw-select-group {

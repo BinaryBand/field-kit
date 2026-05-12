@@ -4,9 +4,12 @@ const STYLE_TEXT = `
 :host {
   display: inline-flex;
   gap: 8px;
+  color: inherit;
+  font: inherit;
 }
 
 input {
+  box-sizing: border-box;
   width: 2rem;
   min-width: 0;
   padding: 10px 8px;
@@ -14,6 +17,13 @@ input {
   font: inherit;
   color: inherit;
   background: transparent;
+  border: 1px solid color-mix(in srgb, var(--tw-border-color, currentColor) calc(var(--tw-border-opacity, 0.3) * 100%), transparent);
+  border-radius: 0.5rem;
+}
+
+input:focus-visible {
+  outline: var(--tw-focus-width, 2px) solid var(--tw-focus-color, currentColor);
+  outline-offset: var(--tw-focus-offset, 2px);
 }
 `;
 
