@@ -73,6 +73,14 @@
       }
       select[multiple] { min-height: 110px; }
       .hint { color: #677089; font-size: 0.82rem; }
+      .pin-native-row {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .pin-native-row > input {
+        text-align: center;
+      }
       .actions {
         display: flex;
         gap: 8px;
@@ -149,6 +157,32 @@
             <label for="direct-multiline">tw-multiline</label>
             <tw-multiline id="direct-multiline" name="directNotes" value="Initial note"></tw-multiline>
             <div class="hint">Autosizing multiline custom element.</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Native Equivalents (Comparison)</h2>
+          <div class="grid">
+            <div class="field">
+              <label for="native-list">Native list approximation (text input)</label>
+              <input id="native-list" name="nativeListEquivalent" value="apple, banana" />
+              <div class="hint">Nearest native equivalent to tw-list: comma-delimited text input.</div>
+            </div>
+            <div class="field">
+              <label for="native-pin-1">Native PIN approximation (4 text inputs)</label>
+              <div class="pin-native-row">
+                <input id="native-pin-1" inputmode="numeric" maxlength="1" name="nativePin1Equivalent" value="7" />
+                <input id="native-pin-2" inputmode="numeric" maxlength="1" name="nativePin2Equivalent" value="8" />
+                <input id="native-pin-3" inputmode="numeric" maxlength="1" name="nativePin3Equivalent" value="9" />
+                <input id="native-pin-4" inputmode="numeric" maxlength="1" name="nativePin4Equivalent" value="0" />
+              </div>
+              <div class="hint">Nearest native equivalent to tw-pin: separate single-character inputs.</div>
+            </div>
+          </div>
+          <div class="field" style="margin-top: 12px;">
+            <label for="native-multiline">Native multiline equivalent (textarea)</label>
+            <textarea id="native-multiline" name="nativeMultilineEquivalent" rows="2">Initial note</textarea>
+            <div class="hint">Nearest native equivalent to tw-multiline: plain textarea.</div>
           </div>
         </section>
 
