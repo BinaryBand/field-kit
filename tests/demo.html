@@ -119,20 +119,28 @@
               <label for="single-select">Single Select</label>
               <select id="single-select" name="singleSelect" class="tw-select-group">
                 <option value="">-- Select one --</option>
-                <option class="tw-option" value="a">Option A</option>
-                <option class="tw-option" value="b" selected>Option B</option>
-                <option class="tw-option" value="c">Option C</option>
+                <option class="tw-option" value="Option 1">Option 1</option>
+                <option class="tw-option" value="Option 2" selected>Option 2</option>
+                <option class="tw-option" value="Option 3">Option 3</option>
               </select>
             </div>
             <div class="field">
               <label for="multi-select">Multi Select</label>
               <select id="multi-select" name="multiSelect" class="tw-select-group" multiple>
-                <option class="tw-option" value="alpha" selected>Alpha</option>
-                <option class="tw-option" value="beta">Beta</option>
-                <option class="tw-option" value="gamma" selected>Gamma</option>
-                <option class="tw-option" value="delta">Delta</option>
+                <option class="tw-option" value="Option A" selected>Option A</option>
+                <option class="tw-option" value="Option B">Option B</option>
+                <option class="tw-option" value="Option C" selected>Option C</option>
+                <option class="tw-option" value="Option D">Option D</option>
               </select>
             </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="field">
+            <label for="form-list">Legacy list input (wrapped)</label>
+            <input type="list" id="form-list" name="formList" value='["apple","cherry"]' />
+            <div class="hint">Legacy input[type=list] is wrapped for compatibility.</div>
           </div>
         </section>
 
@@ -152,37 +160,39 @@
       </section>
     </div>
 
-    <script type="module">
-      import '/src/index.tsx';
+    <link rel="stylesheet" href="/dist/fieldkit.css" type="text/css" />
+    <script src="/dist/main.umd.js" type="text/javascript" defer></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('review-form');
+        const output = document.getElementById('output');
+        const clearBtn = document.getElementById('clear-output');
 
-      const form = document.getElementById('review-form');
-      const output = document.getElementById('output');
-      const clearBtn = document.getElementById('clear-output');
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
 
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
+          const formData = new FormData(form);
+          const data = {};
 
-        const formData = new FormData(form);
-        const data = {};
-
-        for (const [key, value] of formData.entries()) {
-          if (Object.prototype.hasOwnProperty.call(data, key)) {
-            if (!Array.isArray(data[key])) {
-              data[key] = [data[key]];
+          for (const [key, value] of formData.entries()) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+              if (!Array.isArray(data[key])) {
+                data[key] = [data[key]];
+              }
+              data[key].push(value);
+            } else {
+              data[key] = value;
             }
-            data[key].push(value);
-          } else {
-            data[key] = value;
           }
-        }
 
-        output.textContent = JSON.stringify(data, null, 2);
-        output.classList.add('show');
-      });
+          output.textContent = JSON.stringify(data, null, 2);
+          output.classList.add('show');
+        });
 
-      clearBtn.addEventListener('click', () => {
-        output.textContent = '';
-        output.classList.remove('show');
+        clearBtn.addEventListener('click', () => {
+          output.textContent = '';
+          output.classList.remove('show');
+        });
       });
     </script>
   </body>

@@ -34,7 +34,10 @@ test.describe('Demo — Integration smoke (demo.html)', () => {
       }
     }
 
-    function serveStatic(req: import('node:http').IncomingMessage, res: import('node:http').ServerResponse) {
+    function serveStatic(
+      req: import('node:http').IncomingMessage,
+      res: import('node:http').ServerResponse
+    ) {
       const url = new URL(req.url ?? '/', 'http://localhost');
       const pathname = decodeURIComponent(url.pathname);
       if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -44,7 +47,11 @@ test.describe('Demo — Integration smoke (demo.html)', () => {
       }
 
       const resolved = path.resolve(repoRoot, `.${pathname}`);
-      if (!resolved.startsWith(repoRoot) || !fs.existsSync(resolved) || fs.statSync(resolved).isDirectory()) {
+      if (
+        !resolved.startsWith(repoRoot) ||
+        !fs.existsSync(resolved) ||
+        fs.statSync(resolved).isDirectory()
+      ) {
         res.statusCode = 404;
         res.end('Not Found');
         return;
@@ -56,7 +63,8 @@ test.describe('Demo — Integration smoke (demo.html)', () => {
     }
 
     const distBundle = path.join(repoRoot, 'dist', 'main.umd.js');
-    if (!fs.existsSync(distBundle)) test.skip(true, 'dist/main.umd.js missing; run `npm run build` first');
+    if (!fs.existsSync(distBundle))
+      test.skip(true, 'dist/main.umd.js missing; run `npm run build` first');
 
     server = createServer(serveStatic);
     await new Promise<void>((resolve) => server!.listen(0, '127.0.0.1', () => resolve()));
@@ -81,7 +89,9 @@ test.describe('Demo — Integration smoke (demo.html)', () => {
   }
 
   async function pickOption(page: any, optionValue: string) {
-    const optionLocator = page.locator(`[data-testid="select-dropdown"]:not([hidden]) [data-option-value="${optionValue}"]`);
+    const optionLocator = page.locator(
+      `[data-testid="select-dropdown"]:not([hidden]) [data-option-value="${optionValue}"]`
+    );
     await optionLocator.waitFor({ state: 'attached' });
     await optionLocator.click({ force: true });
   }
@@ -110,7 +120,9 @@ test.describe('Demo — Integration smoke (demo.html)', () => {
       const native = document.querySelector<HTMLInputElement>('#form-list:not([data-tw-proxy])');
       const wrapper = native?.previousElementSibling as HTMLElement | null;
       if (!wrapper) return [] as string[];
-      return Array.from(wrapper.querySelectorAll<HTMLDivElement>('.token small')).map((n) => n.textContent?.trim() ?? '');
+      return Array.from(wrapper.querySelectorAll<HTMLDivElement>('.token small')).map(
+        (n) => n.textContent?.trim() ?? ''
+      );
     });
     expect(tokens).toEqual(expect.arrayContaining(['uno', 'tres']));
 
@@ -118,9 +130,15 @@ test.describe('Demo — Integration smoke (demo.html)', () => {
     await openDropdownFor(page, '#single-select:not([data-tw-proxy])');
     await pickOption(page, 'Option 1');
 
-    const nativeVal = await page.$eval('#single-select:not([data-tw-proxy])', (s) => (s as HTMLSelectElement).value);
+    const nativeVal = await page.$eval(
+      '#single-select:not([data-tw-proxy])',
+      (s) => (s as HTMLSelectElement).value
+    );
     expect(nativeVal).toBe('Option 1');
-    const proxyVal = await page.$eval('#single-select[data-tw-proxy]', (s) => (s as HTMLSelectElement).value);
+    const proxyVal = await page.$eval(
+      '#single-select[data-tw-proxy]',
+      (s) => (s as HTMLSelectElement).value
+    );
     expect(proxyVal).toBe('Option 1');
 
     // Multi select
@@ -129,9 +147,13 @@ test.describe('Demo — Integration smoke (demo.html)', () => {
     await openDropdownFor(page, '#multi-select:not([data-tw-proxy])');
     await pickOption(page, 'Option D');
 
-    const multiNative = await page.$eval('#multi-select:not([data-tw-proxy])', (s) => Array.from((s as HTMLSelectElement).selectedOptions).map((o) => o.value));
+    const multiNative = await page.$eval('#multi-select:not([data-tw-proxy])', (s) =>
+      Array.from((s as HTMLSelectElement).selectedOptions).map((o) => o.value)
+    );
     expect(multiNative).toEqual(expect.arrayContaining(['Option B', 'Option D']));
-    const multiProxy = await page.$eval('#multi-select[data-tw-proxy]', (s) => Array.from((s as HTMLSelectElement).selectedOptions).map((o) => o.value));
+    const multiProxy = await page.$eval('#multi-select[data-tw-proxy]', (s) =>
+      Array.from((s as HTMLSelectElement).selectedOptions).map((o) => o.value)
+    );
     expect(multiProxy).toEqual(expect.arrayContaining(['Option B', 'Option D']));
   });
 });
