@@ -10,7 +10,7 @@ function PasskeyInput(
     children,
     className,
     disabled,
-    hidden,
+    _hidden,
     identifier,
     onChange,
     style,

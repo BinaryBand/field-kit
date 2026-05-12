@@ -113,7 +113,7 @@ function SelectInput(
     defaultValue,
     multiple,
     onChange,
-    onKeyDown,
+    _onKeyDown,
     style,
     value,
     ...props

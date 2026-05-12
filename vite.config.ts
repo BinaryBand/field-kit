@@ -4,7 +4,7 @@ import path from 'path';
 
 const root: string = path.resolve(__dirname, 'src');
 
-export default defineConfig(({ command }) => ({
+export default defineConfig(({ _command }) => ({
   root: __dirname,
   publicDir: false,
   plugins: [react()],

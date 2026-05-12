@@ -48,7 +48,7 @@ export function FilterGroup({
 
   const unregisterFilter = React.useCallback((key: string): void => {
     setTextFilters((prev) => {
-      const { [key]: _, ...rest } = prev;
+      const { [key]: _removed, ...rest } = prev;
       return rest;
     });
   }, []);

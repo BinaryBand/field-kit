@@ -161,9 +161,26 @@
     </div>
 
     <link rel="stylesheet" href="/dist/fieldkit.css" type="text/css" />
-    <script src="/dist/main.umd.js" type="text/javascript" defer></script>
+     <script src="/dist/main.umd.js" type="text/javascript"></script>
     <script>
+       // Initialize fieldkit components immediately after bundle loads
+       function initializeFieldkit() {
+         if (typeof window.fieldkit !== 'undefined') {
+           const init = window.fieldkit.default || window.fieldkit;
+           if (typeof init === 'function') {
+             init(document.body);
+           }
+         }
+       }
+
+       if (document.readyState === 'loading') {
+         document.addEventListener('DOMContentLoaded', initializeFieldkit);
+       } else {
+         initializeFieldkit();
+       }
+
       document.addEventListener('DOMContentLoaded', () => {
+
         const form = document.getElementById('review-form');
         const output = document.getElementById('output');
         const clearBtn = document.getElementById('clear-output');
