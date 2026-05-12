@@ -2,7 +2,7 @@ import React, { ForwardedRef, ReactElement } from 'react';
 import styled from '@emotion/styled';
 
 import AppContext from '@providers/AppContext';
-import Portal from '@/views/inline/Portal';
+import Portal from '@/bridge/Portal';
 
 const StyledOverlay = styled.div`
   background: none;

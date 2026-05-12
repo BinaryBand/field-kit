@@ -1,10 +1,10 @@
 import React, { ChangeEvent, ComponentProps, ForwardedRef, ReactElement, ReactNode } from 'react';
 import { useDebounce } from 'use-debounce';
 
-import { InputToken, StyledListInput, HiddenInput, StyledOverlay } from '@/views/styled/ListInput';
-import { SelectInputContainer } from '@/views/shared/SelectComponents';
-import { GroupedInputContainer } from '@/views/styled/GroupedInput';
-import Dropdown from '@/views/styled/Dropdown';
+import { InputToken, StyledListInput, HiddenInput, StyledOverlay } from '@/ui/ListInput';
+import { SelectInputContainer } from '@/ui/SelectComponents';
+import { GroupedInputContainer } from '@/ui/GroupedInput';
+import Dropdown from '@/ui/Dropdown';
 
 import CaretDownIcon from '@/assets/native/CaretDownIcon';
 import CheckIcon from '@/assets/native/CheckIcon';

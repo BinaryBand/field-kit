@@ -1,5 +1,5 @@
 import React, { Fragment, ReactNode } from 'react';
-import Portal from '@/views/inline/Portal';
+import Portal from '@/bridge/Portal';
 
 function isInteger(value: string | null): boolean {
   return Number.isInteger(Number(value));

@@ -1,10 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { act } from '@testing-library/react';
 import { vi } from 'vitest';
 
 import App from '@/App';
 import init from '@/index';
-import { html } from '@tools/misc';
 
 // Global cleanup for tests
 let cleanupRender: (() => void) | undefined;
@@ -17,58 +16,47 @@ afterEach(async () => {
   vi.clearAllMocks();
 });
 
-// Mock the components that `init` will render
-vi.mock('@components/ListInput', () => ({
-  default: () => <div data-testid="list-input"></div>,
-}));
-
 describe('init function', () => {
   // Use a beforeEach hook to reset the DOM for each test
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  test('should render a ListInput with the correct initial value', async () => {
-    // Arrange: Set up the DOM and get a reference to the native element.
+  test('should preserve direct tw-list elements when initializing', async () => {
     const initialValue = JSON.stringify(['item1', 'item2', 'item3']);
-    document.body.innerHTML = html`
+    document.body.innerHTML = `
       <div>
-        <input id="list-input-native" name="ListInput" type="list" value=${initialValue} />
+        <tw-list id="list-input-native" name="ListInput" value='${initialValue}'></tw-list>
       </div>
     `;
-    const nativeInput = document.querySelector<HTMLInputElement>('#list-input-native')!;
 
-    // Act: Render the app and initialize the custom components.
+    // Act: Initialize the app.
     const { unmount } = render(<App root={document.body} />);
     cleanupRender = unmount;
 
     await act(async () => init(document.body));
 
-    // Assert: Check that the React component is rendered and the native value is correct.
-    const listInputComponent = screen.getByTestId('list-input');
-    expect(listInputComponent).toBeInTheDocument();
-    expect(nativeInput.value).toBe(initialValue);
+    const listElement = document.querySelector('tw-list#list-input-native') as HTMLElement | null;
+    expect(listElement).toBeInTheDocument();
+    expect(listElement?.getAttribute('value')).toBe(initialValue);
   });
 
-  test('should render a PinInput with the correct initial value', async () => {
-    // Arrange: Set up the DOM and get a reference to the native element.
+  test('should preserve direct tw-pin elements when initializing', async () => {
     const initialValue = '123456';
-    document.body.innerHTML = html`
+    document.body.innerHTML = `
       <div>
-        <input id="pin-input-native" name="Pin" type="pin" value=${initialValue} />
+        <tw-pin id="pin-input-native" name="Pin" value="${initialValue}" data-size="6"></tw-pin>
       </div>
     `;
-    const nativeInput = document.querySelector<HTMLInputElement>('#pin-input-native')!;
 
-    // Act: Render the app and initialize the custom components.
+    // Act: Initialize the app.
     const { unmount } = render(<App root={document.body} />);
     cleanupRender = unmount;
 
     await act(async () => init(document.body));
 
-    // Assert: Check that the React component is rendered and the native value is correct.
-    const pinInputComponent = screen.getByTestId('pin-input');
-    expect(pinInputComponent).toBeInTheDocument();
-    expect(nativeInput.value).toBe(initialValue);
+    const pinElement = document.querySelector('tw-pin#pin-input-native') as HTMLElement | null;
+    expect(pinElement).toBeInTheDocument();
+    expect(pinElement?.getAttribute('value')).toBe(initialValue);
   });
 });

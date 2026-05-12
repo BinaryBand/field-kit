@@ -1,6 +1,25 @@
 import React, { Fragment, ReactNode } from 'react';
 import { tryParse } from '@tools/misc';
 
+function isFieldkitElement(element: Element): boolean {
+  const tagName = element.tagName.toLowerCase();
+  return tagName === 'tw-list' || tagName === 'tw-pin' || tagName === 'tw-multiline';
+}
+
+function normalizeFieldkitValue(element: Element): TWFormData | null {
+  const value = element.getAttribute('value') ?? '';
+
+  switch (element.tagName.toLowerCase()) {
+    case 'tw-list':
+      return tryParse<string[]>(value) ?? [];
+    case 'tw-pin':
+    case 'tw-multiline':
+      return value;
+    default:
+      return null;
+  }
+}
+
 function normalizeInputValue(element: HTMLInputElement): FormType {
   const type: string =
     element.getAttribute('data-type') ?? element.getAttribute('type') ?? element.type;
@@ -53,6 +72,8 @@ function normalizeValue(element: Element): TWFormData | null {
     return normalizeTextAreaValue(element);
   } else if (element instanceof HTMLSelectElement) {
     return normalizeSelectValue(element);
+  } else if (isFieldkitElement(element)) {
+    return normalizeFieldkitValue(element);
   }
 
   return null;
@@ -66,7 +87,7 @@ export function reduceFormData(acc: Record<string, TWFormData>, element: Element
   // Ignore UI-only proxy controls rendered by the React wrappers.
   // The actual submitted value lives on the original native element.
   if (element instanceof HTMLElement) {
-    if (element.hasAttribute('data-tw-ignore')) {
+    if (element.hasAttribute('data-tw-ignore') || element.hasAttribute('data-fieldkit-fallback')) {
       return;
     }
 
@@ -187,6 +208,9 @@ function Form(props: IControllerProps): ReactNode {
         } else {
           valid = el.value.trim().length > 0;
         }
+      } else if (isFieldkitElement(el)) {
+        const normalized = normalizeFieldkitValue(el);
+        valid = Array.isArray(normalized) ? normalized.length > 0 : `${normalized ?? ''}`.trim().length > 0;
       }
       if (!valid) invalidFields.push(el);
     });

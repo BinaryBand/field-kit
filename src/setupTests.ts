@@ -1,7 +1,6 @@
 // src/setupTests.ts
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
-import 'whatwg-fetch';
 
 // Mock `window.location` for this specific suite
 const mockLocationAssign = vi.fn();

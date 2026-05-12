@@ -5,13 +5,13 @@ import ReactDOM, { Root } from 'react-dom/client';
 import App from '@/App';
 import '@/styles/main.scss';
 
-import InputWrapper from '@/views/inline/InputWrapper';
+import InputWrapper from '@/bridge/InputWrapper';
 
 import SelectInput, { GroupedOption } from '@components/SelectInput';
 import ListInput from '@components/ListInput';
 import PasskeyInput from '@components/PasskeyInput';
 import PinInput from '@components/PinInput';
-import { SelectOption } from '@/views/shared/Options';
+import { SelectOption } from '@/ui/Options';
 import Signature from '@components/Signature';
 import SimpleInput from '@components/SimpleInput';
 
@@ -19,6 +19,10 @@ import Calendar from '@controllers/Calendar';
 import { FilterGroup, TextFilter } from '@controllers/Filter';
 import Form from '@controllers/Form';
 import Multiline from '@controllers/Multiline';
+import MultilineElement from '@/elements/MultilineElement';
+import PinInputElement from '@/elements/PinInputElement';
+import ListInputElement from '@/elements/ListInputElement';
+import { registerFieldkitElements } from '@/elements/register';
 
 import { createRandomKey } from '@tools/misc';
 
@@ -93,16 +97,11 @@ function inputToComponent(element: HTMLInputElement): ReactNode {
   switch (type?.toLowerCase()) {
     case 'filter':
       return <TextFilter target={element} key={key} />;
-    case 'list':
-      return <InputWrapper component={ListInput} container={element} key={key} />;
     case 'passkey':
       const identifier: string = element.getAttribute('data-identifier') ?? '';
       const userName: string | undefined = element.getAttribute('data-user') ?? undefined;
       const props: ISecurityProps = { identifier, userName };
       return <InputWrapper component={PasskeyInput} container={element} {...props} key={key} />;
-    case 'pin':
-      const size: number | undefined = Number(element.getAttribute('data-size')) ?? undefined;
-      return <InputWrapper component={PinInput} container={element} size={size} key={key} />;
     case 'signature':
       return <InputWrapper component={Signature} container={element} key={key} />;
     case 'simple':
@@ -144,6 +143,8 @@ export function renderComponents(parent: HTMLElement): ReactNode {
 
 export default function init(element: HTMLElement = document.body): void {
   try {
+    registerFieldkitElements();
+
     const root: HTMLElement = document.createElement('div');
     const appRoot: Root = ReactDOM.createRoot(root);
 
@@ -172,7 +173,10 @@ export default function init(element: HTMLElement = document.body): void {
 }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('load', (): void => init(document.body));
+  window.addEventListener('load', (): void => {
+    registerFieldkitElements();
+    init(document.body);
+  });
 }
 
 // Export all components for external usage
@@ -190,4 +194,8 @@ export {
   TextFilter,
   Form,
   Multiline,
+  MultilineElement,
+  PinInputElement,
+  ListInputElement,
+  registerFieldkitElements,
 };

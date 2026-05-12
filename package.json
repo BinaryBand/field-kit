@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite --open /tests/demo.html",
+    "start:host": "vite --host --open /tests/demo.html",
     "build": "vite build",
     "lint": "eslint .",
     "test": "npm run test:unit && npm run test:e2e",
@@ -49,8 +50,10 @@
     "typescript": "~5.9.3",
     "vite": "^7.2.2",
     "vite-tsconfig-paths": "^5.1.4",
+<<<<<<< HEAD
     "vitest": "^4.0.10",
-    "whatwg-fetch": "^3.6.20"
+    "whatwg-fetch": "^3.6.20",
+    "vitest": "^4.0.10"
   },
   "overrides": {
     "esbuild": "^0.27.0"

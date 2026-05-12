@@ -15,7 +15,7 @@ import {
   InputToken,
   HiddenInput,
   StyledOverlay,
-} from '@/views/styled/ListInput';
+} from '@/ui/ListInput';
 
 import AppContext from '@providers/AppContext';
 import { createChangeEvent } from '@tools/events';

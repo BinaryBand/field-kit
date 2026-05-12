@@ -1,6 +1,6 @@
 import React, { ComponentType, ElementType, JSX } from 'react';
 import styled from '@emotion/styled';
-import Portal from '@/views/inline/Portal';
+import Portal from '@/bridge/Portal';
 
 function Wrapper<C extends ElementType>({
   component,

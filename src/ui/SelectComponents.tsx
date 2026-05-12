@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Overlay from '@/views/inline/Overlay';
+import Overlay from '@/bridge/Overlay';
 
 export const SelectInputContainer = styled.div`
   align-items: center;

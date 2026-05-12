@@ -11,8 +11,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { act } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import Form from '@/controllers/components/Form';
-import { html } from '@tools/misc';
+import Form from '@/controllers/Form';
 
 // Centralize all mocks and hooks for better organization and test isolation.
 // This ensures consistency across all tests in this file.
@@ -36,7 +35,7 @@ describe('Form Component', () => {
   test.each([
     {
       name: 'Native Values',
-      html: html`
+      html: `
         <form action="/submit-data" method="POST">
           <input name="username" type="text" value="testUser" />
           <input name="age" type="number" value="30" />
@@ -52,7 +51,7 @@ describe('Form Component', () => {
     },
     {
       name: 'Nested Data',
-      html: html`
+      html: `
         <form action="/submit-data" method="POST">
           <div data-tw-group="personalInfo">
             <input name="firstName" type="text" value="Jane" />
@@ -61,7 +60,7 @@ describe('Form Component', () => {
               <input name="email" type="email" value="jane.doe@example.com" />
             </div>
           </div>
-          <input name="favoriteColors" type="list" value='["Red","Green","Blue"]' />
+          <tw-list name="favoriteColors" value='["Red","Green","Blue"]'></tw-list>
           <div data-tw-array="skills">
             <input name="skill1" value="JavaScript" />
             <input name="skill2" value="React" />
@@ -82,7 +81,7 @@ describe('Form Component', () => {
     },
     {
       name: 'Complex Nested Data',
-      html: html`
+      html: `
         <form action="/submit-data" method="POST">
           <div data-tw-group="personalInfo">
             <input name="firstName" type="text" value="Jane" />
@@ -91,7 +90,7 @@ describe('Form Component', () => {
               <input name="email" type="email" value="jane.doe@example.com" />
             </div>
           </div>
-          <input name="favoriteColors" type="list" value='["Red","Green","Blue"]' />
+          <tw-list name="favoriteColors" value='["Red","Green","Blue"]'></tw-list>
           <div data-tw-array="skills">
             <input name="firstName" value="JavaScript" />
             <input name="lastName" value="React" />
@@ -111,10 +110,10 @@ describe('Form Component', () => {
     },
     {
       name: 'Custom Input Components',
-      html: html`
+      html: `
         <form action="/submit-data" method="POST">
-          <input name="ListInput" type="list" value='["item1", "item2", "item3"]' />
-          <input name="Pin" type="pin" value="123456" />
+          <tw-list name="ListInput" value='["item1", "item2", "item3"]'></tw-list>
+          <tw-pin name="Pin" value="123456" data-size="6"></tw-pin>
           <button type="submit">Submit</button>
         </form>
       `,
@@ -122,7 +121,7 @@ describe('Form Component', () => {
     },
     {
       name: 'Edge Cases',
-      html: html`
+      html: `
         <form action="/submit-data" method="POST">
           <input name="isSubscribed" type="checkbox" />
           <input name="emptyInput" type="text" value="" />
@@ -322,7 +321,7 @@ describe('Form Component', () => {
   });
 
   test('should ignore empty name attributes (no "" key in payload)', async () => {
-    document.body.innerHTML = html`
+    document.body.innerHTML = `
       <form action="/submit-data" method="POST">
         <input name="" type="text" value="should-be-ignored" />
         <input name="valid" type="text" value="ok" />
@@ -391,7 +390,7 @@ describe('Form Component', () => {
           <div data-tw-group>
             <input name="Name" type="text" value="Deusch" />
             <input name="Active" type="checkbox" checked />
-            <input name="ChemicalLocationDetails" type="list" value='["Eins","Zwei","Drei"]' />
+            <tw-list name="ChemicalLocationDetails" value='["Eins","Zwei","Drei"]'></tw-list>
           </div>
         </div>
 

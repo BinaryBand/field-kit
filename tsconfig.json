@@ -25,10 +25,10 @@
     /* Base URL and paths */
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/views/main/*"],
-      "@controllers/*": ["./src/controllers/components/*"],
-      "@providers/*": ["./src/controllers/providers/*"],
-      "@tools/*": ["./src/controllers/tools/*"]
+      "@components/*": ["./src/components/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@providers/*": ["./src/context/*"],
+      "@tools/*": ["./src/utils/*"]
     }
   },
 

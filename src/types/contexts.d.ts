@@ -1,8 +1,6 @@
 interface IAppContext {
   root: HTMLElement;
   updateTrigger: number;
-  scrollHeight: number;
-  scrollWidth: number;
   pageWidth: number;
   pageHeight: number;
 }
@@ -12,11 +10,6 @@ interface IFilterContext {
   registerFilter: (key: string, value: string) => void;
   unregisterFilter: (key: string) => void;
   updateTextFilter: (key: string, value: string) => void;
-}
-
-interface ISelectInputContext {
-  options: Record<string, React.ReactNode>;
-  addOption: (key: string, value: React.ReactNode) => void;
 }
 
 interface IGroupedInputContext {

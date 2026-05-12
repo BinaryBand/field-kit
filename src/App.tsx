@@ -10,8 +10,6 @@ export type AppProps = {
 function App({ children, root }: AppProps): ReactElement {
   const [_updateTrigger, setUpdateTrigger] = React.useState<number>(0);
 
-  const [scrollWidth, setScrollWidth] = React.useState<number>(0);
-  const [scrollHeight, setScrollHeight] = React.useState<number>(0);
   const [_pageWidth, setPageWidth] = React.useState<number>(0);
   const [_pageHeight, setPageHeight] = React.useState<number>(0);
 
@@ -32,11 +30,6 @@ function App({ children, root }: AppProps): ReactElement {
     setPageHeight(window.innerHeight);
   }
 
-  function handleScroll(): void {
-    setScrollWidth(window.scrollX);
-    setScrollHeight(window.scrollY);
-  }
-
   // The single event handler for our custom 'mutation' event
   function handleUpdate(): void {
     setUpdateTrigger((prev) => prev + 1);
@@ -45,14 +38,11 @@ function App({ children, root }: AppProps): ReactElement {
   React.useEffect((): (() => void) | undefined => {
     if (typeof window !== 'undefined') {
       handleResize();
-      handleScroll();
 
       window.addEventListener('resize', handleResize);
-      window.addEventListener('scroll', handleScroll);
 
       return (): void => {
         window.removeEventListener('resize', handleResize);
-        window.removeEventListener('scroll', handleScroll);
       };
     }
     return;
@@ -73,7 +63,7 @@ function App({ children, root }: AppProps): ReactElement {
   return (
     <AppContext.Provider
       children={children}
-      value={{ root, updateTrigger, scrollWidth, scrollHeight, pageWidth, pageHeight }}
+      value={{ root, updateTrigger, pageWidth, pageHeight }}
     />
   );
 }

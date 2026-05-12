@@ -1,5 +1,5 @@
 import React, { ChangeEvent, ComponentProps, JSX, SyntheticEvent } from 'react';
-import Wrapper from '@/views/inline/Wrapper';
+import Wrapper from '@/bridge/Wrapper';
 
 import { applySelectedOptions, getSelectedOptionValues } from '@tools/inputs';
 import { assert } from '@tools/misc';

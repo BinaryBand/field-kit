@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Overlay from '@/views/inline/Overlay';
+import Overlay from '@/bridge/Overlay';
 
 export const ListInputContainer = styled.div`
   padding: 0.2em 0.3em;
