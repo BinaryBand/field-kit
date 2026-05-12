@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { registerFieldkitElements, MULTILINE_TAG } from '@/elements/register';
+import { registerFieldkitElements, LIST_TAG, MULTILINE_TAG, PIN_TAG } from '@/elements/register';
 
 describe('registerFieldkitElements', () => {
   beforeEach(() => {
@@ -11,6 +11,8 @@ describe('registerFieldkitElements', () => {
     registerFieldkitElements();
     const ctor = customElements.get(MULTILINE_TAG);
     expect(ctor).toBeDefined();
+    expect(customElements.get(PIN_TAG)).toBeDefined();
+    expect(customElements.get(LIST_TAG)).toBeDefined();
 
     // idempotent call
     registerFieldkitElements();

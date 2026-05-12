@@ -20,6 +20,8 @@ import { FilterGroup, TextFilter } from '@controllers/Filter';
 import Form from '@controllers/Form';
 import Multiline from '@controllers/Multiline';
 import MultilineElement from '@/elements/MultilineElement';
+import PinInputElement from '@/elements/PinInputElement';
+import ListInputElement from '@/elements/ListInputElement';
 import { registerFieldkitElements } from '@/elements/register';
 
 import { createRandomKey } from '@tools/misc';
@@ -198,5 +200,7 @@ export {
   Form,
   Multiline,
   MultilineElement,
+  PinInputElement,
+  ListInputElement,
   registerFieldkitElements,
 };
